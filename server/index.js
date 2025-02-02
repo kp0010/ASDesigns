@@ -1,6 +1,9 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
+import pg from "pg"
+
+const app = express()
 
 // Constants
 
@@ -18,7 +21,7 @@ const PG_DB_CONFIG = {
 
 // Constants End
 
-const app = express()
+// -----------------------------------------------------------
 
 // Middleware
 
@@ -33,6 +36,20 @@ app.use(express.urlencoded({ extended: false }))
 
 
 // Middleware End
+
+// -----------------------------------------------------------
+
+// Database Setup
+
+const { Pool } = pg
+const db = new Pool(PG_DB_CONFIG)
+
+db.connect(function(err) {
+	if (err) throw err;
+	console.log("Database Connected!");
+});
+
+// Database Setup End
 
 // -----------------------------------------------------------
 
