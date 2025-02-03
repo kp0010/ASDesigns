@@ -1,8 +1,10 @@
+import './Navbar.css';
 import logo from '../../Assets/ASDesigns_Logo.png';
-import { FaSearch, FaRegUserCircle } from "react-icons/fa";
+
+import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
-import './Navbar.css';
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export const Navbar = () => {
 	return (
@@ -53,17 +55,13 @@ export const Navbar = () => {
 					<FaRegHeart className=' icon' />
 					Wishlist
 				</div>
-				<div class="dropdown">
-					<button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-						<FaRegUserCircle className='icon' />
-					</button>
-					<ul class="dropdown-menu dropdown-menu-end">
-						<li><a class="dropdown-item" href="#">Action</a></li>
-						<li><a class="dropdown-item" href="#">Another action</a></li>
-						<li><a class="dropdown-item" href="#">Something else here</a></li>
-					</ul>
-				</div>
+				<SignedOut>
+					<SignInButton />
+				</SignedOut>
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
 			</div>
-		</nav>
+		</nav >
 	);
 };
