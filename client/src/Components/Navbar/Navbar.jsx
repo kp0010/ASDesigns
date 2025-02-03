@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const Navbar = () => {
 	return (
@@ -55,6 +56,7 @@ export const Navbar = () => {
 					<FaRegHeart className=' icon' />
 					Wishlist
 				</div>
+				<Skeleton className="h-12 w-12 rounded-full" />
 				<SignedOut>
 					<SignInButton />
 				</SignedOut>
