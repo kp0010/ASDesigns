@@ -4,9 +4,11 @@ import logo from '../../Assets/ASDesigns_Logo.png';
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 
 export const Navbar = () => {
+	const { user } = useUser()
+
 	return (
 		<nav className="navbar navbar-expand-md ">
 			<div className="container-fluid">
@@ -55,6 +57,11 @@ export const Navbar = () => {
 					<FaRegHeart className=' icon' />
 					Wishlist
 				</div>
+				{user ? (
+					<h1>user icon present</h1>
+				) : (
+					<h1>user icon absent</h1>
+				)}
 				<SignedOut>
 					<SignInButton />
 				</SignedOut>
