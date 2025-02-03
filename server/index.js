@@ -59,6 +59,28 @@ app.get("/", (_, res) => {
 	res.status(200).send("<span>HELLO WORLD</span>")
 })
 
+
+app.post("/api/auth/register", ClerkExpressWithAuth(), async (req, res) => {
+	// Call to Add New User
+	const { userId, emailAddresses, firstName, lastName } = req.auth.user;
+
+	try {
+		const existingUser = await db.query("SELECT * FROM users WHERE clerk_id = $1", [userId]);
+
+		if (existingUser.rowCount === 0) {
+			await db.query(
+				"INSERT INTO users (clerk_id, email, name) VALUES ($1, $2, $3)",
+				[userId, emailAddresses[0].emailAddress, `${firstName} ${lastName}`]
+			);
+		}
+
+		res.json({ message: "User registered successfully" });
+	} catch (error) {
+		console.error("Error saving user:", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+});
+
 // Routes End
 
 // -----------------------------------------------------------

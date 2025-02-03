@@ -4,7 +4,8 @@ import logo from '../../Assets/ASDesigns_Logo.png';
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { useUser, useAuth, useSession } from "@clerk/clerk-react";
 
 export const Navbar = () => {
 	const { user } = useUser()
