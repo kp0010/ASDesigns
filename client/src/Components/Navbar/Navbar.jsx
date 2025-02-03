@@ -17,8 +17,8 @@ export const Navbar = () => {
 						className='mt-3'
 						src={logo}
 						alt="Bootstrap"
-						width={30}
-						height={24}
+						width={200}
+						height={50}
 					/>
 				</a>
 				<button
