@@ -3,6 +3,8 @@ import cors from "cors"
 import dotenv from "dotenv"
 import pg from "pg"
 
+import { requireAuth, clerkClient } from "@clerk/express"
+
 const app = express()
 
 // Constants
@@ -27,13 +29,25 @@ const PG_DB_CONFIG = {
 
 app.use(cors({
 	origin: CLIENT_URL,
-	credentials: true
+	methods: ["GET", "POST", "PUT", "DELETE"],
+	allowedHeaders: ["Content-Type", "Authorization"],
+	credentials: true,
 }))
 
 app.use(express.json())
 
 app.use(express.urlencoded({ extended: false }))
 
+app.use(requireAuth({
+	secretKey: process.env.CLERK_SECRET_KEY,
+}))
+
+app.use(function(_, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
 
 // Middleware End
 
@@ -55,16 +69,13 @@ db.connect(function(err) {
 
 // Routes
 
-app.get("/", (_, res) => {
-	res.status(200).send("<span>HELLO WORLD</span>")
-})
-
-
-app.post("/api/auth/register", ClerkExpressWithAuth(), async (req, res) => {
-	// Call to Add New User
-	const { userId, emailAddresses, firstName, lastName } = req.auth.user;
-
+app.post("/api/auth/register", requireAuth(), async (req, res) => {
+	// Add New User To DB
 	try {
+		const { userId } = req.auth
+		const user = await clerkClient.users.getUser(userId)
+		const { emailAddresses, firstName, lastName } = user
+
 		const existingUser = await db.query("SELECT * FROM users WHERE clerk_id = $1", [userId]);
 
 		if (existingUser.rowCount === 0) {
@@ -74,7 +85,12 @@ app.post("/api/auth/register", ClerkExpressWithAuth(), async (req, res) => {
 			);
 		}
 
-		res.json({ message: "User registered successfully" });
+		res.json({
+			success: true,
+			userAdded: existingUser.rowCount === 0,
+			message: "User registered successfully"
+		});
+
 	} catch (error) {
 		console.error("Error saving user:", error);
 		res.status(500).json({ error: "Internal Server Error" });
