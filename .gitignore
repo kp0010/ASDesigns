@@ -11,6 +11,7 @@ lerna-debug.log*
 
 # Server Session DB
 /server/db/*
+*.sql
 
 # Ignore Test Dockerfile
 Dockerfile
