@@ -2,21 +2,38 @@ import "./Navbar.css";
 import logo from "../../Assets/ASDesigns_Logo.png";
 import '../../App.css'
 
+import { useEffect } from "react";
+
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
-import { useUser, useAuth, useSession } from "@clerk/clerk-react";
-import { Skeleton } from "./skeleton";
-// import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { useUser, useAuth } from "@clerk/clerk-react";
+import { Skeleton } from "./skeleton";
 export const Navbar = () => {
-  const { user } = useUser();
+	const { user } = useUser()
+	const { isLoaded, isSignedIn, getToken } = useAuth()
+
+	const writeUserToDB = async () => {
+		const token = await getToken()
+		fetch("http://localhost:8080/api/auth/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		})
+			.then((resp) => resp.json())
+			.then((data) => {
+			})
+	}
+
+	useEffect(() => {
+		if (isSignedIn) {
+			writeUserToDB()
+		}
+	}, [isLoaded, getToken])
 
   return (
     <nav className="navbar navbar-expand-md">
