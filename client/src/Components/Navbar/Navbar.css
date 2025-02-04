@@ -13,3 +13,11 @@
 	justify-content: center;
 	align-items: center;
 }
+
+.nav-login-icon {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 1rem 1rem 1rem;
+}
