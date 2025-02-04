@@ -18,7 +18,7 @@ import {
 import { useUser, useAuth } from "@clerk/clerk-react";
 
 import { Skeleton } from "./skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Navbar = () => {
   const { user } = useUser();
@@ -119,7 +119,7 @@ export const Navbar = () => {
 
         <div className="container-fluid d-flex d-md-none justify-content-between mt-2 mb-3">
 					<form className="d-flex w-100">
-						<div className="input-group w-100">
+						<div className="input-group w-80">
 							<input
 								className="form-control border-0 bg-light"
 								type="search"
