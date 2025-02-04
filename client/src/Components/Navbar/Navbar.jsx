@@ -14,44 +14,44 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 import { Skeleton } from "./skeleton";
 
 export const Navbar = () => {
-    const { user } = useUser()
-    const { isLoaded, isSignedIn, getToken } = useAuth()
+	const { user } = useUser()
+	const { isLoaded, isSignedIn, getToken } = useAuth()
 
-    const writeUserToDB = async () => {
-        const token = await getToken()
-        fetch("http://localhost:8080/api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                Print
-            })
-    }
+	const writeUserToDB = async () => {
+		const token = await getToken()
+		fetch("http://localhost:8080/api/auth/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		})
+			.then((resp) => resp.json())
+			.then((data) => {
+				Print
+			})
+	}
 
-    useEffect(() => {
-        if (isSignedIn) {
-            writeUserToDB()
-        }
-    }, [isLoaded, getToken])
+	useEffect(() => {
+		if (isSignedIn) {
+			writeUserToDB()
+		}
+	}, [isLoaded, getToken])
 
-    return (
-        <nav className="navbar navbar-expand-md">
-            <div className="d-flex flex-column w-100">
-                <div className="container-fluid d-flex w-100">
-                    <a className="navbar-brand" href="#">
-                        <img
-                            className="m-3"
-                            src={logo}
-                            alt="Bootstrap"
-                            width={150}
-                            height={30}
-                        />
-                    </a>
-                    {/* <button
+	return (
+		<nav className="navbar navbar-expand-md">
+			<div className="d-flex flex-column w-100">
+				<div className="container-fluid d-flex w-100">
+					<a className="navbar-brand" href="#">
+						<img
+							className="m-3"
+							src={logo}
+							alt="Bootstrap"
+							width={150}
+							height={30}
+						/>
+					</a>
+					{/* <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
@@ -103,52 +103,85 @@ export const Navbar = () => {
                     </div>
                 </div>
 
-                {/* {Mobile Search}       */}
-                <div className="container-fluid d-md-none mt-2 mb-3">
-                    <form className="d-flex w-100">
-                        <div className="input-group w-100">
-                            <input
-                                className="form-control border-0 bg-light"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <span className="input-group-text bg-light border-0">
-                                <FaSearch className="text-muted" />
-                            </span>
-                        </div>
-                    </form>
-                </div>
-                <div className="container-fluid w-100">
-                    <ul className="nav nav-underline">
-                        <li className="nav-item ps-3">
-                            <a className="nav-link text-dark" href="#">
-                                Home
-                            </a>
-                        </li>
-                        <li className="nav-item ps-3">
-                            <a className="nav-link text-dark" href="#shop">
-                                Shop
-                            </a>
-                        </li>
-                        <li className="nav-item ps-3">
-                            <a className="nav-link text-dark" href="#sports">
-                                Sports
-                            </a>
-                        </li>
-                        <li className="nav-item ps-3">
-                            <a className="nav-link text-dark" href="#festival">
-                                Festival
-                            </a>
-                        </li>
-                        <li className="nav-item ps-3">
-                            <a className="nav-link text-dark" href="#others">
-                                Others
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    );
+				{/* {Mobile Search and Toggle Bar}       */}
+				<div className="container-fluid d-flex d-md-none justify-content-between mt-2 mb-3">
+					<form className="d-flex w-100">
+						<div className="input-group w-100">
+							<input
+								className="form-control border-0 bg-light"
+								type="search"
+								placeholder="Search"
+								aria-label="Search"
+							/>
+							<span className="input-group-text bg-light border-0">
+								<FaSearch className="text-muted" />
+							</span>
+						</div>
+					</form>
+					<button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+						<span className="navbar-toggler-icon"></span>
+					</button>
+					<div className="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+						<div className="offcanvas-header">
+							<h5 className="offcanvas-title" id="offcanvasNavbarLabel">ASDesigns</h5>
+							<button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+						</div>
+						<div className="offcanvas-body">
+							<ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+								<li className="nav-item">
+									<a className="nav-link active" aria-current="page" href="#">Home</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" href="#shop">Shop</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" href="#sports">Sports</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" href="#festivl">Festival</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" href="#others">Others</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" href="#about">About</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				{/* Navbar items */}
+				<div className="container-fluid w-100 d-none d-md-block">
+					<ul className="nav nav-underline">
+						<li className="nav-item ps-3">
+							<a className="nav-link text-dark" href="#">
+								Home
+							</a>
+						</li>
+						<li className="nav-item ps-3">
+							<a className="nav-link text-dark" href="#shop">
+								Shop
+							</a>
+						</li>
+						<li className="nav-item ps-3">
+							<a className="nav-link text-dark" href="#sports">
+								Sports
+							</a>
+						</li>
+						<li className="nav-item ps-3">
+							<a className="nav-link text-dark" href="#festival">
+								Festival
+							</a>
+						</li>
+						<li className="nav-item ps-3">
+							<a className="nav-link text-dark" href="#others">
+								Others
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	);
 };
