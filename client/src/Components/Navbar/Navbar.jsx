@@ -89,18 +89,17 @@ export const Navbar = () => {
                         Wishlist
                     </div>
                     <div className="nav-login-icon">
-                        {!user ? (
+                        {!user && !isLoaded ? (
                             <Skeleton className="w-[30px] h-[30px] rounded-full" />
-                        ) : (
-                            <>
-                                <SignedOut>
-                                    <SignInButton />
-                                </SignedOut>
-                                <SignedIn>
-                                    <UserButton />
-                                </SignedIn>
-                            </>
-                        )}
+                        ) : null}
+                        <>
+                            <SignedOut>
+                                <SignInButton />
+                            </SignedOut>
+                            <SignedIn>
+                                <UserButton />
+                            </SignedIn>
+                        </>
                     </div>
                 </div>
 
