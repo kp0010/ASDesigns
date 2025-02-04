@@ -1,57 +1,67 @@
 import "./Navbar.css";
 import logo from "../../Assets/ASDesigns_Logo.png";
-import '../../App.css'
+import "../../App.css";
 
 import { useEffect } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
+import { FaRegUserCircle } from "react-icons/fa";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 import { useUser, useAuth } from "@clerk/clerk-react";
 
 import { Skeleton } from "./skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Navbar = () => {
-	const { user } = useUser()
-	const { isLoaded, isSignedIn, getToken } = useAuth()
+  const { user } = useUser();
+  const { isLoaded, isSignedIn, getToken } = useAuth();
 
-	const writeUserToDB = async () => {
-		const token = await getToken()
-		fetch("http://localhost:8080/api/auth/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-		})
-			.then((resp) => resp.json())
-			.then((data) => {
-				Print
-			})
-	}
+  const writeUserToDB = async () => {
+    const token = await getToken();
+    fetch("http://localhost:8080/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        Print;
+      });
+  };
 
-	useEffect(() => {
-		if (isSignedIn) {
-			writeUserToDB()
-		}
-	}, [isLoaded, getToken])
+  useEffect(() => {
+    if (isSignedIn) {
+      writeUserToDB();
+    }
+  }, [isLoaded, getToken]);
 
-	return (
-		<nav className="navbar navbar-expand-md">
-			<div className="d-flex flex-column w-100">
-				<div className="container-fluid d-flex w-100">
-					<a className="navbar-brand" href="#">
-						<img
-							className="m-3"
-							src={logo}
-							alt="Bootstrap"
-							width={150}
-							height={30}
-						/>
-					</a>
-					{/* <button
+  return (
+    <nav
+      className="navbar navbar-expand-md"
+      style={{ "--bs-navbar-padding-y": "0rem" }}
+    >
+      <div className="d-flex flex-column w-100">
+        <div className="container-fluid d-flex w-100">
+          <a className="navbar-brand" href="#">
+            <img
+              className="m-3"
+              src={logo}
+              alt="Bootstrap"
+              width={130}
+              height={20}
+            />
+          </a>
+          {/* <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
@@ -63,48 +73,51 @@ export const Navbar = () => {
             <span className="navbar-toggler-icon" />
           </button> */}
 
-                    <form className="d-none d-md-flex mx-auto">
-                        <div className="input-group mt-10">
-                            <input
-                                className="form-control border-0 bg-light"
-                                style={{ width: "18rem", height: "2rem" }}
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <button
-                                className="input-group-text bg-light border-0"
-                                style={{ height: "2rem" }}
-                            >
-                                <FaSearch className="text-muted" />
-                            </button>
-                        </div>
-                    </form>
-                    <div className="nav-icons">
-                        <LuShoppingCart className="icon" />
-                        Cart
-                    </div>
-                    <div className="nav-icons">
-                        <FaRegHeart className="icon" />
-                        Wishlist
-                    </div>
-                    <div className="nav-login-icon">
-                        {!user && !isLoaded ? (
-                            <Skeleton className="w-[30px] h-[30px] rounded-full" />
-                        ) : null}
-                        <>
-                            <SignedOut>
-                                <SignInButton />
-                            </SignedOut>
-                            <SignedIn>
-                                <UserButton />
-                            </SignedIn>
-                        </>
-                    </div>
+          <form className="d-none d-md-flex mx-auto">
+            <div className="input-group mt-6">
+              <input
+                className="form-control border-0 bg-light"
+                style={{ width: "18rem", height: "2rem" }}
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button
+                className="input-group-text bg-light border-0"
+                style={{ height: "2rem" }}
+              >
+                <FaSearch className="text-muted" />
+              </button>
+            </div>
+          </form>
+          <div className="nav-icons">
+            <LuShoppingCart className="icon" />
+            Cart
+          </div>
+          <div className="nav-icons">
+            <FaRegHeart className="icon" />
+            Wishlist
+          </div>
+          <div className="nav-login-icon">
+            {!user && !isLoaded ? (
+              <Skeleton className="w-[30px] h-[30px] rounded-full" />
+            ) : null}
+            <>
+              <SignedOut>
+                <div className="sign-in d-flex flex-md-row flex-column p-2 mt-2">
+                  <FaRegUserCircle className="ml-2 mr-2" />
+                  <SignInButton className="mt-md-0 mt-1 me-lg-2" />
                 </div>
+              </SignedOut>
 
-				{/* {Mobile Search and Toggle Bar}       */}
-				<div className="container-fluid d-flex d-md-none justify-content-between mt-2 mb-3">
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </>
+          </div>
+        </div>
+
+        <div className="container-fluid d-flex d-md-none justify-content-between mt-2 mb-3">
 					<form className="d-flex w-100">
 						<div className="input-group w-100">
 							<input
