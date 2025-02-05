@@ -10,10 +10,8 @@
 .nav-icons {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: end;
 	align-items: center;
-	margin: 0.5rem 0.5rem 0.5rem 0.5rem;
-	
 }
 
 .nav-login-icon {
@@ -21,7 +19,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin: 0 1rem 1rem 1rem;
+	margin-bottom: 1rem;
 }
 @media (max-width: 800px) { 
 	.nav-login-icon {
@@ -34,7 +32,7 @@
 	border-radius: 2rem;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: center;	
 }
 @media (max-width: 800px) {  
 	.sign-in {
