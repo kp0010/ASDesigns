@@ -10,39 +10,39 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 
 import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	UserButton,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
 } from "@clerk/clerk-react";
 import { useUser, useAuth } from "@clerk/clerk-react";
 
 import { Skeleton } from "./Skeleton";
 
 export const Navbar = () => {
-	const { user } = useUser();
-	const { isLoaded, isSignedIn, getToken } = useAuth();
+  const { user } = useUser();
+  const { isLoaded, isSignedIn, getToken } = useAuth();
 
-	const writeUserToDB = async () => {
-		const token = await getToken();
-		fetch("http://localhost:8080/api/auth/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-		})
-			.then((resp) => resp.json())
-			.then((data) => {
-				// Error Handling
-			});
-	};
+  const writeUserToDB = async () => {
+    const token = await getToken();
+    fetch("http://localhost:8080/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        // Error Handling
+      });
+  };
 
-	useEffect(() => {
-		if (isSignedIn) {
-			writeUserToDB();
-		}
-	}, [isLoaded, getToken]);
+  useEffect(() => {
+    if (isSignedIn) {
+      writeUserToDB();
+    }
+  }, [isLoaded, getToken]);
 
   return (
     <nav
@@ -137,13 +137,13 @@ export const Navbar = () => {
           </button>
           <div
             className="offcanvas offcanvas-end w-50"
-            tabindex="-1"
+            tabIndex="-1"
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
           >
             <div className="offcanvas-header">
               <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-                ASDesigns
+                Welcome{isLoaded && isSignedIn ? ", " + user.fullName : null}
               </h5>
               <button
                 type="button"
