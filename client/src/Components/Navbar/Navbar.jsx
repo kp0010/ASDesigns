@@ -96,15 +96,17 @@ export const Navbar = () => {
 
               <>
                 <SignedOut>
-                  <div className="sign-in d-flex flex-md-row flex-column p-2 mt-2 border-md">
+                  <div className="sign-out d-flex flex-md-row flex-column p-2 mt-2 border-md">
                     <FaRegUserCircle className="me-2" />
                     <SignInButton className="mt-md-0 mt-1 me-lg-2" />
                   </div>
                 </SignedOut>
-
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
+                <div className="sign-in ml-2 mr-2 mt-1">
+                  <SignedIn>
+                    <UserButton/>
+                  </SignedIn>
+                </div>
+                
               </>
             </div>
           </div>

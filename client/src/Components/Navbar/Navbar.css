@@ -27,7 +27,7 @@
 	}
 }
 
-.sign-in {
+.sign-out {
 	border: 1px solid black;
 	border-radius: 2rem;
 	display: flex;
@@ -35,7 +35,7 @@
 	align-items: center;	
 }
 @media (max-width: 800px) {  
-	.sign-in {
+	.sign-out {
 	  border: none;
 	}
 }
