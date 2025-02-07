@@ -109,8 +109,9 @@ export const Navbar = () => {
             </div>
           </div>
         </div>
-
-        <div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-3">
+        
+        {/* search and sidebar for mobile view */}
+        <div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2">
           <form className="d-flex flex-grow-1">
             <div className="input-group w-100">
               <input
@@ -188,7 +189,9 @@ export const Navbar = () => {
             </div>
           </div>
         </div>
-        <div className="container-fluid w-100 d-none d-md-block">
+
+        {/* Navitems for big screen */}
+        <div className="container-fluid w-100 d-none d-md-block bg-light">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <a className="nav-link text-dark" href="#">

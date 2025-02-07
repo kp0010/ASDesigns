@@ -4,7 +4,7 @@ import carousel_1 from "../../Assets/hero_main.png";
 export const Carousel = () => {
     return (
         <div>
-            <div id="carouselExample" className="carousel slide m-4">
+            <div id="carouselExample" className="carousel slide m-4 mt-3">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <img src={carousel_1} className="d-block w-100 rounded-4" alt="..." />
