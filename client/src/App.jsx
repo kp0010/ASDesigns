@@ -1,4 +1,5 @@
 import { Carousel } from './Components/Carousel/Carousel'
+import { Category } from './Components/Category/Category'
 import { Footer } from './Components/Footer/Footer'
 import { Navbar } from './Components/Navbar/Navbar'
 
@@ -8,6 +9,7 @@ function App() {
       <div>
         <Navbar />
         <Carousel />
+        <Category />
         <Footer />
       </div>
     </>
