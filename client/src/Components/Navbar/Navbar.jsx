@@ -104,15 +104,15 @@ export const Navbar = () => {
                 </SignedOut>
                 <div className="sign-in ml-2 mr-2 mt-1">
                   <SignedIn>
-                    <UserButton/>
+                    <UserButton />
                   </SignedIn>
                 </div>
-                
+
               </>
             </div>
           </div>
         </div>
-        
+
         {/* search and sidebar for mobile view */}
         <div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2">
           <form className="d-flex flex-grow-1">
