@@ -7,7 +7,6 @@ import fs from "fs"
 
 import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
-import { error } from "console"
 
 const app = express()
 
@@ -53,6 +52,29 @@ app.use(function(_, res, next) {
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
+
+const requireAdmin = () => {
+	return async (req, res, next) => {
+		try {
+			await requireAuth()(req, res, async () => {
+				const { userId } = req.auth
+
+				db.query("SELECT * FROM users WHERE clerk_id = $1", [
+					userId
+				])
+					.then((result) => {
+						if (result.rowCount && result.rows[0]['admin']) {
+							next()
+						} else {
+							res.status(403).json({ message: "Admin Authorization Required" });
+						}
+					})
+			});
+		} catch (error) {
+			res.status(401).json({ message: "Unauthorized access", error: error.message });
+		}
+	}
+};
 
 // Middleware End
 
@@ -103,9 +125,10 @@ db.connect(function(err) {
 //	POST	:	/api/products/
 //			Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
 
-//	TODO
 //	DELETE	:	/api/products/:productId
 //			Delete Product with Specified Product Id (Protected Admin) 
+
+//	TODO: Implement Following Routes
 
 //	PATCH	:	/api/products/:productId
 //			Update Product with Specified Product Id (Protected Admin) 
@@ -150,7 +173,7 @@ app.get("/api/products/(page)?/:pageNo?", async (req, res) => {
 		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
 		const sortBy = req.query["order-by"] ? req.query["order-by"] : "default"
 
-		// TODO DB Query
+		// TODO: DB Query
 
 		res.json({ pageNo, sortBy })
 
@@ -182,87 +205,117 @@ app.get("/api/products/:productId", async (req, res) => {
 	}
 })
 
-app.post("/api/products", requireAuth(), upload.array("files"), async (req, res) => {
-	// Add Files Uploaded from Client to Products Folder in GDrive
-	// Requires Setup to ensure Admin auth
+const createNewFolderGDrive = async (newProductId) => {
+	// Create the Folder for the files
+	const folderMetadata = {
+		name: newProductId,
+		mimeType: "application/vnd.google-apps.folder",
+		parents: [GDRIVE_PARENT_FOLDER_ID],
+	};
 
-	const { userId } = req.auth
+	const newFolder = await drive.files.create({
+		resource: folderMetadata,
+		fields: "id, webViewLink",
+	});
 
-	if (!userId) {
-		return res.status(400).json({ error: "Missing User" });
+	return newFolder
+}
+
+const copyFilesToGDrive = async (files, parentFolderId) => {
+	// Upload the Files Uploaded via Multer
+	const uploadedFiles = []
+
+	for (let i = 0; i < files.length; i++) {
+		let file = files[i]
+
+		const fileMetadata = {
+			name: file["originalname"],
+			parents: [parentFolderId],
+		};
+
+		const media = {
+			mimeType: file["mimetype"],
+			body: fs.createReadStream(file["path"]),
+		};
+
+		const uploadedFile = await drive.files.create({
+			resource: fileMetadata,
+			media,
+			fields: "id, name, webViewLink",
+		});
+
+		uploadedFiles.push(uploadedFile.data);
+
+		fs.unlinkSync(file["path"], (err) => { console.error("Unable to Delete Uploads", err) });
 	}
+	return uploadedFiles
+}
 
-	const user = await clerkClient.users.getUser(userId)
-	const { emailAddresses, firstName, lastName } = user
-
-	// Add Admin User Auth
-
-	console.log(emailAddresses[0].emailAddress, firstName, lastName)
-
+app.post("/api/products", requireAdmin(), upload.array("files"), async (req, res) => {
+	// Add Files Uploaded from Client to Products Folder in GDrive
 	try {
-		const newProductId = req.body.folderName;
+		// TODO: Add Products to the DB as well
+		const newProductId = req.body["folderName"];
 		const files = req.files
 
 		if (!newProductId || !files) {
-			return res.status(400).json({ error: "Missing newProductId or Files" });
+			return res.status(400).json({ error: "Missing newProductId or files" });
 		}
 
-		// Create the Folder for the files
-		const folderMetadata = {
-			name: newProductId,
-			mimeType: "application/vnd.google-apps.folder",
-			parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
-		};
+		const newFolder = await createNewFolderGDrive(newProductId)
+		const uploadedFiles = await copyFilesToGDrive(files, newFolder.data.id)
 
-		const newFolder = await drive.files.create({
-			resource: folderMetadata,
-			fields: "id, webViewLink",
+		res.json({
+			message: "Folder created & files copied",
+			newFolder: newFolder,
+			uploadedFiles: uploadedFiles
 		});
 
-		const newFolderId = newFolder.data.id;
-
-		// const normalizeFileNames = (fileName) => {
-		// 	const nameSplit = fileName.split(".")
-		// 	const extn = nameSplit[nameSplit.length - 1]
-		// 	console.log(nameSplit, extn)
-		// }
-
-		// Upload the Files Uploaded
-		const uploadedFiles = []
-
-		for (let i = 0; i < files.length; i++) {
-			let file = files[i]
-			console.log("Uploading ", file["originalname"])
-
-			const fileMetadata = {
-				name: file["originalname"],
-				parents: [newFolderId],
-			};
-
-			const media = {
-				mimeType: file["mimetype"],
-				body: fs.createReadStream(file["path"]),
-			};
-
-			const uploadedFile = await drive.files.create({
-				resource: fileMetadata,
-				media,
-				fields: "id, name, webViewLink",
-			});
-
-			uploadedFiles.push(uploadedFile.data);
-
-			fs.unlinkSync(file.path);
-		}
-
-		// console.log("All Files Uploaded")
-		res.json({ message: "Folder created & files copied", newFolderId, copiedFiles: uploadedFiles });
-
 	} catch (error) {
-		console.error("Error copying files:", error);
+		console.error("Error copying files: ", error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
+
+app.delete("/api/products", requireAdmin(), async (req, res) => {
+	// Delete Products from DB
+	try {
+		// TODO: Delete Products from the Database as well
+
+		const { productId } = req.body
+
+		if (!productId) {
+			res.status(400).json({ error: "Missing productId" })
+		}
+
+		const query = `name = '${productId}' and '${GDRIVE_PARENT_FOLDER_ID}' in parents`
+
+		const folder = await drive.files.list({
+			q: query,
+			fields: "files(id, name)",
+		})
+
+		if (!folder) {
+			return res.status(400).json({ error: "No Folder with the Specified Name found" })
+		}
+
+		const folderId = folder.data.files[0].id
+
+		const deletedFolder = await drive.files.delete({
+			fileId: folderId,
+		})
+
+		res.json({
+			success: !Boolean(deletedFolder["error"]),
+			deletedFolder: deletedFolder,
+			message: !Boolean(deletedFolder["error"]) ? "Product Deleted Successfully" : "Product Deletion Unsuccessful"
+		})
+
+	} catch (error) {
+		console.error("Error Deleting Product: ", error)
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+})
 
 // Routes End
 

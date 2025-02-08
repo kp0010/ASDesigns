@@ -174,7 +174,7 @@ export const Navbar = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#festivl">
+                  <a className="nav-link" href="#festival">
                     Festival
                   </a>
                 </li>
@@ -224,6 +224,6 @@ export const Navbar = () => {
           </ul>
         </div>
       </div>
-    </nav>
+    </nav >
   );
 };
