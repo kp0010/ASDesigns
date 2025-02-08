@@ -15,6 +15,7 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
+
 import { useUser, useAuth } from "@clerk/clerk-react";
 
 import { Skeleton } from "./Skeleton";
@@ -146,7 +147,7 @@ export const Navbar = () => {
           >
             <div className="offcanvas-header">
               <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-                Welcome{isLoaded && isSignedIn ? ", " + user.fullName : null}
+                Welcome{isLoaded && isSignedIn ? ", " + user.firstName : null}
               </h5>
               <button
                 type="button"

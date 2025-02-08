@@ -2,7 +2,10 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import pg from "pg"
+import multer from "multer"
+import fs from "fs"
 
+import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
 
 const app = express()
@@ -20,6 +23,9 @@ const PG_DB_CONFIG = {
 	database: process.env.PG_DB,
 	port: process.env.PG_PORT,
 }
+
+const GDRIVE_KEY_FILE = process.env.GOOGLE_DRIVE_KEY_FILE
+const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID
 
 // Constants End
 
@@ -53,6 +59,21 @@ app.use(function(_, res, next) {
 
 // -----------------------------------------------------------
 
+// GDrive Setup
+
+const auth = new google.auth.GoogleAuth({
+	keyFile: GDRIVE_KEY_FILE,
+	scopes: ["https://www.googleapis.com/auth/drive"],
+});
+
+const drive = google.drive({ version: "v3", auth });
+
+const upload = multer({ dest: process.env.MULTER_DESTINATION })
+
+// GDrive End
+
+// -----------------------------------------------------------
+
 // Database Setup
 
 const { Pool } = pg
@@ -73,6 +94,11 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 	// Add New User To DB
 	try {
 		const { userId } = req.auth
+
+		if (!userId) {
+			return res.status(400).json({ error: "Missing User" });
+		}
+
 		const user = await clerkClient.users.getUser(userId)
 		const { emailAddresses, firstName, lastName } = user
 
@@ -96,6 +122,105 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
+
+
+app.post("/api/products", requireAuth(), upload.array("files"), async (req, res) => {
+	// Add Files Uploaded from Client to Products Folder in GDrive
+	// Requires Setup to ensure Admin auth
+
+	const { userId } = req.auth
+
+	if (!userId) {
+		return res.status(400).json({ error: "Missing User" });
+	}
+
+	const user = await clerkClient.users.getUser(userId)
+	const { emailAddresses, firstName, lastName } = user
+
+	// Add Admin User Auth
+
+	console.log(emailAddresses[0].emailAddress, firstName, lastName)
+
+	try {
+		const newProductId = req.body.folderName;
+		const files = req.files
+
+		if (!newProductId || !files) {
+			return res.status(400).json({ error: "Missing newProductId" });
+		}
+
+		const folderMetadata = {
+			name: newProductId,
+			mimeType: "application/vnd.google-apps.folder",
+			parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
+		};
+
+		const newFolder = await drive.files.create({
+			resource: folderMetadata,
+			fields: "id, webViewLink",
+		});
+
+		const newFolderId = newFolder.data.id;
+
+		// const normalizeFileNames = (fileName) => {
+		// 	const nameSplit = fileName.split(".")
+		// 	const extn = nameSplit[nameSplit.length - 1]
+		// 	console.log(nameSplit, extn)
+		// }
+
+		const uploadedFiles = []
+
+		console.log(files)
+
+		for (let i = 0; i < files.length; i++) {
+			let file = files[i]
+			console.log("Uploading ", file["originalname"])
+			console.log(file)
+
+			const fileMetadata = {
+				name: file["originalname"],
+				parents: [newFolderId],
+			};
+
+			const media = {
+				mimeType: file["mimetype"],
+				body: fs.createReadStream(file["path"]),
+			};
+
+			const uploadedFile = await drive.files.create({
+				resource: fileMetadata,
+				media,
+				fields: "id, name, webViewLink",
+			});
+
+			uploadedFiles.push(uploadedFile.data);
+
+			fs.unlinkSync(file.path);
+		}
+
+		console.log("All Files Uploaded")
+		res.json({ message: "Folder created & files copied", newFolderId, copiedFiles: uploadedFiles });
+
+	} catch (error) {
+		console.error("Error copying files:", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+});
+
+
+app.get("/api/products/:id", async (req, res) => {
+	// Get individual Products
+	try {
+
+	} catch (error) {
+		console.error("Error Reading Product", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+})
+
+
+app.get("/api/products/?:page")
+
 
 // Routes End
 

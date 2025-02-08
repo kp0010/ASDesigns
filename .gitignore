@@ -13,6 +13,9 @@ lerna-debug.log*
 /server/db/*
 *.sql
 
+# Ignore API json
+asd*.json
+
 # Ignore Test Dockerfile
 Dockerfile
 
