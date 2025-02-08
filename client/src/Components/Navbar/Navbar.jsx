@@ -47,7 +47,7 @@ export const Navbar = () => {
 
   return (
     <nav
-      className="navbar navbar-expand-md"
+      className="navbar sticky-top bg-light navbar-expand-md"
       style={{ "--bs-navbar-padding-y": "0rem" }}
     >
       <div className="d-flex flex-column w-100">
