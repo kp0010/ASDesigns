@@ -1,0 +1,47 @@
+.item {
+    background: #efefef;
+    width: 250px;
+    border-radius: 10px;
+    padding: 25px;
+    /* transition: all 0.3s ease-in-out; */
+}
+.item-image {
+    
+    padding-bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.item-image img {
+    width: 200px;
+    height: 200px;
+    transition: all 0.3s ;
+}
+.item-content {
+    padding-top: 15px;
+}
+.item-content h2 {
+    font-weight: 500;
+}
+.item-price {
+    padding-top: 5px;
+}
+.item-hover-container {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    height: auto;
+    /* background: rgba(0, 0, 0, 0.3);  Semi-transparent overlay   */
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: visibility bottom 0.3s;
+}
+.item:hover .item-hover-container{
+    visibility: visible;
+}
