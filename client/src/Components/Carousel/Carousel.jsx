@@ -1,6 +1,5 @@
 import React from "react";
 import carousel_1 from "../../Assets/1.png";
-import carousel_2 from "../../Assets/test.png";
 
 export const Carousel = () => {
   return (

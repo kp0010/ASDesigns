@@ -4,8 +4,8 @@ import "./Category.css";
 import "../../App.css";
 
 import sports from "../../Assets/sport.jpg";
-import fest from "../../Assets/fest.jpg";
-import other from "../../Assets/other.jpg";
+import fest from "../../Assets/fest2.png";
+import other from "../../Assets/other2.jpg";
 
 import { NeonGradientCard } from "../magicui/neon-gradient-card";
 // import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
@@ -26,7 +26,7 @@ export const Category = () => {
           <div className="relative w-full rounded-xl overflow-hidden">
             <img
               src={sports}
-              className="w-full h-48 object-cover filter blur-[1px]"
+              className="w-full h-48 object-cover filter blur-[2px]"
               alt="Sports"
             />
             <div className="absolute inset-0 bg-black/40"></div>
@@ -45,7 +45,7 @@ export const Category = () => {
           <div className="relative w-full rounded-xl overflow-hidden">
             <img
               src={fest}
-              className="w-full h-48 object-cover filter blur-[1px]"
+              className="w-full h-48 object-cover filter blur-[2px]"
               alt="Festivals"
             />
             <div className="absolute inset-0 bg-black/40"></div>
@@ -64,7 +64,7 @@ export const Category = () => {
           <div className="relative w-full rounded-xl overflow-hidden">
             <img
               src={other}
-              className="w-full h-48 object-cover filter blur-[0px]"
+              className="w-full h-48 object-cover filter blur-[2px]"
               alt="Others"
             />
             <div className="absolute inset-0 bg-black/40"></div>
