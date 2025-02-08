@@ -7,6 +7,7 @@ import fs from "fs"
 
 import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
+import { error } from "console"
 
 const app = express()
 
@@ -44,13 +45,11 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: false }))
 
-app.use(requireAuth({
-	secretKey: process.env.CLERK_SECRET_KEY,
-}))
+// app.use(requireAuth({ secretKey: process.env.CLERK_SECRET_KEY, }))
 
 app.use(function(_, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+	res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
@@ -90,6 +89,28 @@ db.connect(function(err) {
 
 // Routes
 
+// Auth Routes:
+//	POST	:	/api/auth/register
+//			Register New Users to the DB (Protected)
+
+// Product Routes:
+//	GET	:	/api/products/page?/:pageNo?/?order-by=x
+//			View Products (Optionally Via Page Number and Sorting Options) (Public)
+
+//	GET	:	/api/products/:productId
+//			View Product with Specified Product Id (Public)
+
+//	POST	:	/api/products/
+//			Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
+
+//	TODO
+//	DELETE	:	/api/products/:productId
+//			Delete Product with Specified Product Id (Protected Admin) 
+
+//	PATCH	:	/api/products/:productId
+//			Update Product with Specified Product Id (Protected Admin) 
+
+
 app.post("/api/auth/register", requireAuth(), async (req, res) => {
 	// Add New User To DB
 	try {
@@ -123,6 +144,43 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 	}
 });
 
+app.get("/api/products/(page)?/:pageNo?", async (req, res) => {
+	// Get All Products with Pagination and Sorting
+	try {
+		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
+		const sortBy = req.query["order-by"] ? req.query["order-by"] : "default"
+
+		// TODO DB Query
+
+		res.json({ pageNo, sortBy })
+
+	} catch (error) {
+		console.error("Error Reading Products", error)
+		res.status(500).json({ error: "Internal Server Error" })
+	}
+})
+
+app.get("/api/products/:productId", async (req, res) => {
+	// Get individual Products by IDS
+
+	try {
+		const { productId } = req.params
+
+		const product = await db.query("SELECT * FROM products WHERE productid = $1", [
+			productId
+		])
+
+		res.status(200).json({
+			success: Boolean(product.rowCount),
+			message: product.rowCount ? "Product Retrieved Succesfully" : "Product Not Found",
+			product: product.rows[0]
+		})
+
+	} catch (error) {
+		console.error("Error Reading Product", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+})
 
 app.post("/api/products", requireAuth(), upload.array("files"), async (req, res) => {
 	// Add Files Uploaded from Client to Products Folder in GDrive
@@ -146,9 +204,10 @@ app.post("/api/products", requireAuth(), upload.array("files"), async (req, res)
 		const files = req.files
 
 		if (!newProductId || !files) {
-			return res.status(400).json({ error: "Missing newProductId" });
+			return res.status(400).json({ error: "Missing newProductId or Files" });
 		}
 
+		// Create the Folder for the files
 		const folderMetadata = {
 			name: newProductId,
 			mimeType: "application/vnd.google-apps.folder",
@@ -168,14 +227,12 @@ app.post("/api/products", requireAuth(), upload.array("files"), async (req, res)
 		// 	console.log(nameSplit, extn)
 		// }
 
+		// Upload the Files Uploaded
 		const uploadedFiles = []
-
-		console.log(files)
 
 		for (let i = 0; i < files.length; i++) {
 			let file = files[i]
 			console.log("Uploading ", file["originalname"])
-			console.log(file)
 
 			const fileMetadata = {
 				name: file["originalname"],
@@ -198,7 +255,7 @@ app.post("/api/products", requireAuth(), upload.array("files"), async (req, res)
 			fs.unlinkSync(file.path);
 		}
 
-		console.log("All Files Uploaded")
+		// console.log("All Files Uploaded")
 		res.json({ message: "Folder created & files copied", newFolderId, copiedFiles: uploadedFiles });
 
 	} catch (error) {
@@ -206,21 +263,6 @@ app.post("/api/products", requireAuth(), upload.array("files"), async (req, res)
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
-
-
-app.get("/api/products/:id", async (req, res) => {
-	// Get individual Products
-	try {
-
-	} catch (error) {
-		console.error("Error Reading Product", error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-})
-
-
-app.get("/api/products/?:page")
-
 
 // Routes End
 
