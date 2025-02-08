@@ -1,8 +1,13 @@
 .category {
     background: #dcdada;
 }
+
 .category-head {
     font-size: 50px;
     padding-top: 16px;
     padding-bottom: 8px;
+}
+
+.explore-btn:hover {
+    color: white !important;
 }

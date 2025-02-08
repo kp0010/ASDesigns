@@ -1,12 +1,15 @@
 import React from "react";
+
 import "./Category.css";
 import "../../App.css";
+
 import sports from "../../Assets/sport.jpg";
 import fest from "../../Assets/fest.jpg";
 import other from "../../Assets/other.jpg";
+
 import { NeonGradientCard } from "../magicui/neon-gradient-card";
 // import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import { ChevronRight } from "lucide-react";
 
 export const Category = () => {
@@ -31,7 +34,7 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Sports
               </h5>
-              <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
+              <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] hover:bg-black text-black">
                 Explore More <ChevronRight />
               </Button>
             </div>
