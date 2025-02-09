@@ -24,7 +24,7 @@ export const UploadFiles = () => {
 		})
 			.then((resp) => resp.json())
 			.then((data) => {
-				// TODO: Error Handlig
+				// TODO: Error Handling
 			});
 	};
 

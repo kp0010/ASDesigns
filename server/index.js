@@ -54,6 +54,7 @@ app.use(function(_, res, next) {
 });
 
 const requireAdmin = () => {
+	// Custom requireAdmin middleware to use
 	return async (req, res, next) => {
 		try {
 			await requireAuth()(req, res, async () => {

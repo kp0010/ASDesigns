@@ -41,7 +41,7 @@ export const Item = () => {
                 </a>
             </div>
             <div className="item-price">
-                <h2>Rs 200</h2>
+                <h2>₹ 199.00</h2>
             </div>
         </div>
     )
