@@ -47,7 +47,7 @@ export const Navbar = () => {
 
   return (
     <nav
-      className="navbar sticky-top bg-light navbar-expand-md"
+      className="navbar sticky-top bg-white navbar-expand-md"
       style={{ "--bs-navbar-padding-y": "0rem" }}
     >
       <div className="d-flex flex-column w-100">
@@ -156,7 +156,7 @@ export const Navbar = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body">
+            <div className="offcanvas-body bg-[#dcdada]">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
                   <a className="nav-link active" aria-current="page" href="#">
@@ -194,7 +194,7 @@ export const Navbar = () => {
         </div>
 
         {/* Navitems for big screen */}
-        <div className="container-fluid w-100 d-none d-md-block bg-light">
+        <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <a className="nav-link text-dark" href="#">

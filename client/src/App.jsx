@@ -3,6 +3,7 @@ import { Category } from './Components/Category/Category'
 import { Footer } from './Components/Footer/Footer'
 import { Item } from './Components/Item/Item'
 import { Navbar } from './Components/Navbar/Navbar'
+import './App.css';
 
 function App() {
   return (

@@ -6,7 +6,7 @@ export const Carousel = () => {
     <div>
       <div
         id="carouselExampleInterval"
-        className="carousel slide m-4 mt-3 custom-carousel"
+        className="carousel slide m-4 mt-3 custom-carousel sm:m-0"
         data-bs-ride="carousel"
         data-bs-pause="hover"
       >
