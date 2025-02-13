@@ -34,9 +34,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Sports
               </h5>
-              <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] hover:bg-black text-black">
-                Explore More <ChevronRight />
-              </Button>
+              <a href="/sports">
+                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] hover:bg-black text-black">
+                  Explore More <ChevronRight />
+                </Button>
+              </a>
             </div>
           </div>
         </div>
@@ -53,9 +55,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Festivals
               </h5>
-              <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
-                Explore More <ChevronRight />
-              </Button>
+              <a href="/festival">
+                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
+                  Explore More <ChevronRight />
+                </Button>
+              </a>
             </div>
           </div>
         </div>
@@ -72,9 +76,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Others
               </h5>
-              <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
-                Explore More <ChevronRight />
-              </Button>
+              <a href="/others">
+                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
+                  Explore More <ChevronRight />
+                </Button>
+              </a>
             </div>
           </div>
         </div>

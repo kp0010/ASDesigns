@@ -12,7 +12,7 @@ export const Item = () => {
         <div className="item">
             {/* onclick link to product page  */}
             {/* need to add props */}
-            <a href="/product/productId">
+            <a href="/product/:productId">
                 <div className="item-image">
                     <img src={sample_img} alt="..." />
                     <div className="item-hover-container">
@@ -39,9 +39,7 @@ export const Item = () => {
                     </div>
                 </div>
                 <div className="item-content">
-                    <a href="#product">
-                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
-                    </a>
+                    <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
                 </div>
                 <div className="item-price">
                     <h2>₹ 199.00</h2>

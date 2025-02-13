@@ -87,6 +87,10 @@
 .item-content h2 {
     font-weight: 500;
 }
+.item-content:hover {
+    color:#05b1b1;
+    transition: 0.3s;
+}
 .item-price {
     padding-top: 5px;
 } 
