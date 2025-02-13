@@ -11,38 +11,43 @@ export const Item = () => {
     return (
         <div className="item">
             {/* onclick link to product page  */}
-            <div className="item-image">
-                <img src={sample_img} alt="..." />
-                <div className="item-hover-container">
-                    <a href="" className="item-icons-container d-flex rounded-full">
-                        <i>
-                            <LuShoppingCart className="item-icon" />
-                        </i>
-                        <span className="item-icon-tag">Add to Cart</span>
-                    </a>
-                    <a href="" className="item-icons-container d-flex rounded-full">
-                        <i>
-                            <PiEyeDuotone className="item-icon" />
-                        </i>
-                        <span className="item-icon-tag">Quick View</span>
-                    </a>
-                    <a href="" className="item-icons-container d-flex rounded-full">
-                        <i>
-                            <FaRegHeart className="item-icon" />
-                        </i>
-                        <span className="item-icon-tag">Wishlist</span>
-                        {/* wishlist toggle functionality pending */}
+            {/* need to add props */}
+            <a href="/product/productId">
+                <div className="item-image">
+                    <img src={sample_img} alt="..." />
+                    <div className="item-hover-container">
+                        {/* will navigate to add to cart page on clicking the button */}
+                        <a href="" className="item-icons-container d-flex rounded-full">
+                            <i>
+                                <LuShoppingCart className="item-icon" />
+                            </i>
+                            <span className="item-icon-tag">Add to Cart</span>
+                        </a>
+                        <a href="" className="item-icons-container d-flex rounded-full">
+                            <i>
+                                <PiEyeDuotone className="item-icon" />
+                            </i>
+                            <span className="item-icon-tag">Quick View</span>
+                        </a>
+                        <a href="" className="item-icons-container d-flex rounded-full">
+                            <i>
+                                <FaRegHeart className="item-icon" />
+                            </i>
+                            <span className="item-icon-tag">Wishlist</span>
+                            {/* wishlist toggle functionality pending */}
+                        </a>
+                    </div>
+                </div>
+                <div className="item-content">
+                    <a href="#product">
+                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
                     </a>
                 </div>
-            </div>
-            <div className="item-content">
-                <a href="#product">
-                    <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
-                </a>
-            </div>
-            <div className="item-price">
-                <h2>₹ 199.00</h2>
-            </div>
+                <div className="item-price">
+                    <h2>₹ 199.00</h2>
+                </div>
+            </a>
+
         </div>
     )
 }

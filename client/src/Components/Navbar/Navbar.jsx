@@ -80,15 +80,20 @@ export const Navbar = () => {
             </div>
           </form>
           <div className="d-flex align-items-center gap-lg-3 gap-1">
-            <div className="nav-icons d-flex align-items-center">
-              <LuShoppingCart className="icon me-2" />
-              <span>Cart</span>
-            </div>
+            <a href="/cart">
+              <div className="nav-icons d-flex align-items-center">
+                <LuShoppingCart className="icon me-2" />
+                <span>Cart</span>
+              </div>
+            </a>
 
-            <div className="nav-icons d-flex align-items-center">
-              <FaRegHeart className="icon me-2" />
-              <span>Wishlist</span>
-            </div>
+            <a href="/wishlist">
+              <div className="nav-icons d-flex align-items-center">
+                <FaRegHeart className="icon me-2" />
+                <span>Wishlist</span>
+              </div>
+            </a>
+
 
             <div className="nav-login-icon">
               {!user && !isLoaded ? (
@@ -159,32 +164,32 @@ export const Navbar = () => {
             <div className="offcanvas-body bg-[#dcdada]">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="#">
+                  <a className="nav-link active" aria-current="page" href="/">
                     Home
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#shop">
+                  <a className="nav-link" href="/shop">
                     Shop
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#sports">
+                  <a className="nav-link" href="/sports">
                     Sports
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#festival">
+                  <a className="nav-link" href="/festival">
                     Festival
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#others">
+                  <a className="nav-link" href="/others">
                     Others
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#about">
+                  <a className="nav-link" href="/about">
                     About
                   </a>
                 </li>
@@ -197,27 +202,27 @@ export const Navbar = () => {
         <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="#">
+              <a className="nav-link text-dark" href="/">
                 Home
               </a>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="#shop">
+              <a className="nav-link text-dark" href="/shop">
                 Shop
               </a>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="#sports">
+              <a className="nav-link text-dark" href="/sports">
                 Sports
               </a>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="#festival">
+              <a className="nav-link text-dark" href="/festival">
                 Festival
               </a>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="#others">
+              <a className="nav-link text-dark" href="/others">
                 Others
               </a>
             </li>
