@@ -1,8 +1,0 @@
-package main
-import "fmt"
-
-func main(){
-	var temp int = 10
-	fmt.Println(temp)
-	fmt.Println("HELLO WORLD")
-}
