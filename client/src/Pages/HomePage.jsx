@@ -6,9 +6,9 @@ import React from 'react'
 export const HomePage = () => {
   return (
     <div>
-        <Carousel />
-        <Category />
-        <Item />
+      <Carousel />
+      <Category />
+      <Item />
     </div>
   )
 }

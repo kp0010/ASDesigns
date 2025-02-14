@@ -17,6 +17,7 @@ export const UploadFiles = () => {
 			formData.append("files", files[i])
 		}
 
+		// TODO: Switch to AXIOS
 		fetch("http://localhost:8080/api/products", {
 			method: "POST",
 			headers: { Authorization: `Bearer ${token}`, },

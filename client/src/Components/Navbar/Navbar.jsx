@@ -26,6 +26,7 @@ export const Navbar = () => {
 
   const writeUserToDB = async () => {
     const token = await getToken();
+    // TODO: Switch to AXIOS
     fetch("http://localhost:8080/api/auth/register", {
       method: "POST",
       headers: {
