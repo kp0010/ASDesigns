@@ -1,18 +1,24 @@
 import React from 'react'
 import "./Item.css"
-import sample_img from "../../Assets/Products/sample_product_img.png"
+
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
 
-export const Item = () => {
+export const Item = ({ product }) => {
+    const { product_id, name, price } = product
+    console.log(product_id, product_id.length)
+
+    const imageSrc = `./src/Assets/Products/${product_id}.jpeg`
+    console.log(imageSrc, imageSrc.length)
+
     return (
         <div className="item">
             {/* TODO: onclick link to product page  */}
             {/* TODO: need to add props */}
-            <a href={`/product/${10}`}>
+            <a href={`/product/${product_id}`}>
                 <div className="item-image">
-                    <img src={sample_img} alt="..." />
+                    <img src={imageSrc} alt="..." />
                     <div className="item-hover-container">
                         {/* TODO: will navigate to add to cart page on clicking the button */}
                         <button className="item-icons-container d-flex rounded-full">
@@ -37,10 +43,10 @@ export const Item = () => {
                     </div>
                 </div>
                 <div className="item-content">
-                    <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                    <h2>{product_id + (name ? " | " + name : "")}</h2>
                 </div>
                 <div className="item-price">
-                    <h2>₹ 199.00</h2>
+                    <h2>₹ {parseFloat(price).toFixed(2) - 1}</h2>
                 </div>
             </a>
 

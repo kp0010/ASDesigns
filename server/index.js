@@ -7,6 +7,7 @@ import fs from "fs"
 
 import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
+import { on } from "events"
 
 const app = express()
 
@@ -174,11 +175,26 @@ app.get("/api/products/(page)?/:pageNo?", async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
 		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
-		const sortBy = req.query["order-by"] ? req.query["order-by"] : "default"
+		const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
+		const limit = req.query["limit"] ? req.query["limit"] : 0
 
-		// TODO: DB Query
+		let selectQuery = "SELECT * FROM products"
 
-		res.json({ pageNo, sortBy })
+		// TODO: Add Popular Sort
+		const sortToSql = {
+			"default": "random()",
+			"recent": "updated_at DESC"
+		}
+		selectQuery += " ORDER BY " + sortToSql[orderBy]
+
+		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
+		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
+
+		console.log(selectQuery, limit, orderBy, pageNo)
+		const result = await db.query(selectQuery)
+
+		console.log(result.rows)
+		res.json(result.rows)
 
 	} catch (error) {
 		console.error("Error Reading Products", error)
