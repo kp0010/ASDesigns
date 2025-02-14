@@ -9,7 +9,7 @@ export const UploadFiles = () => {
 		const token = await getToken()
 
 		const formData = new FormData()
-		formData.append("folderName", "HELLO")
+		formData.append("folderName", "NEW")
 
 		const files = event.target.files
 
@@ -29,9 +29,28 @@ export const UploadFiles = () => {
 			});
 	};
 
+
+	const deleteProduct = async (event) => {
+		event.preventDefault()
+
+		const token = await getToken()
+
+		fetch("http://localhost:8080/api/products", {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ productId: "PRODUCT_NAME" })
+		})
+			.then((resp) => resp.json())
+			.then((data) => console.log(data))
+	}
+
 	return (
 		<>
 			<input type="file" multiple onChange={uploadFiles} />
+			<button onClick={deleteProduct}>DELETE</button>
 		</>
 	)
 

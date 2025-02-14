@@ -12,6 +12,7 @@ lerna-debug.log*
 # Server Session DB
 /server/db/*
 *.sql
+*.yml
 
 # Ignore API json
 asd*.json

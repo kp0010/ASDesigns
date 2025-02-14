@@ -10,7 +10,7 @@ export const Item = () => {
         <div className="item">
             {/* TODO: onclick link to product page  */}
             {/* TODO: need to add props */}
-            <a href="/product/:productId">
+            <a href={`/product/${10}`}>
                 <div className="item-image">
                     <img src={sample_img} alt="..." />
                     <div className="item-hover-container">
