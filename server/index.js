@@ -22,6 +22,7 @@ const PG_DB_CONFIG = {
 	host: process.env.PG_HOST,
 	database: process.env.PG_DB,
 	port: process.env.PG_PORT,
+	password: process.env.PG_PASSWORD
 }
 
 const GDRIVE_KEY_FILE = process.env.GOOGLE_DRIVE_KEY_FILE
@@ -60,9 +61,9 @@ const requireAdmin = () => {
 			await requireAuth()(req, res, async () => {
 				const { userId } = req.auth
 
-				db.query("SELECT * FROM users WHERE clerk_id = $1", [
-					userId
-				])
+				const selectQuery = "SELECT * FROM users WHERE clerk_id = $1"
+
+				db.query(selectQuery, [userId])
 					.then((result) => {
 						if (result.rowCount && result.rows[0]['admin']) {
 							next()
@@ -99,6 +100,7 @@ const upload = multer({ dest: process.env.MULTER_DESTINATION })
 // Database Setup
 
 const { Pool } = pg
+
 const db = new Pool(PG_DB_CONFIG)
 
 db.connect(function(err) {
@@ -147,12 +149,14 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 		const user = await clerkClient.users.getUser(userId)
 		const { emailAddresses, firstName, lastName } = user
 
-		const existingUser = await db.query("SELECT * FROM users WHERE clerk_id = $1", [userId]);
+		const selectQuery = "SELECT * FROM users WHERE clerk_id = $1"
+		const existingUser = await db.query(selectQuery, [userId]);
+
+		const insertQuery = "INSERT INTO users (clerk_id, email, name) VALUES ($1, $2, $3)"
 
 		if (existingUser.rowCount === 0) {
 			await db.query(
-				"INSERT INTO users (clerk_id, email, name) VALUES ($1, $2, $3)",
-				[userId, emailAddresses[0].emailAddress, `${firstName} ${lastName}`]
+				insertQuery, [userId, emailAddresses[0].emailAddress, `${firstName} ${lastName}`]
 			);
 		}
 
@@ -190,9 +194,9 @@ app.get("/api/products/:productId", async (req, res) => {
 	try {
 		const { productId } = req.params
 
-		const product = await db.query("SELECT * FROM products WHERE productid = $1", [
-			productId
-		])
+		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
+
+		const product = await db.query(selectQuery, [productId])
 
 		res.status(200).json({
 			success: Boolean(product.rowCount),
@@ -222,7 +226,7 @@ const createNewFolderGDrive = async (newProductId) => {
 	return newFolder
 }
 
-const copyFilesToGDrive = async (files, parentFolderId) => {
+const copyFilesGDrive = async (files, parentFolderId) => {
 	// Upload the Files Uploaded via Multer
 	const uploadedFiles = []
 
@@ -264,7 +268,7 @@ app.post("/api/products", requireAdmin(), upload.array("files"), async (req, res
 		}
 
 		const newFolder = await createNewFolderGDrive(newProductId)
-		const uploadedFiles = await copyFilesToGDrive(files, newFolder.data.id)
+		const uploadedFiles = await copyFilesGDrive(files, newFolder.data.id)
 
 		res.json({
 			message: "Folder created & files copied",
@@ -278,33 +282,48 @@ app.post("/api/products", requireAdmin(), upload.array("files"), async (req, res
 	}
 });
 
+const deleteProductGDrive = async (productId) => {
+	const query = `name = '${productId}' and '${GDRIVE_PARENT_FOLDER_ID}' in parents`
+
+	const folder = await drive.files.list({
+		q: query,
+		fields: "files(id, name)",
+	})
+
+	if (!folder) {
+		return res.status(400).json({ error: "No Folder with the Specified Name found" })
+	}
+
+	const folderId = folder.data.files[0].id
+
+	const deletedFolder = await drive.files.delete({
+		fileId: folderId,
+	})
+
+	return deletedFolder
+}
+
+const deleteProductDB = async (productId) => {
+	// TODO: Test API
+	const query = `DELETE FROM products WHERE product_id = $1`
+
+	const result = await db.query(query, [productId])
+}
+
 app.delete("/api/products", requireAdmin(), async (req, res) => {
 	// Delete Products from DB
+	// WARNING: Deleting from the DB or Google Drive will result in Previous Buyers of the Product from downloading it again
+	// FIX: Maybe Check whether the Item has been bought ever and then remove only if not in orders list
 	try {
-		// TODO: Delete Products from the Database as well
-
 		const { productId } = req.body
 
 		if (!productId) {
-			res.status(400).json({ error: "Missing productId" })
+			return res.status(400).json({ error: "Missing productId" })
 		}
 
-		const query = `name = '${productId}' and '${GDRIVE_PARENT_FOLDER_ID}' in parents`
+		const deletedFolder = await deleteProductGDrive(productId)
 
-		const folder = await drive.files.list({
-			q: query,
-			fields: "files(id, name)",
-		})
-
-		if (!folder) {
-			return res.status(400).json({ error: "No Folder with the Specified Name found" })
-		}
-
-		const folderId = folder.data.files[0].id
-
-		const deletedFolder = await drive.files.delete({
-			fileId: folderId,
-		})
+		await deleteProductDB(productId)
 
 		res.json({
 			success: !Boolean(deletedFolder["error"]),
