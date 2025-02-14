@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import "../../App.css";
-import logo from "../../Assets/ASDesigns_Logo.png";
+import logo from "../../Assets/Logos/AS_logo_full.png";
 
 import { useEffect } from "react";
 

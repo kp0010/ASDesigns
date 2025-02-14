@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Item.css"
-import sample_img from "../../Assets/sample_product_img.png"
+import sample_img from "../../Assets/Products/sample_product_img.png"
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";

@@ -3,9 +3,9 @@ import React from "react";
 import "./Category.css";
 import "../../App.css";
 
-import sports from "../../Assets/sport.jpg";
-import fest from "../../Assets/fest2.png";
-import other from "../../Assets/other2.jpg";
+import sports from "../../Assets/Categories/sport.jpg";
+import fest from "../../Assets/Categories/fest.png";
+import other from "../../Assets/Categories/other.jpg";
 
 import { NeonGradientCard } from "../magicui/neon-gradient-card";
 // import { InteractiveHoverButton } from "../magicui/interactive-hover-button";

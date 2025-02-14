@@ -5,15 +5,19 @@ import "./CSS/HomePage.css"
 import React from 'react'
 
 export const HomePage = () => {
+  const getFeaturedProducts = () => {
+
+  }
+
   return (
     <div>
       <Carousel />
       <Category />
       <div className="product-grid-container">
-            {Array.from({ length: 4 }).map((_, i) => (
-                <Item key={i} />
-            ))}
-        </div>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Item key={i} />
+        ))}
+      </div>
     </div>
   )
 }

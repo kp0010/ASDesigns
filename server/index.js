@@ -45,8 +45,6 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: false }))
 
-// app.use(requireAuth({ secretKey: process.env.CLERK_SECRET_KEY, }))
-
 app.use(function(_, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH");
