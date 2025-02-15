@@ -18,7 +18,8 @@ lerna-debug.log*
 asd*.json
 
 # Ignore uploads
-/server/misc/uploads/*
+/server/uploads/
+/misc/
 
 # Ignore Test Dockerfile
 Dockerfile

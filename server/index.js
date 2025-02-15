@@ -7,7 +7,6 @@ import fs from "fs"
 
 import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
-import { on } from "events"
 
 const app = express()
 
@@ -190,10 +189,8 @@ app.get("/api/products/(page)?/:pageNo?", async (req, res) => {
 		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
 		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
 
-		console.log(selectQuery, limit, orderBy, pageNo)
 		const result = await db.query(selectQuery)
 
-		console.log(result.rows)
 		res.json(result.rows)
 
 	} catch (error) {
@@ -209,13 +206,16 @@ app.get("/api/products/:productId", async (req, res) => {
 		const { productId } = req.params
 
 		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
+		const categoryQuery = "SELECT * FROM get_product_categories($1)"
 
 		const product = await db.query(selectQuery, [productId])
+		const categories = await db.query(categoryQuery, [productId])
 
 		res.status(200).json({
 			success: Boolean(product.rowCount),
 			message: product.rowCount ? "Product Retrieved Succesfully" : "Product Not Found",
-			product: product.rows[0]
+			product: product.rows[0],
+			categories: categories.rows
 		})
 
 	} catch (error) {

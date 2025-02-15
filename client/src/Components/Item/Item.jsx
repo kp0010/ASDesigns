@@ -4,19 +4,18 @@ import "./Item.css"
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 export const Item = ({ product }) => {
     const { product_id, name, price } = product
-    console.log(product_id, product_id.length)
 
     const imageSrc = `./src/Assets/Products/${product_id}.jpeg`
-    console.log(imageSrc, imageSrc.length)
 
     return (
         <div className="item">
             {/* TODO: onclick link to product page  */}
             {/* TODO: need to add props */}
-            <a href={`/product/${product_id}`}>
+            <Link to={`/product/${product_id}`}>
                 <div className="item-image">
                     <img src={imageSrc} alt="..." />
                     <div className="item-hover-container">
@@ -46,9 +45,9 @@ export const Item = ({ product }) => {
                     <h2>{product_id + (name ? " | " + name : "")}</h2>
                 </div>
                 <div className="item-price">
-                    <h2>₹ {parseFloat(price).toFixed(2) - 1}</h2>
+                    <h2>₹ {(parseFloat(product.price) - 1.0).toFixed(2)}</h2>
                 </div>
-            </a>
+            </Link>
 
         </div>
     )

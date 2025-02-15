@@ -8,11 +8,7 @@ export const Product = () => {
   return (
     <div>
       <BasicBreadcrumbs />
-      <ProductDisplay/>
-      <div>Product</div>
-      {productId &&
-        <h1>Product Id : {productId}</h1>
-      }
+      <ProductDisplay productId={productId} />
     </div>
   )
 }
