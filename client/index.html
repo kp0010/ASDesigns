@@ -3,16 +3,16 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link id="favicon" rel="icon" type="image/png" href="./src/Assets/Logos/AS_logo_w.png" />
+  <link id="favicon" rel="icon" type="image/png" href="/Logos/AS_logo_w.png" />
   <script>
     function updateFavicon() {
       const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const favicon = document.getElementById('favicon');
 
       if (isDarkMode) {
-        favicon.href = './src/Assets/Logos/AS_logo_w.png';
+        favicon.href = '/Logos/AS_logo_w.png';
       } else {
-        favicon.href = './src/Assets/Logos/AS_logo_b.png';
+        favicon.href = '/Logos/AS_logo_b.png';
       }
     }
     updateFavicon();

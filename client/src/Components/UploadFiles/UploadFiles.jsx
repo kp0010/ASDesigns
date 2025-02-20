@@ -17,7 +17,7 @@ export const UploadFiles = () => {
 			formData.append("files", files[i])
 		}
 
-		fetch("http://localhost:8080/api/products", {
+		fetch("/api/products", {
 			method: "POST",
 			headers: { Authorization: `Bearer ${token}`, },
 			body: formData,
@@ -34,7 +34,7 @@ export const UploadFiles = () => {
 
 		const token = await getToken()
 
-		fetch("http://localhost:8080/api/products", {
+		fetch("/api/products", {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${token}`,

@@ -35,7 +35,7 @@ const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID
 // Middleware
 
 app.use(cors({
-	origin: CLIENT_URL,
+	origin: "*",
 	methods: ["GET", "POST", "PUT", "DELETE"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
@@ -117,7 +117,7 @@ db.connect(function(err) {
 //			Register New Users to the DB (Protected)
 
 // Product Routes:
-//	GET	:	/api/products/page?/:pageNo?/?order-by=x
+//	GET	:	/api/products/page?/:pageNo?/?orderBy=x&limit=x
 //			View Products (Optionally Via Page Number and Sorting Options) (Public)
 
 //	GET	:	/api/products/:productId
@@ -355,7 +355,7 @@ app.delete("/api/products", requireAdmin(), async (req, res) => {
 
 // -----------------------------------------------------------
 
-app.listen(SERVER_PORT, () => {
+app.listen(SERVER_PORT, "0.0.0.0", () => {
 	console.log(`App is listening on port ${SERVER_PORT}`)
-	console.log(`Client URL is ${process.env.CLIENT_URL}`)
+	console.log(`Client URL is ${CLIENT_URL}`)
 });

@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import "../../App.css";
-import logo from "../../Assets/Logos/AS_logo_full.png";
+import logo from "../../Assets/Logos/AS_logo_b.png";
 
 import { useEffect } from "react";
 
@@ -26,7 +26,7 @@ export const Navbar = () => {
 
   const writeUserToDB = async () => {
     const token = await getToken();
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch("/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const Navbar = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // Error Handling
+        // TODO: Error Handling
       });
   };
 
@@ -52,13 +52,13 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" to="/">
             <img
               className="m-3"
               src={logo}
               alt="Bootstrap"
-              width={130}
-              height={20}
+              width={50}
+              height={50}
             />
           </a>
 

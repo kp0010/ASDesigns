@@ -16,7 +16,7 @@ export const HomePage = () => {
   })
 
   const getFeaturedProducts = () => {
-    fetch(`http://localhost:8080/api/products/?${params.toString()}`, {
+    fetch(`/api/products/?${params.toString()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

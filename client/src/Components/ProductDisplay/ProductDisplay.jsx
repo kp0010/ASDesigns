@@ -6,33 +6,28 @@ import {
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 
-const images = import.meta.glob('../../Assets/Products/*.jpeg');
-
 import { IoCartOutline } from "react-icons/io5";
 import { IoCloudDownloadOutline } from "react-icons/io5";
 
-import { CiHeart } from "react-icons/ci";
+import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
+import { AlertCircle } from "lucide-react";
 
 export const ProductDisplay = (props) => {
   const { productId } = props
 
-  const getImage = async (productId) => {
-    const module = await images[`../../Assets/Products/${productId}.jpeg`]();
-    const imageSrc = module.default
-    return imageSrc
-  }
-
   const [product, setProduct] = useState({})
   const [categories, setCategories] = useState({})
   const [loaded, setLoaded] = useState(false)
-  const [imageSrc, setImageSrc] = useState("")
+  const [wishlistCurrent, setWishlistCurrent] = useState(false)
+
 
   const getProduct = () => {
-    fetch(`http://localhost:8080/api/products/${productId}`, {
+    fetch(`/api/products/${productId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,8 +37,7 @@ export const ProductDisplay = (props) => {
         setProduct(data["product"])
         setCategories(data["categories"])
         setLoaded(true)
-        const imageSrc = await getImage(productId)
-        setImageSrc(imageSrc)
+        j
       })
   }
 
@@ -52,19 +46,12 @@ export const ProductDisplay = (props) => {
   }, [])
 
 
-  // To Calculate Discounted Rate
+  const toggleWishlist = () => {
+    // TODO: Add Database query to add to wishlist
 
-  //   const oldPrice = 599;
-  //   const newPrice = 299;
-  //   const discountPercentage = Math.round(
-  //     ((oldPrice - newPrice) / oldPrice) * 100
-  //   );
+    setWishlistCurrent(!wishlistCurrent)
+  }
 
-  //   <div className="price flex mt-3 items-center">
-  //     <h1 className="new-price font-bold text-3xl mr-4">${newPrice}</h1>
-  //     <h1 className="old-price text-2xl line-through">${oldPrice}</h1>
-  //     <h3 className="text-xl ml-3">(-{discountPercentage}% off)</h3>
-  //   </div>;
   const tags = [
     "CDR File ",
     "Sport ",
@@ -77,7 +64,7 @@ export const ProductDisplay = (props) => {
       <div className="product-display-left mt-4 ml-8">
         <div className="productDiplay-img h-[500px] w-[500px]">
           <img
-            src={imageSrc}
+            src={`/Products/${product.product_id}.jpeg`}
             className="product-display-main-img rounded-lg"
             alt=""
           />
@@ -124,8 +111,12 @@ export const ProductDisplay = (props) => {
           <Button className="w-72 mr-3 bg-[#e3c756]">
             <IoCloudDownloadOutline />Download
           </Button>
-          <Button className="bg-white text-black  border-black border-[2px]">
-            <CiHeart />
+          <Button onClick={toggleWishlist} className="bg-white text-black  border-black border-[2px]">
+            {wishlistCurrent ? (
+              <FaHeart className='item-icon' />
+            ) : (
+              <FaRegHeart className="item-icon" />
+            )}
           </Button>
         </div>
       </div>

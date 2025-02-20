@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./Item.css"
 
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 
 export const Item = ({ product }) => {
     const { product_id, name, price } = product
 
-    const imageSrc = `./src/Assets/Products/${product_id}.jpeg`
+    const [wishlistCurrent, setWishlistCurrent] = useState(false)
+
+    const imageSrc = `/Products/${product_id}.jpeg`
 
     return (
         <div className="item">
@@ -32,9 +35,13 @@ export const Item = ({ product }) => {
                             </i>
                             <span className="item-icon-tag">Quick View</span>
                         </button>
-                        <button href="" className="item-icons-container d-flex rounded-full">
+                        <button onClick={() => { setWishlistCurrent(!wishlistCurrent) }} className="item-icons-container d-flex rounded-full">
                             <i>
-                                <FaRegHeart className="item-icon" />
+                                {wishlistCurrent ? (
+                                    <FaHeart className='item-icon' />
+                                ) : (
+                                    <FaRegHeart className="item-icon" />
+                                )}
                             </i>
                             <span className="item-icon-tag">Wishlist</span>
                             {/* TODO: wishlist toggle functionality pending */}
@@ -45,7 +52,7 @@ export const Item = ({ product }) => {
                     <h2>{product_id + (name ? " | " + name : "")}</h2>
                 </div>
                 <div className="item-price">
-                    <h2>₹ {(parseFloat(product.price) - 1.0).toFixed(2)}</h2>
+                    <h2>₹ {(parseFloat(price) - 1.0).toFixed(2)}</h2>
                 </div>
             </Link>
 
