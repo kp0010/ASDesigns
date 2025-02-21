@@ -17,6 +17,7 @@ export const Product = () => {
       },
     }).then((resp) => resp.json())
       .then((data) => {
+        console.log("HITTING IN PAGE")
         setProduct(data["product"])
         setCategories(data["categories"])
       })

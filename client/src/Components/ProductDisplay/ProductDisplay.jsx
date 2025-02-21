@@ -14,37 +14,12 @@ import { FaHeart } from "react-icons/fa6";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 export const ProductDisplay = (props) => {
-  const { productId } = props
+  const { productId, product, categories } = props
 
-  const [product, setProduct] = useState({})
-  const [categories, setCategories] = useState({})
-  const [loaded, setLoaded] = useState(false)
   const [wishlistCurrent, setWishlistCurrent] = useState(false)
-
-
-  const getProduct = () => {
-    fetch(`/api/products/${productId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((resp) => resp.json())
-      .then(async (data) => {
-        setProduct(data["product"])
-        setCategories(data["categories"])
-        setLoaded(true)
-        j
-      })
-  }
-
-  useEffect(() => {
-    getProduct()
-  }, [])
-
 
   const toggleWishlist = () => {
     // TODO: Add Database query to add to wishlist
@@ -72,25 +47,22 @@ export const ProductDisplay = (props) => {
       </div>
       <div className="product-display-right ml-28">
         <h2 className="text-4xl  mt-4">{productId + (product.name ? " | " + product.name : "")}</h2>
-        {loaded && (
-          <div className="price flex mt-3 items-center">
-            <h1 className="new-price font-bold text-3xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
-            <h1 className="old-price text-2xl  line-through">₹{(parseFloat(product.price) + 200.00).toFixed(2)}</h1>
-            <h3 className="text-xl ml-3"> (-40% off)</h3>
-          </div>
-        )}
+        <div className="price flex mt-3 items-center">
+          <h1 className="new-price font-bold text-3xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
+          <h1 className="old-price text-2xl  line-through">₹{(parseFloat(product.price) + 200.00).toFixed(2)}</h1>
+          <h3 className="text-xl ml-3"> (-40% off)</h3>
+        </div>
         <div className="category flex items-center mt-3 bg-white">
           <h2 className="text-xl">Category: </h2>
           <Breadcrumb className="ml-2">
             <BreadcrumbList>
-
-              {loaded && categories.map((el, i) => (
-                <>
-                  <BreadcrumbItem key={i}>
+              {categories.map((el, i) => (
+                <div key={i}>
+                  <BreadcrumbItem>
                     <BreadcrumbLink href="/">{el["name"]}</BreadcrumbLink>
+                    {(categories.length - 1 != i) && (<CgFormatSlash />)}
                   </BreadcrumbItem>
-                  {(categories.length - 1 != i) && (<CgFormatSlash />)}
-                </>
+                </div>
               ))}
 
             </BreadcrumbList >

@@ -9,7 +9,7 @@ export const UploadFiles = () => {
 		const token = await getToken()
 
 		const formData = new FormData()
-		formData.append("folderName", "NEW")
+		formData.append("folderName", "NewFolder")
 
 		const files = event.target.files
 
@@ -40,7 +40,7 @@ export const UploadFiles = () => {
 				Authorization: `Bearer ${token}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ productId: "PRODUCT_NAME" })
+			body: JSON.stringify({ productId: "NewFolder" })
 		})
 			.then((resp) => resp.json())
 			.then((data) => console.log(data))
