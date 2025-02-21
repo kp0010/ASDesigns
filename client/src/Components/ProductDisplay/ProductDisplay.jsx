@@ -15,6 +15,8 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
+import prod_img from "../../../public/Products/JD001.jpeg";
+
 
 export const ProductDisplay = (props) => {
   const { productId } = props
@@ -64,6 +66,52 @@ export const ProductDisplay = (props) => {
     { name: "Football", link: "/football" },
     { name: "Tennis", link: "/tennis" },
   ];
+  const badges = [
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge",
+    "Badge",
+    "Badge ",
+    "Badge ",
+    "Badge",
+    "Badge",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge ",
+    "Badge",
+    "Badge",
+    "Badge ",
+    "Badge ",
+    "Badge",
+    "Badge",
+  ];
 
   return (
     <>
@@ -71,7 +119,7 @@ export const ProductDisplay = (props) => {
         <div className="product-display-left mt-4 ml-8 ">
           <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
-              src={product_img}
+              src={prod_img}
               className="product-display-main-img rounded-lg"
               alt=""
             />
@@ -137,7 +185,7 @@ export const ProductDisplay = (props) => {
         <div className="w-full flex justify-center">
           <div className="productDiplay-img h-[350px] w-[350px]">
             <img
-              src={product_img}
+              src={prod_img}
               className="product-display-main-img rounded-lg"
               alt=""
             />

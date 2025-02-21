@@ -1,0 +1,11 @@
+@media (max-width:766px) {
+    .car-con{
+        flex-basis: 50%;
+    }
+}
+@media (max-width:585px) {
+    .car-con{
+        flex-basis: 100%;
+        margin-left: auto;
+    }
+}
