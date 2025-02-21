@@ -152,16 +152,24 @@ db.connect(function(err) {
 //			Update Product with Specified Product Id (Protected Admin)
 
 //	Cart Routes
-//	GET	:	/api/carts/
+//	GET	:	/api/cart/
 //			Get All Cart Items for a User (Protected)
 
-//	TODO: 
-//	DELETE	:	/api/carts/
+//	DELETE	:	/api/cart/
 //			Delete Items from a Users Cart (Protected)
 
-//	TODO: 
-//	POST	:	/api/carts/
+//	POST	:	/api/cart/
 //			Add Items to a Users Cart (Protected)
+
+//	Wishlist Routes
+//	GET	:	/api/wishlist/
+//			Get All Wishlist Items for a User (Protected)
+
+//	DELETE	:	/api/wishlist/
+//			Delete Items from a Users Wishlist (Protected)
+
+//	POST	:	/api/wishlist/
+//			Add Items to a Users Wishlist (Protected)
 
 
 
@@ -217,13 +225,13 @@ app.delete("/api/products", requireAdmin(), deleteProduct)
 
 // CART
 // Get Cart Items for a User
-app.get("/api/carts", requireAuth(), getCartItems)
+app.get("/api/cart", requireAuth(), getCartItems)
 
 // Post Items to Cart
-app.get("/api/carts", requireAuth(), postCartItem)
+app.get("/api/cart", requireAuth(), postCartItem)
 
 // Delete Items from Cart
-app.get("/api/carts", requireAuth(), deleteCartItem)
+app.get("/api/cart", requireAuth(), deleteCartItem)
 
 
 // WISHLIST

@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,88 +10,26 @@ import {
 
 import { IoCartOutline } from "react-icons/io5";
 import { IoCloudDownloadOutline } from "react-icons/io5";
-import React from "react";
 import { CiHeart } from "react-icons/ci";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
-import { AlertCircle } from "lucide-react";
-import prod_img from "../../../public/Products/JD001.jpeg";
-
 
 export const ProductDisplay = (props) => {
-  // const { productId, product, categories } = props
-
-  const [product, setProduct] = useState({})
-  // const [categories, setCategories] = useState({})
-  const [loaded, setLoaded] = useState(false)
-  const [wishlistCurrent, setWishlistCurrent] = useState(false)
+  const { productId, product, categories } = props
 
   const toggleWishlist = () => {
     // TODO: Add Database query to add to wishlist
-
     setWishlistCurrent(!wishlistCurrent)
   }
+
+  const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
   const tags = [
     "CDR File ",
     "Sport ",
     "Cricket ",
     "Half Sleeves ",
-  ];
-  const categories = [
-    { name: "Sports", link: "/" },
-    { name: "Cricket", link: "/cricket" },
-    { name: "Kabaddi", link: "/kabaddi" },
-    { name: "Football", link: "/football" },
-    { name: "Tennis", link: "/tennis" },
-  ];
-  const badges = [
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge",
-    "Badge",
-    "Badge ",
-    "Badge ",
-    "Badge",
-    "Badge",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge ",
-    "Badge",
-    "Badge",
-    "Badge ",
-    "Badge ",
-    "Badge",
-    "Badge",
   ];
 
   return (
@@ -98,7 +38,7 @@ export const ProductDisplay = (props) => {
         <div className="product-display-left mt-4 ml-8 ">
           <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
-              src={prod_img}
+              src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />
@@ -106,11 +46,11 @@ export const ProductDisplay = (props) => {
         </div>
 
         <div className="product-display-right ml-28">
-          <h2 className="text-4xl mt-4">Shoes Reebok Zig Kinetica K2</h2>
+          <h2 className="text-4xl mt-4">{productId + (product["name"] ? " | " + product["name"] : "")}</h2>
 
           <div className="price flex mt-3 items-center">
-            <h1 className="new-price font-bold text-3xl mr-4">$299</h1>
-            <h1 className="old-price text-2xl line-through">$599</h1>
+            <h1 className="new-price font-bold text-3xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
+            <h1 className="old-price text-2xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
             <h3 className="text-xl ml-3">(-40% off)</h3>
           </div>
 
@@ -121,8 +61,8 @@ export const ProductDisplay = (props) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                      <BreadcrumbLink href={category.link}>
-                        {category.name}
+                      <BreadcrumbLink href="/">
+                        {category["name"]}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (
@@ -138,9 +78,9 @@ export const ProductDisplay = (props) => {
 
           <div className="tags flex flex-wrap gap-2 mt-3">
             <h2 className="text-xl w-full">Tags:</h2>
-            {badges.map((badge, index) => (
+            {tags.map((tag, index) => (
               <Badge key={index} className="mr-1">
-                {badge}
+                {tag}
               </Badge>
             ))}
           </div>
@@ -152,19 +92,20 @@ export const ProductDisplay = (props) => {
             <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
               <IoCloudDownloadOutline /> Download
             </Button>
-            <Button className="bg-white  text-black border-black border-2 md:mb-3">
+            <Button className="bg-white text-black border-black border-2 md:mb-3">
               <CiHeart />
             </Button>
           </div>
         </div>
       </div>
+
       {/* Small Screens (<md) Layout */}
       <div className="md:hidden productDisplay flex flex-col items-center p-4">
         {/* Product Image */}
         <div className="w-full flex justify-center">
           <div className="productDiplay-img h-[350px] w-[350px]">
             <img
-              src={prod_img}
+              src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />
@@ -173,12 +114,12 @@ export const ProductDisplay = (props) => {
 
         {/* Product Details */}
         <div className="w-full text-center mt-6">
-          <h2 className="text-3xl mt-4 mr-5 ">Shoes Reebok Zig Kinetica K2</h2>
+          <h2 className="text-3xl mt-4 mr-5 ">{productId + (product["name"] ? " | " + product["name"] : "")}</h2>
 
           {/* Price */}
           <div className="price flex justify-center mt-3 items-center">
-            <h1 className="new-price font-bold text-2xl mr-4">$299</h1>
-            <h1 className="old-price text-xl line-through">$599</h1>
+            <h1 className="new-price font-bold text-2xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
+            <h1 className="old-price text-xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
             <h3 className="text-lg ml-3">(-40% off)</h3>
           </div>
 
@@ -190,8 +131,8 @@ export const ProductDisplay = (props) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                      <BreadcrumbLink href={category.link}>
-                        {category.name}
+                      <BreadcrumbLink >
+                        {category["name"]}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (
@@ -208,9 +149,9 @@ export const ProductDisplay = (props) => {
           {/* Tags */}
           <div className="tags flex flex-wrap justify-center gap-2 mt-3">
             <h2 className="text-xl w-full text-center">Tags:</h2>
-            {badges.map((badge, index) => (
+            {tags.map((tag, index) => (
               <Badge key={index} className="mr-1">
-                {badge}
+                {tag}
               </Badge>
             ))}
           </div>
@@ -225,7 +166,7 @@ export const ProductDisplay = (props) => {
               <IoCloudDownloadOutline className="mr-2" />
               Download
             </Button>
-            <Button className="w-full bg-white text-black border-black border-2 flex items-center justify-center">
+            <Button onClick={toggleWishlist} className="w-full bg-white text-black border-black border-2 flex items-center justify-center">
               <CiHeart className="mr-2" />
               Wishlist
             </Button>

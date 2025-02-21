@@ -1,20 +1,47 @@
-import * as React from "react";
-import prod_img from "../../../public/Products/JD001.jpeg";
+import React, { useState, useEffect } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+} from "@/Components/ui/carousel";
+
 import './Related_Products.css';
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
 
+import { Item } from "../Item/Item";
+
 export const Related_Products = () => {
+
+  const [relatedProducts, setRelatedProducts] = useState([])
+  const [loaded, setLoaded] = useState(false)
+
+  const params = new URLSearchParams({
+    "orderBy": "default",
+    "limit": 6
+  })
+
+  const getFeaturedProducts = () => {
+    fetch(`/api/products/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((resp) => resp.json())
+      .then((data) => {
+        setRelatedProducts([...data])
+        setLoaded(true)
+      })
+  }
+
+  useEffect(() => {
+    getFeaturedProducts()
+  }, [])
+
   return (
     <div className="prod-list bg-[#edeae7]">
       <h2 className="text-3xl ml-0 pt-3 font-bold mb-8 text-center">
@@ -27,9 +54,9 @@ export const Related_Products = () => {
         className="md:w-[80%] sm:w-full md:ml-40 ml-12"
       >
         <CarouselContent>
-          {Array.from({ length: 10 }).map((_, index) => (
+          {loaded && relatedProducts.map((el, idx) => (
             <CarouselItem
-              key={index}
+              key={idx}
               className="car-con md:basis-1/2 lg:basis-1/3 xl:basis-1/4 "
             >
               <div className="p-1">
@@ -38,7 +65,7 @@ export const Related_Products = () => {
                   {/* TODO: need to add props */}
                   <a href={`/`}>
                     <div className="item-image">
-                      <img src={prod_img} alt="..." />
+                      <img src={`/Products/${el.product_id}.jpeg`} alt="..." />
                       <div className="item-hover-container">
                         {/* TODO: will navigate to add to cart page on clicking the button */}
                         <button className="item-icons-container d-flex rounded-full">
@@ -69,10 +96,10 @@ export const Related_Products = () => {
                       </div>
                     </div>
                     <div className="item-content">
-                      <h2>Shoes</h2>
+                      <h2>{el["product_id"] + (el["name"] ? " | " + el["name"] : "")}</h2>
                     </div>
                     <div className="item-price">
-                      <h2>₹ 200</h2>
+                      <h2>₹{(parseFloat(el["price"]) - 1.0).toFixed(2)}</h2>
                     </div>
                   </a>
                 </div>
