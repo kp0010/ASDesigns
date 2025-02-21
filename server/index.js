@@ -3,10 +3,28 @@ import cors from "cors"
 import dotenv from "dotenv"
 import pg from "pg"
 import multer from "multer"
-import fs from "fs"
 
 import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
+
+import {
+	getAllProducts,
+	getIndividualProduct,
+	deleteProduct,
+	postProduct
+} from "./routes/products.js"
+
+import {
+	getCartItems,
+	deleteCartItem,
+	postCartItem
+} from "./routes/cart.js"
+
+import {
+	getWishlistItems,
+	deleteWishlistItem,
+	postWishlistItem
+} from "./routes/wishlist.js"
 
 const app = express()
 
@@ -26,7 +44,7 @@ const PG_DB_CONFIG = {
 }
 
 const GDRIVE_KEY_FILE = process.env.GOOGLE_DRIVE_KEY_FILE
-const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID
+export const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID
 
 // Constants End
 
@@ -87,7 +105,7 @@ const auth = new google.auth.GoogleAuth({
 	scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
-const drive = google.drive({ version: "v3", auth });
+export const drive = google.drive({ version: "v3", auth });
 
 const upload = multer({ dest: process.env.MULTER_DESTINATION })
 
@@ -99,7 +117,7 @@ const upload = multer({ dest: process.env.MULTER_DESTINATION })
 
 const { Pool } = pg
 
-const db = new Pool(PG_DB_CONFIG)
+export const db = new Pool(PG_DB_CONFIG)
 
 db.connect(function(err) {
 	if (err) throw err;
@@ -110,14 +128,14 @@ db.connect(function(err) {
 
 // -----------------------------------------------------------
 
-// Routes
+//	Routes
 
-// Auth Routes:
+//	Auth Routes:
 //	POST	:	/api/auth/register
 //			Register New Users to the DB (Protected)
 
-// Product Routes:
-//	GET	:	/api/products/page?/:pageNo?/?orderBy=x&limit=x
+//	Product Routes:
+//	GET	:	/api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
 //			View Products (Optionally Via Page Number and Sorting Options) (Public)
 
 //	GET	:	/api/products/:productId
@@ -127,12 +145,24 @@ db.connect(function(err) {
 //			Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
 
 //	DELETE	:	/api/products/:productId
-//			Delete Product with Specified Product Id (Protected Admin) 
+//			Delete Product with Specified Product Id (Protected Admin)
 
-//	TODO: Implement Following Routes
-
+//	TODO: 
 //	PATCH	:	/api/products/:productId
-//			Update Product with Specified Product Id (Protected Admin) 
+//			Update Product with Specified Product Id (Protected Admin)
+
+//	Cart Routes
+//	GET	:	/api/carts/
+//			Get All Cart Items for a User (Protected)
+
+//	TODO: 
+//	DELETE	:	/api/carts/
+//			Delete Items from a Users Cart (Protected)
+
+//	TODO: 
+//	POST	:	/api/carts/
+//			Add Items to a Users Cart (Protected)
+
 
 
 app.post("/api/auth/register", requireAuth(), async (req, res) => {
@@ -170,186 +200,42 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 	}
 });
 
-app.get("/api/products/(page)?/:pageNo?", async (req, res) => {
-	// Get All Products with Pagination and Sorting
-	try {
-		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
-		const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
-		const limit = req.query["limit"] ? req.query["limit"] : 0
 
-		let selectQuery = "SELECT * FROM products"
+// PRODUCT
+// Get All Products with Pagination and Sorting
+app.get("/api/products/(page)?/:pageNo?", getAllProducts)
 
-		// TODO: Add Popular Sort
-		const sortToSql = {
-			"default": "random()",
-			"recent": "updated_at DESC"
-		}
-		selectQuery += " ORDER BY " + sortToSql[orderBy]
+// Get individual Products by IDS
+app.get("/api/products/:productId", getIndividualProduct)
 
-		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
-		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
+// Add Files Uploaded from Client to Products Folder in GDrive
+app.post("/api/products", requireAdmin(), upload.array("files"), postProduct)
 
-		const result = await db.query(selectQuery)
+// Delete Products from DB
+app.delete("/api/products", requireAdmin(), deleteProduct)
 
-		res.json(result.rows)
 
-	} catch (error) {
-		console.error("Error Reading Products", error)
-		res.status(500).json({ error: "Internal Server Error" })
-	}
-})
+// CART
+// Get Cart Items for a User
+app.get("/api/carts", requireAuth(), getCartItems)
 
-app.get("/api/products/:productId", async (req, res) => {
-	// Get individual Products by IDS
+// Post Items to Cart
+app.get("/api/carts", requireAuth(), postCartItem)
 
-	try {
-		const { productId } = req.params
+// Delete Items from Cart
+app.get("/api/carts", requireAuth(), deleteCartItem)
 
-		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
-		const categoryQuery = "SELECT * FROM get_product_categories($1)"
 
-		const product = await db.query(selectQuery, [productId])
-		const categories = await db.query(categoryQuery, [productId])
+// WISHLIST
+// Get Wishlist Items for a User
+app.get("/api/wishlist", requireAuth(), getWishlistItems)
 
-		res.status(200).json({
-			success: Boolean(product.rowCount),
-			message: product.rowCount ? "Product Retrieved Succesfully" : "Product Not Found",
-			product: product.rows[0],
-			categories: categories.rows
-		})
+// Post Items to Wishlist
+app.get("/api/wishlist", requireAuth(), postWishlistItem)
 
-	} catch (error) {
-		console.error("Error Reading Product", error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-})
+// Delete Items from Wishlist
+app.get("/api/wishlist", requireAuth(), deleteWishlistItem)
 
-const createNewFolderGDrive = async (newProductId) => {
-	// Create the Folder for the files
-	const folderMetadata = {
-		name: newProductId,
-		mimeType: "application/vnd.google-apps.folder",
-		parents: [GDRIVE_PARENT_FOLDER_ID],
-	};
-
-	const newFolder = await drive.files.create({
-		resource: folderMetadata,
-		fields: "id, webViewLink",
-	});
-
-	return newFolder
-}
-
-const copyFilesGDrive = async (files, parentFolderId) => {
-	// Upload the Files Uploaded via Multer
-	const uploadedFiles = []
-
-	for (let i = 0; i < files.length; i++) {
-		let file = files[i]
-
-		const fileMetadata = {
-			name: file["originalname"],
-			parents: [parentFolderId],
-		};
-
-		const media = {
-			mimeType: file["mimetype"],
-			body: fs.createReadStream(file["path"]),
-		};
-
-		const uploadedFile = await drive.files.create({
-			resource: fileMetadata,
-			media,
-			fields: "id, name, webViewLink",
-		});
-
-		uploadedFiles.push(uploadedFile.data);
-
-		fs.unlinkSync(file["path"], (err) => { console.error("Unable to Delete Uploads", err) });
-	}
-	return uploadedFiles
-}
-
-app.post("/api/products", requireAdmin(), upload.array("files"), async (req, res) => {
-	// Add Files Uploaded from Client to Products Folder in GDrive
-	try {
-		// TODO: Add Products to the DB as well
-		const newProductId = req.body["folderName"];
-		const files = req.files
-
-		if (!newProductId || !files) {
-			return res.status(400).json({ error: "Missing newProductId or files" });
-		}
-
-		const newFolder = await createNewFolderGDrive(newProductId)
-		const uploadedFiles = await copyFilesGDrive(files, newFolder.data.id)
-
-		res.json({
-			message: "Folder created & files copied",
-			newFolder: newFolder,
-			uploadedFiles: uploadedFiles
-		});
-
-	} catch (error) {
-		console.error("Error copying files: ", error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-});
-
-const deleteProductGDrive = async (productId) => {
-	const query = `name = '${productId}' and '${GDRIVE_PARENT_FOLDER_ID}' in parents`
-
-	const folder = await drive.files.list({
-		q: query,
-		fields: "files(id, name)",
-	})
-
-	if (!folder) {
-		return res.status(400).json({ error: "No Folder with the Specified Name found" })
-	}
-
-	const folderId = folder.data.files[0].id
-
-	const deletedFolder = await drive.files.delete({
-		fileId: folderId,
-	})
-
-	return deletedFolder
-}
-
-const deleteProductDB = async (productId) => {
-	// TODO: Test API
-	const query = `DELETE FROM products WHERE product_id = $1`
-
-	const result = await db.query(query, [productId])
-}
-
-app.delete("/api/products", requireAdmin(), async (req, res) => {
-	// Delete Products from DB
-	// WARNING: Deleting from the DB or Google Drive will result in Previous Buyers of the Product from downloading it again
-	// FIX: Maybe Check whether the Item has been bought ever and then remove only if not in orders list
-	try {
-		const { productId } = req.body
-
-		if (!productId) {
-			return res.status(400).json({ error: "Missing productId" })
-		}
-
-		const deletedFolder = await deleteProductGDrive(productId)
-
-		await deleteProductDB(productId)
-
-		res.json({
-			success: !Boolean(deletedFolder["error"]),
-			deletedFolder: deletedFolder,
-			message: !Boolean(deletedFolder["error"]) ? "Product Deleted Successfully" : "Product Deletion Unsuccessful"
-		})
-
-	} catch (error) {
-		console.error("Error Deleting Product: ", error)
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-})
 
 // Routes End
 

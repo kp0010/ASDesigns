@@ -19,33 +19,12 @@ import prod_img from "../../../public/Products/JD001.jpeg";
 
 
 export const ProductDisplay = (props) => {
-  const { productId } = props
+  // const { productId, product, categories } = props
 
   const [product, setProduct] = useState({})
   // const [categories, setCategories] = useState({})
   const [loaded, setLoaded] = useState(false)
   const [wishlistCurrent, setWishlistCurrent] = useState(false)
-
-
-  const getProduct = () => {
-    fetch(`/api/products/${productId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((resp) => resp.json())
-      .then(async (data) => {
-        setProduct(data["product"])
-        setCategories(data["categories"])
-        setLoaded(true)
-        j
-      })
-  }
-
-  useEffect(() => {
-    getProduct()
-  }, [])
-
 
   const toggleWishlist = () => {
     // TODO: Add Database query to add to wishlist
