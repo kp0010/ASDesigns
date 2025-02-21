@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./CSS/HomePage.css"
-
+import "../App.css"
 import { Carousel } from '@/Components/Carousel/Carousel'
 import { Category } from '@/Components/Category/Category'
 import { Item } from '@/Components/Item/Item'
@@ -42,6 +42,9 @@ export const HomePage = () => {
     <div>
       <Carousel />
       <Category />
+      <div className="featured-products">
+        <h2>Featured Products</h2>
+      </div>
       <div className="product-grid-container">
         {loaded ? (
           featuredProd.map((el, i) => (

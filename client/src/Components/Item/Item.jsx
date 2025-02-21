@@ -5,7 +5,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 export const Item = ({ product }) => {
     const { product_id, name, price } = product
@@ -14,11 +14,21 @@ export const Item = ({ product }) => {
 
     const imageSrc = `/Products/${product_id}.jpeg`
 
+    const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        event.preventDefault();
+        window.scrollTo({ top:0, behavoir:"smooth" });
+        const splitLink = event.currentTarget.href.split("/");
+        const productId = splitLink[splitLink.length - 1];
+        navigate(`/product/${productId}`);
+    };
+
     return (
         <div className="item">
             {/* TODO: onclick link to product page  */}
             {/* TODO: need to add props */}
-            <Link to={`/product/${product_id}`}>
+            <Link to={`/product/${product_id}`} onClick={handleClick}>
                 <div className="item-image">
                     <img src={imageSrc} alt="..." />
                     <div className="item-hover-container">
