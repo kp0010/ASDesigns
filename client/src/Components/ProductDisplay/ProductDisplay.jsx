@@ -10,13 +10,13 @@ import {
 
 import { IoCartOutline } from "react-icons/io5";
 import { IoCloudDownloadOutline } from "react-icons/io5";
-import { CiHeart } from "react-icons/ci";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { FaHeart } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa6";
 
-export const ProductDisplay = (props) => {
-  const { productId, product, categories } = props
+export const ProductDisplay = ({ productId, product, categories }) => {
 
   const toggleWishlist = () => {
     // TODO: Add Database query to add to wishlist
@@ -92,8 +92,12 @@ export const ProductDisplay = (props) => {
             <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
               <IoCloudDownloadOutline /> Download
             </Button>
-            <Button className="bg-white text-black border-black border-2 md:mb-3">
-              <CiHeart />
+            <Button onClick={toggleWishlist} className="bg-white text-black border-black border-2 md:mb-3">
+              {wishlistCurrent ? (
+                <FaHeart className='item-icon' />
+              ) : (
+                <FaRegHeart className="item-icon" />
+              )}
             </Button>
           </div>
         </div>
@@ -167,8 +171,11 @@ export const ProductDisplay = (props) => {
               Download
             </Button>
             <Button onClick={toggleWishlist} className="w-full bg-white text-black border-black border-2 flex items-center justify-center">
-              <CiHeart className="mr-2" />
-              Wishlist
+              {wishlistCurrent ? (
+                <FaHeart className='item-icon' />
+              ) : (
+                <FaRegHeart className="item-icon" />
+              )}
             </Button>
           </div>
         </div>

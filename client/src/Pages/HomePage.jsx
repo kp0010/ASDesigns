@@ -42,8 +42,10 @@ export const HomePage = () => {
     <div>
       <Carousel />
       <Category />
-      <div className="featured-products">
-        <h2>Featured Products</h2>
+      <div className="text-center">
+        <h1 className="text-5xl pt-5 mb-10" style={{ fontFamily: "DM Sans" }}>
+          Our Featured Products
+        </h1>
       </div>
       <div className="product-grid-container">
         {loaded ? (

@@ -13,7 +13,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
 
-import { Item } from "../Item/Item";
+import { Link } from "react-router-dom";
 
 export const Related_Products = () => {
 
@@ -22,7 +22,7 @@ export const Related_Products = () => {
 
   const params = new URLSearchParams({
     "orderBy": "default",
-    "limit": 6
+    "limit": 8
   })
 
   const getFeaturedProducts = () => {
@@ -39,8 +39,11 @@ export const Related_Products = () => {
   }
 
   useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }, 10);
     getFeaturedProducts()
-  }, [])
+  }, [loaded])
 
   return (
     <div className="prod-list bg-[#edeae7]">
@@ -63,7 +66,7 @@ export const Related_Products = () => {
                 <div className="item bg-white mb-5 ">
                   {/* TODO: onclick link to product page  */}
                   {/* TODO: need to add props */}
-                  <a href={`/`}>
+                  <Link to={`/product/${el.product_id}`} onClick={() => { setLoaded(false) }}>
                     <div className="item-image">
                       <img src={`/Products/${el.product_id}.jpeg`} alt="..." />
                       <div className="item-hover-container">
@@ -101,7 +104,7 @@ export const Related_Products = () => {
                     <div className="item-price">
                       <h2>₹{(parseFloat(el["price"]) - 1.0).toFixed(2)}</h2>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </CarouselItem>
@@ -110,6 +113,6 @@ export const Related_Products = () => {
         <CarouselPrevious />
         <CarouselNext className="md:ml-5 lg:ml-5" />
       </Carousel>
-    </div>
+    </div >
   );
 };

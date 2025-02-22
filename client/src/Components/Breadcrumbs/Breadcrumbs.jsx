@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 
-export const BasicBreadcrumbs = () => {
+export const BasicBreadcrumbs = ({ categories }) => {
   return (
     <div role="presentation" className="ml-9 mt-3">
       <Breadcrumb>
@@ -18,12 +18,17 @@ export const BasicBreadcrumbs = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+            <BreadcrumbLink href="/Shop">Shop</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-          </BreadcrumbItem>
+          {categories.map((el, idx) => (
+            <>
+              <BreadcrumbItem>
+                <BreadcrumbLink>{el.name}</BreadcrumbLink>
+              </BreadcrumbItem>
+              {categories.length - 1 != idx && (<BreadcrumbSeparator />)}
+            </>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
     </div>

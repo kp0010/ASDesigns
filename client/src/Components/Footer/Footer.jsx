@@ -64,13 +64,13 @@ export const Footer = () => {
                   <span className="fa-li">
                     <FaHome />
                   </span>
-                  <span className="ms-2">Govandi Gaon, Navi Mumbai</span>
+                  <span className="ms-2">Chembur, Mumbai - 400071</span>
                 </li>
                 <li className="mb-3 d-flex align-items-center">
                   <span className="fa-li">
                     <FaEnvelope />
                   </span>
-                  <span className="ms-2">sanpadawarrior@bhikari.com</span>
+                  <span className="ms-2">asdesigns@outlook.com</span>
                 </li>
                 <li className="mb-3 d-flex align-items-center">
                   <span className="fa-li">

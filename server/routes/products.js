@@ -47,7 +47,7 @@ export const getAllProducts = async (req, res) => {
 
 		const result = await db.query(selectQuery)
 
-		res.json(result.rows)
+		res.status(200).json(result.rows)
 
 	} catch (error) {
 		console.error("Error Reading Products", error)

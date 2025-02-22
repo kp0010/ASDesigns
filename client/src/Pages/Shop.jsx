@@ -1,9 +1,9 @@
 import React from 'react'
 import "./CSS/Shop.css"
 import "../App.css"
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { BasicBreadcrumbs } from '@/Components/Breadcrumbs/Breadcrumbs';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,7 +11,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from "@/Components/ui/breadcrumb"
 
 
 export const Shop = () => {
@@ -38,7 +38,7 @@ export const Shop = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      
+
       <div className="shop-sort">
         <h2>sorting</h2>
       </div>

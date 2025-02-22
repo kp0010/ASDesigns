@@ -52,7 +52,7 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <a className="navbar-brand" to="/">
+          <a className="navbar-brand" href="/">
             <img
               className="m-3"
               src={logo}
