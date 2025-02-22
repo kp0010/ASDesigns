@@ -19,11 +19,11 @@ function App() {
   return (
     <>
       <div>
-        <Navbar />
         <Router>
+          <Navbar />
           <RoutesList />
+          <Footer />
         </Router>
-        <Footer />
       </div>
     </>
   )

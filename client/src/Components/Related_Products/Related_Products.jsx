@@ -12,6 +12,7 @@ import './Related_Products.css';
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 
 import { Link } from "react-router-dom";
 
@@ -19,6 +20,8 @@ export const Related_Products = () => {
 
   const [relatedProducts, setRelatedProducts] = useState([])
   const [loaded, setLoaded] = useState(false)
+
+  const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
   const params = new URLSearchParams({
     "orderBy": "default",
@@ -66,38 +69,49 @@ export const Related_Products = () => {
                 <div className="item bg-white mb-5 ">
                   {/* TODO: onclick link to product page  */}
                   {/* TODO: need to add props */}
-                  <Link to={`/product/${el.product_id}`} onClick={() => { setLoaded(false) }}>
-                    <div className="item-image">
+
+                  <div className="item-image">
+                    <Link to={`/product/${el.product_id}`} onClick={() => { setLoaded(false) }}>
                       <img src={`/Products/${el.product_id}.jpeg`} alt="..." />
-                      <div className="item-hover-container">
-                        {/* TODO: will navigate to add to cart page on clicking the button */}
+                    </Link>
+                    <div className="item-hover-container">
+                      <Link to="/cart">
                         <button className="item-icons-container d-flex rounded-full">
                           <i>
                             <LuShoppingCart className="item-icon" />
                           </i>
                           <span className="item-icon-tag">Add to Cart</span>
                         </button>
-                        <button
-                          href=""
-                          className="item-icons-container d-flex rounded-full"
-                        >
-                          <i>
-                            <PiEyeDuotone className="item-icon" />
-                          </i>
-                          <span className="item-icon-tag">Quick View</span>
-                        </button>
-                        <button
-                          href=""
-                          className="item-icons-container d-flex rounded-full"
-                        >
-                          <i>
+                      </Link>
+
+                      <button
+                        href=""
+                        className="item-icons-container d-flex rounded-full"
+                      >
+                        <i>
+                          <PiEyeDuotone className="item-icon" />
+                        </i>
+                        <span className="item-icon-tag">Quick View</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setWishlistCurrent(!wishlistCurrent) }}
+                        className="item-icons-container d-flex rounded-full"
+                      >
+                        <i>
+                          {wishlistCurrent ? (
+                            <FaHeart className='item-icon' />
+                          ) : (
                             <FaRegHeart className="item-icon" />
-                          </i>
-                          <span className="item-icon-tag">Wishlist</span>
-                          {/* TODO: wishlist toggle functionality pending */}
-                        </button>
-                      </div>
+                          )}
+                        </i>
+                        <span className="item-icon-tag">Wishlist</span>
+                        {/* TODO: wishlist count functionality pending */}
+                      </button>
                     </div>
+                  </div>
+                  
+                  <Link to={`/product/${el.product_id}`} onClick={() => { setLoaded(false) }}>
                     <div className="item-content">
                       <h2>{el["product_id"] + (el["name"] ? " | " + el["name"] : "")}</h2>
                     </div>

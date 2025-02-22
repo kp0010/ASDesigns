@@ -11,8 +11,19 @@ import { NeonGradientCard } from "../magicui/neon-gradient-card";
 // import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 import { Button } from "@/Components/ui/button";
 import { ChevronRight } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export const Category = () => {
+
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    window.scrollTo(0, 0);
+    const splitLink = event.currentTarget.href.split("/")
+    navigate(splitLink[splitLink.length - 1])
+  };
+
   return (
     <div className="category">
       <div className="text-center">
@@ -34,11 +45,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Sports
               </h5>
-              <a href="/sports">
+              <NavLink to="/sports" onClick={handleClick}>
                 <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] hover:bg-black text-black">
                   Explore More <ChevronRight />
                 </Button>
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>
@@ -55,11 +66,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Festivals
               </h5>
-              <a href="/festival">
+              <NavLink to="/festival" onClick={handleClick}>
                 <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
                   Explore More <ChevronRight />
                 </Button>
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>
@@ -76,11 +87,11 @@ export const Category = () => {
               <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
                 Others
               </h5>
-              <a href="/others">
+              <NavLink to="/others" onClick={handleClick}>
                 <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
                   Explore More <ChevronRight />
                 </Button>
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>

@@ -43,7 +43,7 @@ export const HomePage = () => {
       <Carousel />
       <Category />
       <div className="text-center">
-        <h1 className="text-5xl pt-5 mb-10" style={{ fontFamily: "DM Sans" }}>
+        <h1 className="text-5xl pt-4 mb-10" style={{ fontFamily: "DM Sans" }}>
           Our Featured Products
         </h1>
       </div>

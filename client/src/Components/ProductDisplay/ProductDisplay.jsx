@@ -61,6 +61,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
+                    {/* need to add right path */}
                       <BreadcrumbLink href="/">
                         {category["name"]}
                       </BreadcrumbLink>
@@ -135,6 +136,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
+                    {/* need to add right path */}
                       <BreadcrumbLink >
                         {category["name"]}
                       </BreadcrumbLink>

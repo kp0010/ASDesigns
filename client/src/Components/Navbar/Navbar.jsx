@@ -9,6 +9,8 @@ import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 
+import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   SignedIn,
   SignedOut,
@@ -23,6 +25,7 @@ import { Skeleton } from "./Skeleton";
 export const Navbar = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn, getToken } = useAuth();
+  const navigate = useNavigate()
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -39,6 +42,13 @@ export const Navbar = () => {
       });
   };
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    window.scrollTo(0, 0);
+    const splitLink = event.currentTarget.href.split("/")
+    navigate(splitLink[splitLink.length - 1])
+  };
+
   useEffect(() => {
     if (isSignedIn) {
       writeUserToDB();
@@ -52,7 +62,7 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <a className="navbar-brand" href="/">
+          <NavLink to="/" onClick={handleClick} className="navbar-brand">
             <img
               className="m-3"
               src={logo}
@@ -60,7 +70,7 @@ export const Navbar = () => {
               width={50}
               height={50}
             />
-          </a>
+          </NavLink>
 
           <form className="d-none d-md-flex mx-auto ">
             <div className="input-group">
@@ -80,19 +90,19 @@ export const Navbar = () => {
             </div>
           </form>
           <div className="d-flex align-items-center gap-lg-3 gap-1">
-            <a href="/cart">
+            <NavLink to="/cart" onClick={handleClick}>
               <div className="nav-icons d-flex align-items-center">
                 <LuShoppingCart className="icon me-2" />
                 <span>Cart</span>
               </div>
-            </a>
+            </NavLink>
 
-            <a href="/wishlist">
+            <NavLink to="/wishlist" onClick={handleClick}>
               <div className="nav-icons d-flex align-items-center">
                 <FaRegHeart className="icon me-2" />
                 <span>Wishlist</span>
               </div>
-            </a>
+            </NavLink>
 
 
             <div className="nav-login-icon">
@@ -164,34 +174,34 @@ export const Navbar = () => {
             <div className="offcanvas-body bg-[#dcdada]">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/">
+                  <NavLink className="nav-link active" aria-current="page" to="/" onClick={handleClick}>
                     Home
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/shop">
+                  <NavLink className="nav-link" to="/shop" onClick={handleClick}>
                     Shop
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/sports">
+                  <NavLink className="nav-link" to="/sports" onClick={handleClick}>
                     Sports
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/festival">
+                  <NavLink className="nav-link" to="/festival" onClick={handleClick}>
                     Festival
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/others">
+                  <NavLink className="nav-link" to="/others" onClick={handleClick}>
                     Others
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/about">
+                  <NavLink className="nav-link" to="/about" onClick={handleClick}>
                     About
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </div>
@@ -202,29 +212,29 @@ export const Navbar = () => {
         <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="/">
+              <NavLink className="nav-link text-dark" to="/" onClick={handleClick}>
                 Home
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="/shop">
+              <NavLink className="nav-link text-dark" to="/shop" onClick={handleClick}>
                 Shop
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="/sports">
+              <NavLink className="nav-link text-dark" to="/sports" onClick={handleClick}>
                 Sports
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="/festival">
+              <NavLink className="nav-link text-dark" to="/festival" onClick={handleClick}>
                 Festival
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <a className="nav-link text-dark" href="/others">
+              <NavLink className="nav-link text-dark" to="/others" onClick={handleClick}>
                 Others
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
