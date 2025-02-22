@@ -75,7 +75,7 @@ export const Category = () => {
           </div>
         </div>
 
-        <div className="w-80 flex flex-col items-center text-center mt-2">
+        <div className="w-80 flex flex-col items-center text-center mt-2 mb-14">
           <div className="relative w-full rounded-xl overflow-hidden">
             <img
               src={other}

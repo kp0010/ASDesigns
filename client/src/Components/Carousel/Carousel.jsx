@@ -6,7 +6,7 @@ export const Carousel = () => {
     <div>
       <div
         id="carouselExampleInterval"
-        className="carousel slide m-4 mt-3 custom-carousel sm:m-0"
+        className="carousel slide sm:m-0 sm:mt-0 md:mt-3 md:m-4 lg:mt-3 lg:m-4 xl:mt-3 xl:m-4 custom-carousel"
         data-bs-ride="carousel"
         data-bs-pause="hover"
       >
@@ -14,21 +14,21 @@ export const Carousel = () => {
           <div className="carousel-item active">
             <img
               src={carousel_1}
-              className="d-block w-100 h-100 rounded-4 img-fit"
+              className="d-block w-100 h-100 sm:rounded-none md:rounded-4 lg:rounded-4 xl:rounded-4 img-fit"
               alt="..."
             />
           </div>
           <div className="carousel-item">
             <img
               src={carousel_1}
-              className="d-block w-100 h-100 rounded-4 img-fit"
+              className="d-block w-100 h-100 sm:rounded-none md:rounded-4 lg:rounded-4 xl:rounded-4 img-fit"
               alt="..."
             />
           </div>
           <div className="carousel-item">
             <img
               src={carousel_1}
-              className="d-block w-100 h-100 rounded-4 img-fit"
+              className="d-block w-100 h-100 sm:rounded-none md:rounded-4 lg:rounded-4 xl:rounded-4 img-fit"
               alt="..."
             />
           </div>
