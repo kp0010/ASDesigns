@@ -59,7 +59,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   return (
     <>
-      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay">
+      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay justify-center"> 
         <div className="product-display-left mt-4 ml-8 ">
           <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img

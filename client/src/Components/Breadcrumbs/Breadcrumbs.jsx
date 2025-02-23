@@ -9,7 +9,7 @@ import {
 
 export const BasicBreadcrumbs = ({ categories }) => {
   return (
-    <div role="presentation" className="ml-9 mt-3">
+    <div role="presentation" className="ml-9 mt-4">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
