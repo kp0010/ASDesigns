@@ -48,10 +48,11 @@ export const Product_Carousel = () => {
 			className="md:w-[80%] sm:w-full md:ml-40 ml-12"
 		>
 			<CarouselContent>
+				{loaded && relatedProducts.map((el, idx) => (
+					<Product_Carousel_Item key={idx} product={el} />
+				))}
 			</CarouselContent>
-			{loaded && relatedProducts.map((el, idx) => (
-				<Product_Carousel_Item key={idx} product={el} />
-			))}
+			
 			<CarouselPrevious />
 			<CarouselNext className="md:ml-5 lg:ml-5" />
 		</Carousel >
