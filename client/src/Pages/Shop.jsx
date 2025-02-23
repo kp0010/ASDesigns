@@ -59,7 +59,7 @@ export const Shop = () => {
   return (
     <div>
       <div className="shop-header">
-        <h2>Shop</h2>
+        <>Shop</>
       </div>
 
       {/* breadcrumb */}
@@ -126,8 +126,29 @@ export const Shop = () => {
 
       <div className="shop-main">
         <div className="shop-filters">
-          Filters
+          <div className="shop-filters-head">
+            <h2>Filters</h2>
+            <div className="shop-filters-category">
+              <h2>Category</h2>
+              <ul>
+                <li>
+                  <label htmlFor="">
+                    <input type="checkbox" />
+                    <span>Sports</span>
+                  </label>
+                  <ul>
+                    <li>Cricket</li>
+                    <li>Football</li>
+                    <li>Basketball</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+          </div>
         </div>
+
+
         <div className="shop-content" style={{ "text-align": "center" }}>
           Products displayed
         </div>

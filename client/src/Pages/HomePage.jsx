@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import "./CSS/HomePage.css"
 import "../App.css"
 import { Carousel } from '@/Components/Carousel/Carousel'
 import { Category } from '@/Components/Category/Category'

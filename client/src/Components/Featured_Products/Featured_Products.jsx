@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Item } from '@/Components/Item/Item'
+import "./Featured_Products.css"
 
 export const Featured_Products = () => {
 

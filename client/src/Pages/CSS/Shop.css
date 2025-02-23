@@ -9,3 +9,10 @@
     padding: 10px;
     padding-right: 100px;
 }
+.shop-main {
+    display: flex;
+    padding: 50px;
+}
+.shop-filters {
+    width: 20%
+}
