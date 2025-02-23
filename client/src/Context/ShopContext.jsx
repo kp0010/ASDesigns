@@ -197,6 +197,7 @@ const ShopContextProvider = ({ children }) => {
       })
   }
 
+
   const getPrice = () => {
     let acc = 0
 

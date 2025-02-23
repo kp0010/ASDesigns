@@ -110,7 +110,7 @@ export const Related_Products = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <Link to={`/product/${el.product_id}`} onClick={() => { setLoaded(false) }}>
                     <div className="item-content">
                       <h2>{el["product_id"] + (el["name"] ? " | " + el["name"] : "")}</h2>

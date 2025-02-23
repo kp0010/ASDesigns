@@ -28,16 +28,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   } = useShop()
 
   const toggleWishlist = () => {
-    // TODO: Add Database query to add to wishlist
-
     if (wishlistCurrent) {
       deleteFromWishlist(productId)
     } else {
       addToWishlist(productId)
     }
-
     refreshWishlist()
-    // setWishlistCurrent(!wishlistCurrent)
   }
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false)

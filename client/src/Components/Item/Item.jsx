@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Item.css"
 
 import { LuShoppingCart } from "react-icons/lu";
@@ -7,12 +7,34 @@ import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useShop } from "@/Context/ShopContext";
+
+
 export const Item = ({ product }) => {
     const { product_id, name, price } = product
 
     const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
-    const imageSrc = `/Products/${product_id}.jpeg`
+    const {
+        wishlistData,
+        deleteFromWishlist,
+        addToWishlist,
+        refreshWishlist
+    } = useShop()
+
+    const toggleWishlist = () => {
+        if (wishlistCurrent) {
+            deleteFromWishlist(product_id)
+        } else {
+            addToWishlist(product_id)
+        }
+        refreshWishlist()
+    }
+
+    useEffect(() => {
+        const foundProd = wishlistData.find(prod => prod.product_id == product_id)
+        setWishlistCurrent((foundProd != undefined))
+    }, [wishlistData, product_id])
 
     const navigate = useNavigate();
 
@@ -28,7 +50,7 @@ export const Item = ({ product }) => {
         <div className="item">
             <div className="item-image">
                 <Link to={`/product/${product_id}`} onClick={handleClick}>
-                    <img src={imageSrc} alt="..." />
+                    <img src={`/Products/${product_id}.jpeg`} alt="..." />
                 </Link>
                 <div className="item-hover-container">
                     <Link to="/cart">
@@ -49,7 +71,7 @@ export const Item = ({ product }) => {
                     </button>
 
                     {/* TODO: wishlist count pending */}
-                    <button onClick={() => { setWishlistCurrent(!wishlistCurrent) }} className="item-icons-container d-flex rounded-full">
+                    <button onClick={toggleWishlist} className="item-icons-container d-flex rounded-full">
                         <i>
                             {wishlistCurrent ? (
                                 <FaHeart className='item-icon' />
