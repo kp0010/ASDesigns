@@ -62,7 +62,7 @@ export const Item = ({ product }) => {
                         </button>
                     </Link>
 
-                    {/* modal will be opened by clicking on quick view */}
+                    {/* TODO: modal will be opened by clicking on quick view */}
                     <button href="" className="item-icons-container d-flex rounded-full">
                         <i>
                             <PiEyeDuotone className="item-icon" />
