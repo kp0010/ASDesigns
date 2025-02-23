@@ -6,9 +6,11 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 const ShopContext = createContext({
   cartData: [],
   cartCount: 0,
+  cartLoaded: false,
 
   wishlistData: [],
   wishlistCount: 0,
+  wishtlistLoaded: false,
 
   addToCart: () => { },
   deleteFromCart: () => { },
@@ -31,10 +33,12 @@ const ShopContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState([])
   const [cartCount, setCartCount] = useState(0);
   const [cartChanged, setCartChanged] = useState(false)
+  const [cartLoaded, setCartLoaded] = useState(false)
 
   const [wishlistData, setWishlistData] = useState([])
   const [wishlistCount, setWishlistCount] = useState(0);
   const [wishlistChanged, setWishlistChanged] = useState(false)
+  const [wishlistLoaded, setWishlistLoaded] = useState(false)
 
   const [price, setPrice] = useState(0)
 
@@ -85,7 +89,7 @@ const ShopContextProvider = ({ children }) => {
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setCartChanged(true)
+          setCartChanged(!cartChanged)
           return { success: true, message: "Product Added to Cart" }
         }
       })
@@ -112,7 +116,7 @@ const ShopContextProvider = ({ children }) => {
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setCartChanged(true)
+          setCartChanged(!cartChanged)
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -146,7 +150,7 @@ const ShopContextProvider = ({ children }) => {
       })
   }
 
-  const addToWishlist = async (productid) => {
+  const addToWishlist = async (productId) => {
     if (!(isLoaded && isSignedIn)) {
       return { success: false, message: "User not Found" }
     }
@@ -160,38 +164,39 @@ const ShopContextProvider = ({ children }) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        productId: productid,
+        productId: productId,
       }),
     })
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setWishlistChanged(true)
+          setWishlistData([...wishlistData, data.product])
           return { success: true, message: "Product Added to Wishlist" }
         }
       })
   }
 
-  const deleteFromWishlist = async (productid) => {
+  const deleteFromWishlist = async (productId) => {
     if (!(isLoaded && isSignedIn)) {
       return { success: false, message: "User not Found" }
     }
 
     const token = await getToken()
 
-    fetch("/api/wishlist", {
+    await fetch("/api/wishlist", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        productId: productid,
+        productId: productId,
       }),
     }).then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setWishlistChanged(true)
+          // setWishlistChanged(!wishlistChanged)
+          setWishlistData([...wishlistData.filter(prod => prod.product_id !== productId)])
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -222,16 +227,34 @@ const ShopContextProvider = ({ children }) => {
     setWishlistChanged(!wishlistChanged)
   }
 
-  useEffect(() => { getCart() }, [cartChanged, user])
-  useEffect(() => { getWishlist() }, [wishlistChanged, user])
+  useEffect(() => {
+    const getAsyncCart = async () => {
+      await getCart()
+      setCartLoaded(true)
+    }
+
+    getAsyncCart()
+  }, [cartChanged, user])
+
+  useEffect(() => {
+    const getAsyncWS = async () => {
+      await getWishlist()
+      setWishlistLoaded(true)
+    }
+
+    getAsyncWS()
+  }, [cartChanged, user])
+
   useEffect(() => { getPrice() }, [cartData])
 
   const contextValue = {
     cartData,
     cartCount,
+    cartLoaded,
 
     wishlistData,
     wishlistCount,
+    wishlistLoaded,
 
     addToCart,
     deleteFromCart,

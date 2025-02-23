@@ -22,26 +22,32 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   const {
     wishlistData,
+    wishlistLoaded,
     deleteFromWishlist,
     addToWishlist,
     refreshWishlist
   } = useShop()
 
+  const [wishlistCurrent, setWishlistCurrent] = useState(false)
+
   const toggleWishlist = () => {
     if (wishlistCurrent) {
-      deleteFromWishlist(productId)
+      setWishlistCurrent(false)
+      deleteFromWishlist(product.product_id)
     } else {
-      addToWishlist(productId)
+      setWishlistCurrent(true)
+      addToWishlist(product.product_id)
     }
     refreshWishlist()
+    // console.log("SET 2 TO ", !wishlistCurrent, " FROM ", wishlistCurrent)
+    // // setWishlistCurrent(!wishlistCurrent)
   }
 
-  const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
   useEffect(() => {
     const foundProd = wishlistData.find(prod => prod.product_id == productId)
     setWishlistCurrent((foundProd != undefined))
-  }, [wishlistData, productId])
+  }, [wishlistLoaded, wishlistData, productId])
 
 
   const tags = [

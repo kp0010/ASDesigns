@@ -47,12 +47,15 @@ export const postWishlistItem = async (req, res) => {
 		const userId = await getUserIdFromClerkId(clerkId)
 
 		const wishlistInsertQuery = "INSERT INTO wishlists values ($1, $2) RETURNING *"
-		const insertResult = await db.query(wishlistInsertQuery, [userId, productId])
+		await db.query(wishlistInsertQuery, [userId, productId])
+
+		const productSelectQuery = "SELECT * FROM products WHERE product_id = $1"
+		const productSelectRes = await db.query(productSelectQuery, [productId])
 
 		res.status(200).json({
 			success: true,
 			message: "Product Added to Wishlist Successfully",
-			wishlistItem: insertResult.rows
+			product: productSelectRes.rows[0]
 		})
 
 

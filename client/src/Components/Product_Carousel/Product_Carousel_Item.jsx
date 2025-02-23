@@ -9,23 +9,27 @@ import { FaHeart } from "react-icons/fa6";
 
 import { CarouselItem } from '../ui/carousel';
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useShop } from "@/Context/ShopContext";
 
 export const Product_Carousel_Item = ({ product }) => {
-	const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
 	const {
 		wishlistData,
+		wishlistLoaded,
 		deleteFromWishlist,
 		addToWishlist,
-		refreshWishlist
+		refreshWishlist,
 	} = useShop()
+
+	const [wishlistCurrent, setWishlistCurrent] = useState(false)
 
 	const toggleWishlist = () => {
 		if (wishlistCurrent) {
+			setWishlistCurrent(false)
 			deleteFromWishlist(product.product_id)
 		} else {
+			setWishlistCurrent(true)
 			addToWishlist(product.product_id)
 		}
 		refreshWishlist()
@@ -33,9 +37,18 @@ export const Product_Carousel_Item = ({ product }) => {
 
 	useEffect(() => {
 		const foundProd = wishlistData.find(prod => prod.product_id == product.product_id)
-		setWishlistCurrent((foundProd != undefined))
-	}, [wishlistData, product.product_id])
+		setWishlistCurrent((foundProd !== undefined))
+	}, [wishlistLoaded, product, wishlistData])
 
+	const navigate = useNavigate()
+
+	const handleClick = (event) => {
+		event.preventDefault();
+		window.scrollTo({ top: 0, behavoir: "smooth" });
+		const splitLink = event.currentTarget.href.split("/");
+		const productId = splitLink[splitLink.length - 1];
+		navigate(`/product/${productId}`);
+	};
 
 	return (
 		<CarouselItem
@@ -44,7 +57,7 @@ export const Product_Carousel_Item = ({ product }) => {
 			<div className="p-1">
 				<div className="item bg-white mb-5 ">
 					<div className="item-image">
-						<Link to={`/product/${product.product_id}`} onClick={() => { setLoaded(false) }}>
+						<Link to={`/product/${product.product_id}`} onClick={handleClick}>
 							<img src={`/Products/${product.product_id}.jpeg`} alt="..." />
 						</Link>
 						<div className="item-hover-container">
@@ -83,7 +96,7 @@ export const Product_Carousel_Item = ({ product }) => {
 						</div>
 					</div>
 
-					<Link to={`/product/${product.product_id}`} onClick={() => { setLoaded(false) }}>
+					<Link to={`/product/${product.product_id}`} onClick={handleClick}>
 						<div className="item-content">
 							<h2>{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
 						</div>

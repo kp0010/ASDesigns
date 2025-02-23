@@ -17,6 +17,7 @@ export const Item = ({ product }) => {
 
     const {
         wishlistData,
+        wishlistLoaded,
         deleteFromWishlist,
         addToWishlist,
         refreshWishlist
@@ -24,9 +25,11 @@ export const Item = ({ product }) => {
 
     const toggleWishlist = () => {
         if (wishlistCurrent) {
-            deleteFromWishlist(product_id)
+            setWishlistCurrent(false)
+            deleteFromWishlist(product.product_id)
         } else {
-            addToWishlist(product_id)
+            setWishlistCurrent(true)
+            addToWishlist(product.product_id)
         }
         refreshWishlist()
     }
@@ -34,7 +37,7 @@ export const Item = ({ product }) => {
     useEffect(() => {
         const foundProd = wishlistData.find(prod => prod.product_id == product_id)
         setWishlistCurrent((foundProd != undefined))
-    }, [wishlistData, product_id])
+    }, [wishlistLoaded, wishlistData, product_id])
 
     const navigate = useNavigate();
 

@@ -1,8 +1,8 @@
-import { WishProducts } from '@/Components/WishProducts/WishProducts'
+import { WishlistProducts } from '@/Components/WishlistProducts/WishlistProducts'
 import React from 'react'
 
 export const Wishlist = () => {
   return (
-    <WishProducts/>
+    <WishlistProducts />
   )
 }

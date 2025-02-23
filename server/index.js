@@ -128,49 +128,50 @@ db.connect(function(err) {
 
 // -----------------------------------------------------------
 
-//	Routes
+/*
+Routes
 
-//	Auth Routes:
-//	POST	:	/api/auth/register
-//			Register New Users to the DB (Protected)
+Auth Routes:
+POST	:	/api/auth/register
+		Register New Users to the DB (Protected)
 
-//	Product Routes:
-//	GET	:	/api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
-//			View Products (Optionally Via Page Number and Sorting Options) (Public)
+Product Routes:
+GET	:	/api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
+		View Products (Optionally Via Page Number and Sorting Options) (Public)
 
-//	GET	:	/api/products/:productId
-//			View Product with Specified Product Id (Public)
+GET	:	/api/products/:productId
+		View Product with Specified Product Id (Public)
 
-//	POST	:	/api/products/
-//			Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
+POST	:	/api/products/
+		Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
 
-//	DELETE	:	/api/products/:productId
-//			Delete Product with Specified Product Id (Protected Admin)
+DELETE	:	/api/products/:productId
+		Delete Product with Specified Product Id (Protected Admin)
 
-//	TODO: 
-//	PATCH	:	/api/products/:productId
-//			Update Product with Specified Product Id (Protected Admin)
+TODO: 
+PATCH:	/api/products/:productId
+	Update Product with Specified Product Id (Protected Admin)
 
-//	Cart Routes
-//	GET	:	/api/cart/
-//			Get All Cart Items for a User (Protected)
+Cart Routes
+GET	:	/api/cart/
+		Get All Cart Items for a User (Protected)
 
-//	DELETE	:	/api/cart/
-//			Delete Items from a Users Cart (Protected)
+DELETE	:	/api/cart/
+		Delete Items from a Users Cart (Protected)
 
-//	POST	:	/api/cart/
-//			Add Items to a Users Cart (Protected)
+POST	:	/api/cart/
+		Add Items to a Users Cart (Protected)
 
-//	Wishlist Routes
-//	GET	:	/api/wishlist/
-//			Get All Wishlist Items for a User (Protected)
+Wishlist Routes
+GET	:	/api/wishlist/
+		Get All Wishlist Items for a User (Protected)
 
-//	DELETE	:	/api/wishlist/
-//			Delete Items from a Users Wishlist (Protected)
+DELETE	:	/api/wishlist/
+		Delete Items from a Users Wishlist (Protected)
 
-//	POST	:	/api/wishlist/
-//			Add Items to a Users Wishlist (Protected)
-
+POST	:	/api/wishlist/
+		Add Items to a Users Wishlist (Protected)
+*/
 
 
 app.post("/api/auth/register", requireAuth(), async (req, res) => {
