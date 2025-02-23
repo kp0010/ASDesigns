@@ -228,10 +228,10 @@ app.delete("/api/products", requireAdmin(), deleteProduct)
 app.get("/api/cart", requireAuth(), getCartItems)
 
 // Post Items to Cart
-app.get("/api/cart", requireAuth(), postCartItem)
+app.post("/api/cart", requireAuth(), postCartItem)
 
 // Delete Items from Cart
-app.get("/api/cart", requireAuth(), deleteCartItem)
+app.delete("/api/cart", requireAuth(), deleteCartItem)
 
 
 // WISHLIST
@@ -239,10 +239,10 @@ app.get("/api/cart", requireAuth(), deleteCartItem)
 app.get("/api/wishlist", requireAuth(), getWishlistItems)
 
 // Post Items to Wishlist
-app.get("/api/wishlist", requireAuth(), postWishlistItem)
+app.post("/api/wishlist", requireAuth(), postWishlistItem)
 
 // Delete Items from Wishlist
-app.get("/api/wishlist", requireAuth(), deleteWishlistItem)
+app.delete("/api/wishlist", requireAuth(), deleteWishlistItem)
 
 
 // Routes End

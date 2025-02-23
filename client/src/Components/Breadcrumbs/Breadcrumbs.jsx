@@ -4,7 +4,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 
@@ -22,12 +21,12 @@ export const BasicBreadcrumbs = ({ categories }) => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           {categories.map((el, idx) => (
-            <>
+            <React.Fragment key={idx}>
               <BreadcrumbItem>
                 <BreadcrumbLink>{el.name}</BreadcrumbLink>
               </BreadcrumbItem>
               {categories.length - 1 != idx && (<BreadcrumbSeparator />)}
-            </>
+            </React.Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

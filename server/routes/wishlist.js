@@ -11,13 +11,13 @@ const getUserIdFromClerkId = async (clerkId) => {
 
 export const getWishlistItems = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 
 		if (!clerkId) {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
 		const wishlistSelectQuery = "SELECT * FROM get_wishlist_items($1)"
 		const itemsResult = await db.query(wishlistSelectQuery, [userId])
@@ -37,14 +37,14 @@ export const getWishlistItems = async (req, res) => {
 
 export const postWishlistItem = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 		const { productId } = req.body
 
 		if (!clerkId || !productId) {
 			return res.status(400).json({ error: "User Login or ProductId missing" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
 		const wishlistInsertQuery = "INSERT INTO wishlists values ($1, $2) RETURNING *"
 		const insertResult = await db.query(wishlistInsertQuery, [userId, productId])
@@ -64,16 +64,16 @@ export const postWishlistItem = async (req, res) => {
 
 export const deleteWishlistItem = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 		const { productId } = req.body
 
 		if (!clerkId || !productId) {
 			return res.status(400).json({ error: "User Login or ProductId missing" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
-		const wishlistDeleteQuery = "DELETE FORM wishlists WHERE user_id = $1 AND product_id = $2"
+		const wishlistDeleteQuery = "DELETE FROM wishlists WHERE user_id = $1 AND product_id = $2"
 		await db.query(wishlistDeleteQuery, [userId, productId])
 
 		res.status(200).json({

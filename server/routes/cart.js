@@ -11,13 +11,13 @@ const getUserIdFromClerkId = async (clerkId) => {
 
 export const getCartItems = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 
 		if (!clerkId) {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
 		const cartSelectQuery = "SELECT * FROM get_cart_items($1)"
 		const itemsResult = await db.query(cartSelectQuery, [userId])
@@ -37,14 +37,14 @@ export const getCartItems = async (req, res) => {
 
 export const postCartItem = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 		const { productId } = req.body
 
 		if (!clerkId || !productId) {
 			return res.status(400).json({ error: "User Login or ProductId missing" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
 		const cartInsertQuery = "INSERT INTO cart values ($1, $2) RETURNING *"
 		const insertResult = await db.query(cartInsertQuery, [userId, productId])
@@ -64,16 +64,16 @@ export const postCartItem = async (req, res) => {
 
 export const deleteCartItem = async (req, res) => {
 	try {
-		const { clerkId } = req.auth
+		const { userId: clerkId } = req.auth
 		const { productId } = req.body
 
 		if (!clerkId || !productId) {
 			return res.status(400).json({ error: "User Login or ProductId missing" })
 		}
 
-		const userId = getUserIdFromClerkId(clerkId)
+		const userId = await getUserIdFromClerkId(clerkId)
 
-		const cartDeleteQuery = "DELETE FORM cart WHERE user_id = $1 AND product_id = $2"
+		const cartDeleteQuery = "DELETE FROM cart WHERE user_id = $1 AND product_id = $2"
 		await db.query(cartDeleteQuery, [userId, productId])
 
 		res.status(200).json({

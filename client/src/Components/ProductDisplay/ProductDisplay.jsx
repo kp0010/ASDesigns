@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Breadcrumb,
@@ -16,14 +16,37 @@ import { Button } from "../ui/button";
 import { FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa6";
 
+import { useShop } from "@/Context/ShopContext";
+
 export const ProductDisplay = ({ productId, product, categories }) => {
+
+  const {
+    wishlistData,
+    deleteFromWishlist,
+    addToWishlist,
+    refreshWishlist
+  } = useShop()
 
   const toggleWishlist = () => {
     // TODO: Add Database query to add to wishlist
-    setWishlistCurrent(!wishlistCurrent)
+
+    if (wishlistCurrent) {
+      deleteFromWishlist(productId)
+    } else {
+      addToWishlist(productId)
+    }
+
+    refreshWishlist()
+    // setWishlistCurrent(!wishlistCurrent)
   }
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false)
+
+  useEffect(() => {
+    const foundProd = wishlistData.find(prod => prod.product_id == productId)
+    setWishlistCurrent((foundProd != undefined))
+  }, [wishlistData, productId])
+
 
   const tags = [
     "CDR File ",
@@ -61,7 +84,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                    {/* need to add right path */}
+                      {/* need to add right path */}
                       <BreadcrumbLink href="/">
                         {category["name"]}
                       </BreadcrumbLink>
@@ -136,7 +159,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                    {/* need to add right path */}
+                      {/* need to add right path */}
                       <BreadcrumbLink >
                         {category["name"]}
                       </BreadcrumbLink>
