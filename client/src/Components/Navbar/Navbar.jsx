@@ -50,7 +50,7 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (isLoaded && isSignedIn) {
       writeUserToDB();
     }
   }, [isLoaded, getToken]);
@@ -119,7 +119,13 @@ export const Navbar = () => {
                 </SignedOut>
                 <div className="sign-in ml-2 mr-2 mt-1">
                   <SignedIn>
-                    <UserButton />
+                    <UserButton
+                      appearance={{
+                        baseTheme: "dark",
+                        elements: {
+                          userButtonPopoverActionButton: "hover:bg-red-500",
+                        },
+                      }} />
                   </SignedIn>
                 </div>
 

@@ -38,7 +38,7 @@ export const Product_Carousel = () => {
 			window.scrollTo({ top: 0, behavior: "smooth" })
 		}, 10);
 		getFeaturedProducts()
-	}, [loaded])
+	}, [])
 
 	return (
 		< Carousel
@@ -49,10 +49,10 @@ export const Product_Carousel = () => {
 		>
 			<CarouselContent>
 				{loaded && relatedProducts.map((el, idx) => (
-					<Product_Carousel_Item key={idx} product={el} />
+					<Product_Carousel_Item key={idx} product={el} getFeaturedProducts={getFeaturedProducts} />
 				))}
 			</CarouselContent>
-			
+
 			<CarouselPrevious />
 			<CarouselNext className="md:ml-5 lg:ml-5" />
 		</Carousel >

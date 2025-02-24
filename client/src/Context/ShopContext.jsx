@@ -42,7 +42,6 @@ const ShopContextProvider = ({ children }) => {
 
   const [price, setPrice] = useState(0)
 
-
   const getCart = async () => {
     if (!(isLoaded && isSignedIn)) {
       setCartData([])
@@ -89,7 +88,7 @@ const ShopContextProvider = ({ children }) => {
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setCartChanged(!cartChanged)
+          setCartData([...cartData, data.product])
           return { success: true, message: "Product Added to Cart" }
         }
       })
@@ -116,7 +115,7 @@ const ShopContextProvider = ({ children }) => {
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          setCartChanged(!cartChanged)
+          setCartData([...cartData.filter(prod => prod.product_id !== productId)])
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -195,7 +194,6 @@ const ShopContextProvider = ({ children }) => {
     }).then(resp => resp.json())
       .then(data => {
         if (data.success) {
-          // setWishlistChanged(!wishlistChanged)
           setWishlistData([...wishlistData.filter(prod => prod.product_id !== productId)])
           return { success: true, message: "Product Deleted From Cart" }
         }

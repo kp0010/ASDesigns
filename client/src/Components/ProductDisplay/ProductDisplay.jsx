@@ -16,8 +16,6 @@ import { IoCloudDownloadOutline } from "react-icons/io5";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { FaHeart } from "react-icons/fa6";
-import { FaRegHeart } from "react-icons/fa6";
 
 import { useShop } from "@/Context/ShopContext";
 
@@ -31,12 +29,35 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   } = useShop();
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
-  // const lottieRef = useRef(null); // Reference for Lottie
+
   const lottieRefLarge = useRef(null);
   const lottieRefSmall = useRef(null);
 
   const toggleWishlist = () => {
     setWishlistCurrent(!wishlistCurrent);
+
+    if (lottieRefLarge.current) {
+      if (!wishlistCurrent) {
+        lottieRefLarge.current.goToAndPlay(0, true);
+        setTimeout(() => {
+          lottieRefLarge.current.goToAndStop(30, true);
+        }, 800);
+      } else {
+        lottieRefLarge.current.goToAndPlay(50, true);
+      }
+    }
+
+    if (lottieRefSmall.current) {
+      if (!wishlistCurrent) {
+        lottieRefSmall.current.goToAndPlay(0, true);
+        setTimeout(() => {
+          lottieRefSmall.current.goToAndStop(30, true);
+        }, 800);
+      } else {
+        lottieRefSmall.current.goToAndPlay(50, true);
+      }
+    }
+
     if (wishlistCurrent) {
       setWishlistCurrent(false);
       deleteFromWishlist(product.product_id);
@@ -46,17 +67,17 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
     refreshWishlist();
   };
-  
+
   useEffect(() => {
     // Reset wishlist state based on the new product
     const foundProd = wishlistData.find((prod) => prod.product_id === productId);
     setWishlistCurrent(foundProd !== undefined);
-  
+
     // Reset Lottie animation when switching products
     if (lottieRefLarge.current) {
       lottieRefLarge.current.goToAndStop(0, true); // Reset to the first frame
     }
-  
+
     // If the product is in the wishlist, play animation and stop at frame 30
     if (foundProd && lottieRefLarge.current) {
       lottieRefLarge.current.goToAndPlay(0, true);
@@ -66,23 +87,24 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
 
     if (lottieRefSmall.current) {
-      lottieRefSmall.current.goToAndStop(0, true); 
+      lottieRefSmall.current.goToAndStop(0, true);
     }
-  
+
     if (foundProd && lottieRefSmall.current) {
       lottieRefSmall.current.goToAndPlay(0, true);
       setTimeout(() => {
         lottieRefSmall.current.goToAndStop(30, true);
       }, 800);
     }
-  }, [wishlistLoaded, wishlistData, productId]); 
+  }, [wishlistLoaded, wishlistData, productId]);
+
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
   return (
     <>
-      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay justify-center">
+      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay ml-16">
         <div className="product-display-left mt-4 ml-8 ">
-        <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
+          <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
               src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
@@ -218,7 +240,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                      {/* need to add right path */}
+                      {/* TODO: need to add right path */}
                       <BreadcrumbLink>{category["name"]}</BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (

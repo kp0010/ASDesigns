@@ -1,7 +1,7 @@
 .item {
     /* background: #efefef; */
     background: #dcdada;
-    width: 250px;
+    width: 300px;
     border-radius: 10px;
     padding: 25px;
     position: relative;
@@ -9,7 +9,6 @@
 }
 
 .item-image {
-
     padding-bottom: 0px;
     display: flex;
     justify-content: center;
@@ -18,10 +17,11 @@
 }
 
 .item-image img {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 220px;
     transition: all 0.3s ease-in-out;
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .item-hover-container {
@@ -99,6 +99,7 @@
 
 .item-content h2 {
     font-weight: 500;
+    font-size: 18px;
 }
 
 .item-content:hover {
@@ -111,24 +112,25 @@
 }
 
 /* For ultra-wide screens (4K resolutions and beyond) */
-@media (min-width: 1920px) {
+@media (min-width: 1850px) {
     .item {
-        width: 22rem;
+        width: 21rem;
         /* Adjust for extra-large screens */
-        padding: 2.5rem;
+        padding: 2rem;
     }
 
     .item-image img {
-        width: 16rem;
-        height: 16rem;
+        width: 20rem;
+        height: 15rem;
+        margin-bottom: 10px;
     }
 
     .item-hover-container {
-        padding: 1.5rem;
+        padding: 0.8rem;
     }
 
     .item-icon {
-        font-size: 1.8rem;
+        font-size: 1.2rem;
     }
 
     .item-icons-container {
@@ -136,7 +138,7 @@
     }
 
     .item-icons-container:hover {
-        padding: 0.6rem;
+        padding: 0.8rem;
     }
 
     .item-icon-tag {
@@ -146,11 +148,11 @@
     }
 
     .item-content h2 {
-        font-size: 1.75rem;
+        font-size: 1.35rem;
     }
 
     .item-price {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 }
 

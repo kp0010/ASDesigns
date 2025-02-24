@@ -9,7 +9,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useShop } from "@/Context/ShopContext";
 
-
 export const Item = ({ product }) => {
     const { product_id, name, price } = product
 

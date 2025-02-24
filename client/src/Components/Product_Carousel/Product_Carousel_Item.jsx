@@ -12,8 +12,7 @@ import { CarouselItem } from '../ui/carousel';
 import { Link, useNavigate } from "react-router-dom";
 import { useShop } from "@/Context/ShopContext";
 
-export const Product_Carousel_Item = ({ product }) => {
-
+export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
 	const {
 		wishlistData,
 		wishlistLoaded,
@@ -44,6 +43,7 @@ export const Product_Carousel_Item = ({ product }) => {
 
 	const handleClick = (event) => {
 		event.preventDefault();
+		getFeaturedProducts()
 		window.scrollTo({ top: 0, behavoir: "smooth" });
 		const splitLink = event.currentTarget.href.split("/");
 		const productId = splitLink[splitLink.length - 1];

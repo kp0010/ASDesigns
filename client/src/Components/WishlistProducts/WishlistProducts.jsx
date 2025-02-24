@@ -9,7 +9,12 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useShop } from "@/Context/ShopContext";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useAuth, useClerk } from "@clerk/clerk-react"
+
 export const WishlistProducts = () => {
+
+  const { isLoaded, isSignedIn } = useAuth()
+  const { redirectToSignIn } = useClerk()
 
   const {
     wishlistData,
@@ -20,8 +25,12 @@ export const WishlistProducts = () => {
 
   useEffect(() => {
     refreshWishlist()
-  }, [])
-
+    if (isLoaded) {
+      if (!isSignedIn) {
+        redirectToSignIn()
+      }
+    }
+  }, [isLoaded, isSignedIn])
 
   const navigate = useNavigate()
 
@@ -35,16 +44,13 @@ export const WishlistProducts = () => {
 
   const removeFromWishilst = async (productId) => {
     refreshWishlist()
-    console.log(productId)
     deleteFromWishlist(productId)
     refreshWishlist()
-    // setWishlist([...wishlist.filter(prod => prod.product_id !== productId)])
   }
 
   return (
     <div className="wish bg-[#edeae7] flex flex-col items-center">
-      <h2 className="text-4xl text-center pt-10 mb-5">Your Wishlists</h2>
-
+      <h2 className="text-4xl text-center pt-10 mb-5">Your Favourites</h2>
       {wishlistLoaded && wishlistData.map((product, idx) => (
         <div key={idx} className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-5 p-4">
           <Link to={`/product/${product.product_id}`} onClick={handleClick}>
@@ -85,7 +91,6 @@ export const WishlistProducts = () => {
           </div>
         </div>
       ))}
-
     </div >
   );
 };
