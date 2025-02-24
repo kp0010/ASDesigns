@@ -61,9 +61,9 @@ const sortOptions = [
 
 export const Shop = ({ className }) => {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+  const [sortValue, setSortValue] = useState("")
 
-  const [range, setRange] = useState([null, null]);
+  const [priceRange, setPriceRange] = useState([null, null]);
 
   const [priceExtremes, setPriceExtremes] = useState([0, 0])
   const [productData, setProductData] = useState([])
@@ -71,17 +71,23 @@ export const Shop = ({ className }) => {
 
   const [loaded, setLoaded] = useState(false)
 
-  const getProducts = (...args) => {
+  const getProducts = ({
+    orderBy = null,
+    minPrice = null,
+    maxPrice = null
+  } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
-    if (args.length === 1) {
-      params.append("orderBy", args[0] || value)
+    if (orderBy !== null && orderBy !== undefined) {
+      params.append("orderBy", orderBy)
     }
-    if (range[0] !== null) {
-      params.append("minPrice", range[0])
+
+    if ((minPrice !== null && minPrice !== undefined)) {
+      params.append("minPrice", minPrice !== null ? minPrice : sortValue[0])
     }
-    if (range[1] !== null) {
-      params.append("maxPrice", range[1])
+
+    if ((maxPrice !== null && maxPrice !== undefined)) {
+      params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1])
     }
 
     fetch(`/api/products/?${params.toString()}`, {
@@ -97,8 +103,8 @@ export const Shop = ({ className }) => {
 
         setPriceExtremes([minPrice, maxPrice])
 
-        if ((range[0] === null || range[1] === null)) {
-          setRange([minPrice - 50, maxPrice + 50])
+        if ((priceRange[0] === null || priceRange[1] === null)) {
+          setPriceRange([minPrice - 50, maxPrice + 50])
         }
 
         setProductData(data["products"])
@@ -173,8 +179,8 @@ export const Shop = ({ className }) => {
               aria-expanded={open}
               className="w-[200px] justify-between"
             >
-              {value
-                ? sortOptions.find((sortOption) => sortOption.value === value)?.label
+              {sortValue
+                ? sortOptions.find((sortOption) => sortOption.value === sortValue)?.label
                 : "Sort by..."}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -190,15 +196,21 @@ export const Shop = ({ className }) => {
                       key={sortOption.value}
                       value={sortOption.value}
                       onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue)
-                        if (currentValue !== value) { getProducts(currentValue) }
+                        setSortValue(currentValue === sortValue ? "" : currentValue)
+                        if (currentValue !== sortValue) {
+                          getProducts({
+                            orderBy: currentValue,
+                            minPrice: priceRange[0],
+                            maxPrice: priceRange[1]
+                          })
+                        }
                         setOpen(false)
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value === sortOption.value ? "opacity-100" : "opacity-0"
+                          sortValue === sortOption.value ? "opacity-100" : "opacity-0"
                         )}
                       />
                       {sortOption.label}
@@ -216,7 +228,7 @@ export const Shop = ({ className }) => {
           <div className="shop-filters-head">
             <h2>Filters</h2>
           </div>
-          <span className='mt-2'>{`Showing ${productData.length} Products Out Of ${totalProducts !== 0 && totalProducts}`}</span>
+          <span className='mt-2'>{`Showing ${productData.length} Results Out Of ${totalProducts !== 0 && totalProducts}`}</span>
           <div className="shop-filters-category">
             <h2>Category</h2>
             <ul className="shop-flters-ul">
@@ -256,15 +268,23 @@ export const Shop = ({ className }) => {
           </div>
           <div className="shop-filters-price">
             <h2>Price</h2>
-            <span>{range[0] + "  " + range[1]}</span>
+            <span>{priceRange[0] + "  " + priceRange[1]}</span>
             <Slider
-              value={range}
-              onValueChange={setRange}
-              onValueCommit={() => getProducts(value)}
+              value={priceRange}
+              onValueChange={setPriceRange}
+
+              onValueCommit={(...args) => getProducts({
+                orderBy: sortValue,
+                minPrice: args[0][0],
+                maxPrice: args[0][1]
+              })}
+
               min={priceExtremes[0] - 50}
               max={priceExtremes[1] + 50}
-              minStepsBetweenThumbs={1}
+
               step={50}
+              minStepsBetweenThumbs={1}
+
               className={cn('w-[90%]', className)} />
           </div>
           <div className="shop-filters-tags">

@@ -35,7 +35,6 @@ export const getProducts = async (req, res) => {
 		const totalProductsQuery = "SELECT COUNT(*) FROM products" +
 			(priceClauses.length !== 0 ? " WHERE " : "") +
 			priceClauses.join(" AND ")
-		console.log(totalProductsQuery)
 		const totalProductsResult = await db.query(totalProductsQuery)
 
 		// Add Order By method
