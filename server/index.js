@@ -8,7 +8,7 @@ import { google } from "googleapis"
 import { requireAuth, clerkClient } from "@clerk/express"
 
 import {
-	getAllProducts,
+	getProducts,
 	getIndividualProduct,
 	deleteProduct,
 	postProduct
@@ -220,7 +220,7 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 
 // PRODUCT
 // Get All Products with Pagination and Sorting
-app.get("/api/products/(page)?/:pageNo?", getAllProducts)
+app.get("/api/products/(page)?/:pageNo?", getProducts)
 
 // Get individual Products by IDS
 app.get("/api/products/:productId", getIndividualProduct)

@@ -33,10 +33,13 @@ import { Slider } from '@/Components/ui/dualrangeslider.jsx'
 import { Badge } from '@/Components/ui/badge'
 import { Item } from '@/Components/Item/Item'
 
+// WARN: Test Limit
+const PRODUCT_LIMIT = 6
+
 const sortOptions = [
   {
     value: "default",
-    label: "Default",
+    label: "Relevance",
   },
   {
     value: "popular",
@@ -64,11 +67,12 @@ export const Shop = ({ className }) => {
 
   const [priceExtremes, setPriceExtremes] = useState([0, 0])
   const [productData, setProductData] = useState([])
+  const [totalProducts, setTotalProducts] = useState(0)
+
   const [loaded, setLoaded] = useState(false)
 
   const getProducts = (...args) => {
-
-    const params = new URLSearchParams({})
+    const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
     if (args.length === 1) {
       params.append("orderBy", args[0] || value)
@@ -98,6 +102,7 @@ export const Shop = ({ className }) => {
         }
 
         setProductData(data["products"])
+        setTotalProducts(data["totalProducts"])
 
         setLoaded(true)
       })
@@ -211,6 +216,7 @@ export const Shop = ({ className }) => {
           <div className="shop-filters-head">
             <h2>Filters</h2>
           </div>
+          <span className='mt-2'>{`Showing ${productData.length} Products Out Of ${totalProducts !== 0 && totalProducts}`}</span>
           <div className="shop-filters-category">
             <h2>Category</h2>
             <ul className="shop-flters-ul">
@@ -271,7 +277,6 @@ export const Shop = ({ className }) => {
               ))}
             </div>
           </div>
-
         </div>
 
 

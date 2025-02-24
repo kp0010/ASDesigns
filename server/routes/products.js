@@ -8,7 +8,7 @@ import {
 dotenv.config({ path: "../.env.dev" })
 
 
-export const getAllProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
 		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
@@ -16,10 +16,8 @@ export const getAllProducts = async (req, res) => {
 		const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
 		const limit = req.query["limit"] ? req.query["limit"] : 0
 
-		const maxPrice = req.query["maxPrice"] || req.query["maxPrice"] === "null" ? req.query["maxPrice"] : null
-		const minPrice = req.query["minPrice"] || req.query["minPrice"] === "null" ? req.query["minPrice"] : null
-
-		console.log(maxPrice, minPrice, "HIT")
+		const maxPrice = req.query["maxPrice"] ? req.query["maxPrice"] : null
+		const minPrice = req.query["minPrice"] ? req.query["minPrice"] : null
 
 		let selectQuery = "SELECT * FROM products"
 
@@ -32,6 +30,13 @@ export const getAllProducts = async (req, res) => {
 		if (priceClauses.length) {
 			selectQuery += " WHERE " + priceClauses.join(" AND ")
 		}
+
+		// Get total Products before Offsets and Limits
+		const totalProductsQuery = "SELECT COUNT(*) FROM products" +
+			(priceClauses.length !== 0 ? " WHERE " : "") +
+			priceClauses.join(" AND ")
+		console.log(totalProductsQuery)
+		const totalProductsResult = await db.query(totalProductsQuery)
 
 		// Add Order By method
 		// TODO: Add Popular Sort
@@ -48,8 +53,6 @@ export const getAllProducts = async (req, res) => {
 		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
 		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
 
-		console.log(selectQuery)
-
 		const result = await db.query(selectQuery)
 
 		const priceExtremesResult = await db.query("SELECT MIN(price), MAX(price) FROM products")
@@ -58,7 +61,9 @@ export const getAllProducts = async (req, res) => {
 			success: true,
 			products: result.rows,
 			minPrice: priceExtremesResult.rows[0]["min"],
-			maxPrice: priceExtremesResult.rows[0]["max"]
+			maxPrice: priceExtremesResult.rows[0]["max"],
+			totalProducts: totalProductsResult.rows[0]["count"]
+			// [0]["count"]
 		})
 
 	} catch (error) {

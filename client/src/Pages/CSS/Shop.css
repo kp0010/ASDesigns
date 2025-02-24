@@ -1,12 +1,16 @@
+/* __________________________________________________ */
+/* TODO:  TEMPERORY */
 .product-grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    padding: 20px;
+    padding: 10px;
     padding-left: 130px;
     padding-right: 70px;
     margin-bottom: 48px;
 }
+
+/* __________________________________________________ */
 
 .shop-header {
     font-size: 50px;
