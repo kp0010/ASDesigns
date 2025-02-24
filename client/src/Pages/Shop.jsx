@@ -29,6 +29,9 @@ import {
   PopoverTrigger,
 } from "@/Components/ui/popover"
 
+import { Slider } from '@/Components/ui/dualrangeslider'
+import { Badge } from '@/Components/ui/badge'
+
 const sortOptions = [
   {
     value: "default",
@@ -52,9 +55,40 @@ const sortOptions = [
   },
 ]
 
-export const Shop = () => {
+export const Shop = ({ className }) => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("")
+  const [range, setRange] = React.useState([20, 80]);
+
+  const sports = [
+    "Cricket",
+    "Football",
+    "Basketball"
+  ];
+
+  const festivals = [
+    "Ganesh Jayanti",
+    "Diwali",
+    "New Year Special"
+  ];
+
+  const tags = [
+    "CDR File",
+    "PSD File",
+    "Vector Design",
+    "Jersey Type",
+    "Limited Edition",
+    "Premium Quality",
+    "Customizable",
+    "High Resolution",
+    "Eco-friendly",
+    "Lightweight Fabric"
+  ]
+
+  const handleCheckboxClick = (event) => {
+    const checkbox = event.currentTarget.previousSibling;
+    checkbox.checked = !checkbox.checked;
+  };
 
   return (
     <div>
@@ -128,24 +162,59 @@ export const Shop = () => {
         <div className="shop-filters">
           <div className="shop-filters-head">
             <h2>Filters</h2>
-            <div className="shop-filters-category">
-              <h2>Category</h2>
-              <ul>
-                <li>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    <span>Sports</span>
-                  </label>
-                  <ul>
-                    <li>Cricket</li>
-                    <li>Football</li>
-                    <li>Basketball</li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-
           </div>
+          <div className="shop-filters-category">
+            <h2>Category</h2>
+            <ul className="shop-flters-ul">
+              <li>
+                <label htmlFor="" className="shop-filters-label">
+                  <input type="checkbox" />
+                  <span className="checkmark" onClick={handleCheckboxClick}></span> <span>Sports</span>
+                </label>
+              </li>
+              <ul className="shop-filters-ul-inner">
+                {sports.map((sport, index) => (
+                  <li key={index}>
+                    <label htmlFor="" className="shop-filters-label">
+                      <input type="checkbox" />
+                      <span className="checkmark" onClick={handleCheckboxClick}></span>{sport}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <li>
+                <label htmlFor="" className="shop-filters-label">
+                  <input type="checkbox" />
+                  <span className="checkmark" onClick={handleCheckboxClick}></span>Festivals
+                </label>
+              </li>
+              <ul className="shop-filters-ul-inner">
+                {festivals.map((festival, index) => (
+                  <li key={index}>
+                    <label htmlFor="" className="shop-filters-label">
+                      <input type="checkbox" />
+                      <span className="checkmark" onClick={handleCheckboxClick}></span>{festival}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </ul>
+          </div>
+          <div className="shop-filters-price">
+            <h2>Price</h2>
+            <Slider value={range} onValueChange={setRange} min={0} max={100} step={1} className={cn('w-[60%]', className)} />
+          </div>
+          <div className="shop-filters-tags">
+            <h2>Tags</h2>
+            <div className="shop-filters-tags-content">
+                {tags.map((tag, index) => (
+                  <Badge key={index} className="shop-filters-tags-badge">
+                    {tag}
+                  </Badge>
+                ))}
+            </div>
+          </div>
+
         </div>
 
 
