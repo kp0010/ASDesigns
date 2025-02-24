@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./CSS/Shop.css"
 import "../App.css"
 
@@ -29,8 +29,9 @@ import {
   PopoverTrigger,
 } from "@/Components/ui/popover"
 
-import { Slider } from '@/Components/ui/dualrangeslider'
+import { Slider } from '@/Components/ui/dualrangeslider.jsx'
 import { Badge } from '@/Components/ui/badge'
+import { Item } from '@/Components/Item/Item'
 
 const sortOptions = [
   {
@@ -50,7 +51,7 @@ const sortOptions = [
     label: "Price: High to Low",
   },
   {
-    value: "latest",
+    value: "recent",
     label: "New Arrivals",
   },
 ]
@@ -58,7 +59,53 @@ const sortOptions = [
 export const Shop = ({ className }) => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("")
-  const [range, setRange] = React.useState([20, 80]);
+
+  const [range, setRange] = useState([null, null]);
+
+  const [priceExtremes, setPriceExtremes] = useState([0, 0])
+  const [productData, setProductData] = useState([])
+  const [loaded, setLoaded] = useState(false)
+
+  const getProducts = (...args) => {
+
+    const params = new URLSearchParams({})
+
+    if (args.length === 1) {
+      params.append("orderBy", args[0] || value)
+    }
+    if (range[0] !== null) {
+      params.append("minPrice", range[0])
+    }
+    if (range[1] !== null) {
+      params.append("maxPrice", range[1])
+    }
+
+    fetch(`/api/products/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        const minPrice = parseInt(data["minPrice"])
+        const maxPrice = parseInt(data["maxPrice"])
+
+        setPriceExtremes([minPrice, maxPrice])
+
+        if ((range[0] === null || range[1] === null)) {
+          setRange([minPrice - 50, maxPrice + 50])
+        }
+
+        setProductData(data["products"])
+
+        setLoaded(true)
+      })
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   const sports = [
     "Cricket",
@@ -122,7 +169,7 @@ export const Shop = ({ className }) => {
               className="w-[200px] justify-between"
             >
               {value
-                ? sortOptions.find((framework) => framework.value === value)?.label
+                ? sortOptions.find((sortOption) => sortOption.value === value)?.label
                 : "Sort by..."}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -133,22 +180,23 @@ export const Shop = ({ className }) => {
               <CommandList>
                 <CommandEmpty>No Sort by found.</CommandEmpty>
                 <CommandGroup>
-                  {sortOptions.map((framework) => (
+                  {sortOptions.map((sortOption) => (
                     <CommandItem
-                      key={framework.value}
-                      value={framework.value}
+                      key={sortOption.value}
+                      value={sortOption.value}
                       onSelect={(currentValue) => {
                         setValue(currentValue === value ? "" : currentValue)
+                        if (currentValue !== value) { getProducts(currentValue) }
                         setOpen(false)
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value === framework.value ? "opacity-100" : "opacity-0"
+                          value === sortOption.value ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      {framework.label}
+                      {sortOption.label}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -202,26 +250,37 @@ export const Shop = ({ className }) => {
           </div>
           <div className="shop-filters-price">
             <h2>Price</h2>
-            <Slider value={range} onValueChange={setRange} min={0} max={100} step={1} className={cn('w-[60%]', className)} />
+            <span>{range[0] + "  " + range[1]}</span>
+            <Slider
+              value={range}
+              onValueChange={setRange}
+              onValueCommit={() => getProducts(value)}
+              min={priceExtremes[0] - 50}
+              max={priceExtremes[1] + 50}
+              minStepsBetweenThumbs={1}
+              step={50}
+              className={cn('w-[90%]', className)} />
           </div>
           <div className="shop-filters-tags">
             <h2>Tags</h2>
             <div className="shop-filters-tags-content">
-                {tags.map((tag, index) => (
-                  <Badge key={index} className="shop-filters-tags-badge">
-                    {tag}
-                  </Badge>
-                ))}
+              {tags.map((tag, index) => (
+                <Badge key={index} className="shop-filters-tags-badge">
+                  {tag}
+                </Badge>
+              ))}
             </div>
           </div>
 
         </div>
 
 
-        <div className="shop-content" style={{ "text-align": "center" }}>
-          Products displayed
+        <div className="shop-content product-grid-container" style={{ "textAlign": "center" }}>
+          {loaded && productData.map((product, idx) => (
+            <Item key={idx} product={product} />
+          ))}
         </div>
       </div>
-    </div>
+    </div >
   )
 }

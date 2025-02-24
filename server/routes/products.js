@@ -16,16 +16,18 @@ export const getAllProducts = async (req, res) => {
 		const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
 		const limit = req.query["limit"] ? req.query["limit"] : 0
 
-		const maxPrice = req.query["maxPrice"] ? req.query["maxPrice"] : null
-		const minPrice = req.query["minPrice"] ? req.query["minPrice"] : null
+		const maxPrice = req.query["maxPrice"] || req.query["maxPrice"] === "null" ? req.query["maxPrice"] : null
+		const minPrice = req.query["minPrice"] || req.query["minPrice"] === "null" ? req.query["minPrice"] : null
+
+		console.log(maxPrice, minPrice, "HIT")
 
 		let selectQuery = "SELECT * FROM products"
 
 		// Add Price Min Max Clauses
 		const priceClauses = []
 
-		if (maxPrice != null) { priceClauses.push(`price <= ${maxPrice}`) }
-		if (minPrice != null) { priceClauses.push(`price >= ${minPrice}`) }
+		if (maxPrice !== null) { priceClauses.push(`price <= ${maxPrice}`) }
+		if (minPrice !== null) { priceClauses.push(`price >= ${minPrice}`) }
 
 		if (priceClauses.length) {
 			selectQuery += " WHERE " + priceClauses.join(" AND ")
@@ -35,6 +37,7 @@ export const getAllProducts = async (req, res) => {
 		// TODO: Add Popular Sort
 		const sortToSql = {
 			"default": "random()",
+			"popular": "random()",
 			"recent": "updated_at DESC",
 			"price_desc": "price DESC",
 			"price_asc": "price"
@@ -45,9 +48,18 @@ export const getAllProducts = async (req, res) => {
 		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
 		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
 
+		console.log(selectQuery)
+
 		const result = await db.query(selectQuery)
 
-		res.status(200).json(result.rows)
+		const priceExtremesResult = await db.query("SELECT MIN(price), MAX(price) FROM products")
+
+		res.status(200).json({
+			success: true,
+			products: result.rows,
+			minPrice: priceExtremesResult.rows[0]["min"],
+			maxPrice: priceExtremesResult.rows[0]["max"]
+		})
 
 	} catch (error) {
 		console.error("Error Reading Products", error)

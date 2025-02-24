@@ -28,7 +28,7 @@ export const Product_Carousel = () => {
 			},
 		}).then((resp) => resp.json())
 			.then((data) => {
-				setRelatedProducts([...data])
+				setRelatedProducts([...data["products"]])
 				setLoaded(true)
 			})
 	}

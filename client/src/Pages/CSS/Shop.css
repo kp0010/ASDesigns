@@ -1,18 +1,31 @@
+.product-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    padding-left: 130px;
+    padding-right: 70px;
+    margin-bottom: 48px;
+}
+
 .shop-header {
     font-size: 50px;
     text-align: center;
     padding: 20px;
     background-color: #edeaea;
 }
+
 .shop-sort {
     text-align: right;
     padding: 10px;
     padding-right: 100px;
 }
+
 .shop-main {
     display: flex;
     padding: 50px;
 }
+
 .shop-filters {
     width: 20%;
     display: flex;
@@ -21,11 +34,13 @@
     height: 100%;
     z-index: 3;
 }
+
 .shop-filters-head {
     font-size: 30px;
     padding-bottom: 25px;
     border-bottom: 1px solid #e4e4e4;
 }
+
 .shop-filters-category {
     font-size: 20px;
     margin-top: 25px;
@@ -33,19 +48,23 @@
     padding-bottom: 25px;
     border-bottom: 1px solid #e4e4e4;
 }
+
 .shop-filters-category h2 {
     font-weight: 500;
     color: #262626;
     margin-bottom: 15px;
 }
+
 .shop-flters-ul {
     font-size: 17px;
     color: #808080;
 }
+
 .shop-flters-ul li {
     line-height: normal;
     margin-bottom: 8px;
 }
+
 .shop-filters-label {
     position: relative;
     cursor: pointer;
@@ -56,17 +75,20 @@
     -ms-user-select: none;
     user-select: none;
 }
+
 .shop-filters-label input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     width: 100%;
     height: 100%;
-    
+
 }
+
 .shop-filters-ul-inner {
     padding-left: 10px;
 }
+
 .checkmark {
     position: absolute;
     top: 1px;
@@ -81,47 +103,56 @@
     outline: 0;
     transition: .2s ease-in-out;
 }
-.shop-filters-label:hover input ~ .checkmark {
+
+.shop-filters-label:hover input~.checkmark {
     /* background-color: #ccc; */
     background-color: #262626;
     border-color: #262626;
     box-shadow: inset 0 0 0 4px #ffffff;
 }
-.shop-filters-label input:checked ~ .checkmark {
+
+.shop-filters-label input:checked~.checkmark {
     background-color: #262626;
     border-color: #262626;
     box-shadow: inset 0 0 0 4px #ffffff;
 }
+
 .checkmark::after {
     content: "";
     position: absolute;
     display: none;
 }
-.shop-filters-label input:checked ~ .checkmark::after {
+
+.shop-filters-label input:checked~.checkmark::after {
     display: block;
 }
+
 .shop-filters-price {
     font-size: 20px;
     margin-bottom: 25px;
     padding-bottom: 25px;
     border-bottom: 1px solid #e4e4e4;
 }
+
 .shop-filters-price h2 {
     font-weight: 500;
     margin-bottom: 40px;
     color: #262626;
 }
+
 .shop-filters-tags {
     font-size: 20px;
     margin-bottom: 25px;
     padding-bottom: 25px;
     border-bottom: 1px solid #e4e4e4;
 }
+
 .shop-filters-tags h2 {
     font-weight: 500;
     margin-bottom: 15px;
     color: #262626;
 }
+
 .shop-filters-tags-content {
     display: flex;
     flex-wrap: wrap;

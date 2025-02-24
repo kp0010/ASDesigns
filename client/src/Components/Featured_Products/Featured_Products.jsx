@@ -20,7 +20,7 @@ export const Featured_Products = () => {
 			},
 		}).then((resp) => resp.json())
 			.then((data) => {
-				setFeaturedProd([...data])
+				setFeaturedProd([...data["products"]])
 				setLoaded(true)
 			})
 	}
