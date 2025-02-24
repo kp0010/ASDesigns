@@ -67,6 +67,25 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
     refreshWishlist();
   };
+  useEffect(() => {
+    if (wishlistCurrent && lottieRefLarge.current) {
+      lottieRefLarge.current.goToAndPlay(0, true); // Start animation
+  
+      setTimeout(() => {
+        lottieRefLarge.current.goToAndStop(30, true); // Stop at frame 30
+      }, 800); // Adjust time based on animation speed
+    }
+  }, [wishlistCurrent]);
+  useEffect(() => {
+    if (wishlistCurrent && lottieRefSmall.current) {
+      lottieRefSmall.current.goToAndPlay(0, true); // Start animation
+  
+      setTimeout(() => {
+        lottieRefSmall.current.goToAndStop(30, true); // Stop at frame 30
+      }, 800); // Adjust time based on animation speed
+    }
+  }, [wishlistCurrent]);
+  
 
   useEffect(() => {
     const foundProd = wishlistData.find((prod) => prod.product_id == productId);
@@ -79,7 +98,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     <>
       <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay justify-center">
         <div className="product-display-left mt-4 ml-8 ">
-          <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
+        <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
               src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
