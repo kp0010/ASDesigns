@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Breadcrumb,
@@ -7,6 +7,9 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
+
+import anim from "./anim.json";
+import Lottie from "lottie-react";
 
 import { IoCartOutline } from "react-icons/io5";
 import { IoCloudDownloadOutline } from "react-icons/io5";
@@ -19,47 +22,62 @@ import { FaRegHeart } from "react-icons/fa6";
 import { useShop } from "@/Context/ShopContext";
 
 export const ProductDisplay = ({ productId, product, categories }) => {
-
   const {
     wishlistData,
     wishlistLoaded,
     deleteFromWishlist,
     addToWishlist,
-    refreshWishlist
-  } = useShop()
+    refreshWishlist,
+  } = useShop();
 
-  const [wishlistCurrent, setWishlistCurrent] = useState(false)
+  const [wishlistCurrent, setWishlistCurrent] = useState(false);
+  // const lottieRef = useRef(null); // Reference for Lottie
+  const lottieRefLarge = useRef(null);
+  const lottieRefSmall = useRef(null);
 
   const toggleWishlist = () => {
-    if (wishlistCurrent) {
-      setWishlistCurrent(false)
-      deleteFromWishlist(product.product_id)
-    } else {
-      setWishlistCurrent(true)
-      addToWishlist(product.product_id)
+    setWishlistCurrent(!wishlistCurrent);
+    if (lottieRefLarge.current) {
+      if (!wishlistCurrent) {
+        lottieRefLarge.current.goToAndPlay(0, true);
+        setTimeout(() => {
+          lottieRefLarge.current.goToAndStop(30, true);
+        }, 800);
+      } else {
+        lottieRefLarge.current.goToAndPlay(50, true);
+      }
     }
-    refreshWishlist()
-    // console.log("SET 2 TO ", !wishlistCurrent, " FROM ", wishlistCurrent)
-    // // setWishlistCurrent(!wishlistCurrent)
-  }
 
+    if (lottieRefSmall.current) {
+      if (!wishlistCurrent) {
+        lottieRefSmall.current.goToAndPlay(0, true);
+        setTimeout(() => {
+          lottieRefSmall.current.goToAndStop(30, true);
+        }, 800);
+      } else {
+        lottieRefSmall.current.goToAndPlay(50, true);
+      }
+    }
+    if (wishlistCurrent) {
+      setWishlistCurrent(false);
+      deleteFromWishlist(product.product_id);
+    } else {
+      setWishlistCurrent(true);
+      addToWishlist(product.product_id);
+    }
+    refreshWishlist();
+  };
 
   useEffect(() => {
-    const foundProd = wishlistData.find(prod => prod.product_id == productId)
-    setWishlistCurrent((foundProd != undefined))
-  }, [wishlistLoaded, wishlistData, productId])
+    const foundProd = wishlistData.find((prod) => prod.product_id == productId);
+    setWishlistCurrent(foundProd != undefined);
+  }, [wishlistLoaded, wishlistData, productId]);
 
-
-  const tags = [
-    "CDR File ",
-    "Sport ",
-    "Cricket ",
-    "Half Sleeves ",
-  ];
+  const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
   return (
     <>
-      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay justify-center"> 
+      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay justify-center">
         <div className="product-display-left mt-4 ml-8 ">
           <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
@@ -71,11 +89,17 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         </div>
 
         <div className="product-display-right ml-28">
-          <h2 className="text-4xl mt-4">{productId + (product["name"] ? " | " + product["name"] : "")}</h2>
+          <h2 className="text-4xl mt-4">
+            {productId + (product["name"] ? " | " + product["name"] : "")}
+          </h2>
 
           <div className="price flex mt-3 items-center">
-            <h1 className="new-price font-bold text-3xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
-            <h1 className="old-price text-2xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
+            <h1 className="new-price font-bold text-3xl mr-4">
+              ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+            </h1>
+            <h1 className="old-price text-2xl line-through">
+              ₹{(parseFloat(product.price) + 200.0).toFixed(2)}
+            </h1>
             <h3 className="text-xl ml-3">(-40% off)</h3>
           </div>
 
@@ -111,18 +135,42 @@ export const ProductDisplay = ({ productId, product, categories }) => {
             ))}
           </div>
 
-          <div className="buy-section mt-5">
-            <Button className="mr-3 w-72 md:mb-3 bg-black">
-              <IoCartOutline /> Add to Cart
-            </Button>
-            <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
-              <IoCloudDownloadOutline /> Download
-            </Button>
-            <Button onClick={toggleWishlist} className="bg-white text-black border-black border-2 md:mb-3">
+          <div className="buy-section mt-5 flex">
+            <div className="buy-btns">
+              <Button className="mr-3 w-72 md:mb-3 bg-black">
+                <IoCartOutline /> Add to Cart
+              </Button>
+              <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
+                <IoCloudDownloadOutline /> Download
+              </Button>
+            </div>
+
+            <Button
+              onClick={toggleWishlist}
+              className="bg-white text-black border-black border-2 md:mb-3 pt-0 "
+            >
               {wishlistCurrent ? (
-                <FaHeart className='item-icon' />
+                // <FaHeart className='item-icon' />
+                // <Lottie animationData={anim}/>
+                <Lottie
+                  animationData={anim}
+                  lottieRef={lottieRefLarge}
+                  autoplay={false}
+                  loop={false}
+                  style={{ transform: "scale(4)" }}
+                  className="w-10 mt-2"
+                />
               ) : (
-                <FaRegHeart className="item-icon" />
+                <Lottie
+                  animationData={anim}
+                  lottieRef={lottieRefLarge}
+                  autoplay={false}
+                  loop={false}
+                  style={{ transform: "scale(4)" }}
+                  className="w-10 mt-2"
+                />
+                // <Lottie animationData={anim}/>
+                // <FaRegHeart className="item-icon" />
               )}
             </Button>
           </div>
@@ -144,12 +192,18 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
         {/* Product Details */}
         <div className="w-full text-center mt-6">
-          <h2 className="text-3xl mt-4 mr-5 ">{productId + (product["name"] ? " | " + product["name"] : "")}</h2>
+          <h2 className="text-3xl mt-4 mr-5 ">
+            {productId + (product["name"] ? " | " + product["name"] : "")}
+          </h2>
 
           {/* Price */}
           <div className="price flex justify-center mt-3 items-center">
-            <h1 className="new-price font-bold text-2xl mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
-            <h1 className="old-price text-xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
+            <h1 className="new-price font-bold text-2xl mr-4">
+              ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+            </h1>
+            <h1 className="old-price text-xl line-through">
+              ₹{(parseFloat(product.price) + 200.0).toFixed(2)}
+            </h1>
             <h3 className="text-lg ml-3">(-40% off)</h3>
           </div>
 
@@ -162,9 +216,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
                       {/* need to add right path */}
-                      <BreadcrumbLink >
-                        {category["name"]}
-                      </BreadcrumbLink>
+                      <BreadcrumbLink>{category["name"]}</BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (
                       <BreadcrumbSeparator>
@@ -197,12 +249,30 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               <IoCloudDownloadOutline className="mr-2" />
               Download
             </Button>
-            <Button onClick={toggleWishlist} className="w-full bg-white text-black border-black border-2 flex items-center justify-center">
+            <Button
+              onClick={toggleWishlist}
+              className="w-full bg-white text-black border-black border-2 flex items-center justify-center px-[100px]"
+            >
               {wishlistCurrent ? (
-                <FaHeart className='item-icon' />
+                <Lottie
+                  animationData={anim}
+                  lottieRef={lottieRefSmall}
+                  autoplay={false}
+                  loop={false}
+                  style={{ transform: "scale(4)" }}
+                  className="w-10 "
+                />
               ) : (
-                <FaRegHeart className="item-icon" />
+                <Lottie
+                  animationData={anim}
+                  lottieRef={lottieRefSmall}
+                  autoplay={false}
+                  loop={false}
+                  style={{ transform: "scale(4)" }}
+                  className="w-10 "
+                />
               )}
+              Wishlist
             </Button>
           </div>
         </div>
