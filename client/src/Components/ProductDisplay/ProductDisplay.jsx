@@ -37,27 +37,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   const toggleWishlist = () => {
     setWishlistCurrent(!wishlistCurrent);
-    if (lottieRefLarge.current) {
-      if (!wishlistCurrent) {
-        lottieRefLarge.current.goToAndPlay(0, true);
-        setTimeout(() => {
-          lottieRefLarge.current.goToAndStop(30, true);
-        }, 800);
-      } else {
-        lottieRefLarge.current.goToAndPlay(50, true);
-      }
-    }
-
-    if (lottieRefSmall.current) {
-      if (!wishlistCurrent) {
-        lottieRefSmall.current.goToAndPlay(0, true);
-        setTimeout(() => {
-          lottieRefSmall.current.goToAndStop(30, true);
-        }, 800);
-      } else {
-        lottieRefSmall.current.goToAndPlay(50, true);
-      }
-    }
     if (wishlistCurrent) {
       setWishlistCurrent(false);
       deleteFromWishlist(product.product_id);
@@ -67,31 +46,36 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
     refreshWishlist();
   };
-  useEffect(() => {
-    if (wishlistCurrent && lottieRefLarge.current) {
-      lottieRefLarge.current.goToAndPlay(0, true); // Start animation
   
-      setTimeout(() => {
-        lottieRefLarge.current.goToAndStop(30, true); // Stop at frame 30
-      }, 800); // Adjust time based on animation speed
+  useEffect(() => {
+    // Reset wishlist state based on the new product
+    const foundProd = wishlistData.find((prod) => prod.product_id === productId);
+    setWishlistCurrent(foundProd !== undefined);
+  
+    // Reset Lottie animation when switching products
+    if (lottieRefLarge.current) {
+      lottieRefLarge.current.goToAndStop(0, true); // Reset to the first frame
     }
-  }, [wishlistCurrent]);
-  useEffect(() => {
-    if (wishlistCurrent && lottieRefSmall.current) {
-      lottieRefSmall.current.goToAndPlay(0, true); // Start animation
   
+    // If the product is in the wishlist, play animation and stop at frame 30
+    if (foundProd && lottieRefLarge.current) {
+      lottieRefLarge.current.goToAndPlay(0, true);
       setTimeout(() => {
-        lottieRefSmall.current.goToAndStop(30, true); // Stop at frame 30
-      }, 800); // Adjust time based on animation speed
+        lottieRefLarge.current.goToAndStop(30, true);
+      }, 800);
     }
-  }, [wishlistCurrent]);
+
+    if (lottieRefSmall.current) {
+      lottieRefSmall.current.goToAndStop(0, true); 
+    }
   
-
-  useEffect(() => {
-    const foundProd = wishlistData.find((prod) => prod.product_id == productId);
-    setWishlistCurrent(foundProd != undefined);
-  }, [wishlistLoaded, wishlistData, productId]);
-
+    if (foundProd && lottieRefSmall.current) {
+      lottieRefSmall.current.goToAndPlay(0, true);
+      setTimeout(() => {
+        lottieRefSmall.current.goToAndStop(30, true);
+      }, 800);
+    }
+  }, [wishlistLoaded, wishlistData, productId]); 
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
   return (
