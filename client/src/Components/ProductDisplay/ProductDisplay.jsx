@@ -16,10 +16,78 @@ import { IoCloudDownloadOutline } from "react-icons/io5";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-
+import styled from "styled-components";
 import { useShop } from "@/Context/ShopContext";
 
+const Container = styled.div`
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 500px;
+  height: 500px;
+  border-radius: 15px;
+  cursor: crosshair;
+  
+`;
+
+const Image = styled.img.attrs((props) => ({
+  src: props.source,
+}))`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const Target = styled.div`
+  position: absolute;
+  width: 400px; /* Size of the magnified area */
+  height: 400px;
+  background: url(${(props) => props.source}) no-repeat;
+  background-size: 1000px; /* Zoom Level (Increase for more zoom) */
+  left: ${(props) => props.offset.left}px;
+  top: ${(props) => props.offset.top}px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  display: ${(props) => (props.opacity ? "block" : "none")};
+`;
+
 export const ProductDisplay = ({ productId, product, categories }) => {
+  const sourceRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const [opacity, setOpacity] = useState(0);
+  const [offset, setOffset] = useState({ left: 0, top: 0 });
+  const [bgPos, setBgPos] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = () => {
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
+  const handleMouseMove = (e) => {
+    const imgRect = sourceRef.current.getBoundingClientRect();
+    const x = e.pageX - imgRect.left;
+    const y = e.pageY - imgRect.top;
+
+    if (x < 0 || y < 0 || x > imgRect.width || y > imgRect.height) {
+      setOpacity(0);
+      return;
+    }
+
+    setOffset({ left: x - 100, top: y - 100 });
+
+    setBgPos({
+      x: (-x / imgRect.width) * imgRect.width * 2,
+      y: (-y / imgRect.height) * imgRect.height * 2,
+    });
+
+    setOpacity(1);
+  };
+
   const {
     wishlistData,
     wishlistLoaded,
@@ -70,7 +138,9 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   useEffect(() => {
     // Reset wishlist state based on the new product
-    const foundProd = wishlistData.find((prod) => prod.product_id === productId);
+    const foundProd = wishlistData.find(
+      (prod) => prod.product_id === productId
+    );
     setWishlistCurrent(foundProd !== undefined);
 
     // Reset Lottie animation when switching products
@@ -103,14 +173,32 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   return (
     <>
       <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay ml-16">
-        <div className="product-display-left mt-4 ml-8 ">
-          <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
+        <div className="product-display-left mt-4 ml-8 mb-5">
+          {/* <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
               src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />
-          </div>
+          </div> */}
+          <Container
+            ref={containerRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onMouseMove={handleMouseMove}
+          >
+            <Image
+              ref={sourceRef}
+              source={`/Products/${productId}.jpeg`}
+              alt="Product"
+            />
+            <Target
+              opacity={opacity}
+              offset={offset}
+              source={`/Products/${productId}.jpeg`}
+              style={{ backgroundPosition: `${bgPos.x}px ${bgPos.y}px` }}
+            />
+          </Container>
         </div>
 
         <div className="product-display-right ml-28">
