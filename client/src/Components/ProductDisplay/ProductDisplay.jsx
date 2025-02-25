@@ -7,6 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
+import { Toaster, toast } from "sonner";
 
 import anim from "./anim.json";
 import Lottie from "lottie-react";
@@ -27,7 +28,6 @@ const Container = styled.div`
   height: 500px;
   border-radius: 15px;
   cursor: crosshair;
-  
 `;
 
 const Image = styled.img.attrs((props) => ({
@@ -106,11 +106,13 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
     if (lottieRefLarge.current) {
       if (!wishlistCurrent) {
+        toast.success("Added to Wishlist");
         lottieRefLarge.current.goToAndPlay(0, true);
         setTimeout(() => {
           lottieRefLarge.current.goToAndStop(30, true);
         }, 800);
       } else {
+        toast("Removed from Wishlist");
         lottieRefLarge.current.goToAndPlay(50, true);
       }
     }
@@ -257,7 +259,9 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 <IoCloudDownloadOutline /> Download
               </Button>
             </div>
-
+            <Toaster
+              theme="dark"
+            />
             <Button
               onClick={toggleWishlist}
               className="bg-white text-black border-black border-2 md:mb-3 pt-0 "

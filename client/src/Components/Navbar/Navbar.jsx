@@ -2,12 +2,13 @@ import "./Navbar.css";
 import "../../App.css";
 import logo from "../../Assets/Logos/AS_logo_b.png";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useShop } from "@/context/ShopContext"; // Import wishlist context
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -25,7 +26,9 @@ import { Skeleton } from "./Skeleton";
 export const Navbar = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn, getToken } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { wishlistData, wishlistLoaded } = useShop();
+  const [showWishlist, setShowWishlist] = useState(false);
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -41,12 +44,16 @@ export const Navbar = () => {
         // TODO: Error Handling
       });
   };
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+    setShowWishlist(false); // Close the wishlist dropdown after navigation
+  };
 
   const handleClick = (event) => {
     event.preventDefault();
     window.scrollTo(0, 0);
-    const splitLink = event.currentTarget.href.split("/")
-    navigate(splitLink[splitLink.length - 1])
+    const splitLink = event.currentTarget.href.split("/");
+    navigate(splitLink[splitLink.length - 1]);
   };
 
   useEffect(() => {
@@ -97,13 +104,59 @@ export const Navbar = () => {
               </div>
             </NavLink>
 
-            <NavLink to="/wishlist" onClick={handleClick}>
-              <div className="nav-icons d-flex align-items-center">
-                <FaRegHeart className="icon me-2" />
-                <span>Wishlist</span>
-              </div>
-            </NavLink>
-
+            <div
+              className="relative"
+              onMouseEnter={() => setShowWishlist(true)}
+              onMouseLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  setShowWishlist(false);
+                }
+              }}
+            >
+              <NavLink to="/wishlist" onClick={handleClick}>
+                <div className="nav-icons wishlist d-flex align-items-center">
+                  <FaRegHeart className="icon me-2" />
+                  <span>Wishlist ({wishlistData.length})</span>
+                </div>
+                <div className="hidden wishlist-preview"></div>
+              </NavLink>
+              {showWishlist && (
+                <div
+                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block"
+                  onMouseEnter={() => setShowWishlist(true)} 
+                  onMouseLeave={() => setShowWishlist(false)} 
+                >
+                  {wishlistLoaded && wishlistData.length > 0 ? (
+                    wishlistData.map((product, idx) => (
+                      <div
+                        key={idx}
+                        className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+                        onClick={() => handleProductClick(product.product_id)}
+                      >
+                        <img
+                          src={`/Products/${product.product_id}.jpeg`}
+                          className="w-20 h-20 object-cover rounded"
+                          alt={product.name}
+                        />
+                        <div className="ml-3">
+                          <h3 className="text-md font-semibold">
+                            {product.name}
+                          </h3>
+                          <p className="text-md text-gray-500">
+                            ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500 text-sm">
+                      No items in wishlist
+                    </p>
+                  )}
+        
+                </div>
+              )}
+            </div>
 
             <div className="nav-login-icon">
               {!user && !isLoaded ? (
@@ -125,10 +178,10 @@ export const Navbar = () => {
                         elements: {
                           userButtonPopoverActionButton: "hover:bg-red-500",
                         },
-                      }} />
+                      }}
+                    />
                   </SignedIn>
                 </div>
-
               </>
             </div>
           </div>
@@ -180,32 +233,57 @@ export const Navbar = () => {
             <div className="offcanvas-body bg-[#dcdada]">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <NavLink className="nav-link active" aria-current="page" to="/" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/"
+                    onClick={handleClick}
+                  >
                     Home
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/shop" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link"
+                    to="/shop"
+                    onClick={handleClick}
+                  >
                     Shop
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/sports" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link"
+                    to="/sports"
+                    onClick={handleClick}
+                  >
                     Sports
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/festival" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link"
+                    to="/festival"
+                    onClick={handleClick}
+                  >
                     Festival
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/others" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link"
+                    to="/others"
+                    onClick={handleClick}
+                  >
                     Others
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/about" onClick={handleClick}>
+                  <NavLink
+                    className="nav-link"
+                    to="/about"
+                    onClick={handleClick}
+                  >
                     About
                   </NavLink>
                 </li>
@@ -218,33 +296,53 @@ export const Navbar = () => {
         <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
-              <NavLink className="nav-link text-dark" to="/" onClick={handleClick}>
+              <NavLink
+                className="nav-link text-dark"
+                to="/"
+                onClick={handleClick}
+              >
                 Home
               </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <NavLink className="nav-link text-dark" to="/shop" onClick={handleClick}>
+              <NavLink
+                className="nav-link text-dark"
+                to="/shop"
+                onClick={handleClick}
+              >
                 Shop
               </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <NavLink className="nav-link text-dark" to="/sports" onClick={handleClick}>
+              <NavLink
+                className="nav-link text-dark"
+                to="/sports"
+                onClick={handleClick}
+              >
                 Sports
               </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <NavLink className="nav-link text-dark" to="/festival" onClick={handleClick}>
+              <NavLink
+                className="nav-link text-dark"
+                to="/festival"
+                onClick={handleClick}
+              >
                 Festival
               </NavLink>
             </li>
             <li className="nav-item ps-3">
-              <NavLink className="nav-link text-dark" to="/others" onClick={handleClick}>
+              <NavLink
+                className="nav-link text-dark"
+                to="/others"
+                onClick={handleClick}
+              >
                 Others
               </NavLink>
             </li>
           </ul>
         </div>
       </div>
-    </nav >
+    </nav>
   );
 };

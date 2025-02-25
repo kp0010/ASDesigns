@@ -52,7 +52,7 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
 
 	return (
 		<CarouselItem
-			className="car-con md:basis-1/2 lg:basis-1/3 xl:basis-1/4 "
+			className="car-con md:basis-1/2 lg:basis-1/3 xl:basis-1/3 "
 		>
 			<div className="p-1">
 				<div className="item bg-white mb-5 ">
