@@ -28,13 +28,9 @@ export const Navbar = () => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   const navigate = useNavigate();
-
-  const {
-    cartData,
-    wishlistData,
-    wishlistLoaded,
-  } = useShop();
-
+  const { wishlistData, wishlistLoaded, wishlistCount } = useShop();
+  const { cartData, cartLoaded, cartCount } = useShop();
+  const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
 
   const writeUserToDB = async () => {
@@ -104,12 +100,57 @@ export const Navbar = () => {
             </div>
           </form>
           <div className="d-flex align-items-center gap-lg-3 gap-1">
-            <NavLink to="/cart" onClick={handleClick}>
-              <div className="nav-icons d-flex align-items-center">
-                <LuShoppingCart className="icon me-2" />
-                <span>Cart ({cartData.length})</span>
-              </div>
-            </NavLink>
+            <div
+              className="relative"
+              onMouseEnter={() => setShowCart(true)}
+              onMouseLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  setShowCart(false);
+                }
+              }}
+            >
+              <NavLink to="/cart" onClick={handleClick}>
+                <div className="nav-icons d-flex align-items-center">
+                  <LuShoppingCart className="icon me-2" />
+                  <span>Cart ({cartCount})</span>
+                </div>
+              </NavLink>
+              {showCart && (
+                <div
+                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block"
+                  onMouseEnter={() => setShowCart(true)}
+                  onMouseLeave={() => setShowCart(false)}
+                >
+                  {cartLoaded && cartData.length > 0 ? (
+                    cartData.map((product, idx) => (
+                      <div
+                        key={idx}
+                        className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+                        onClick={() => handleProductClick(product.product_id)}
+                      >
+                        <img
+                          src={`/Products/${product.product_id}.jpeg`}
+                          className="w-20 h-20 object-cover rounded"
+                          alt={product.name}
+                        />
+                        <div className="ml-3">
+                          <h3 className="text-md font-semibold">
+                            {product.name}
+                          </h3>
+                          <p className="text-md text-gray-500">
+                            ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500 text-sm">
+                      No items in Cart
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
 
             <div
               className="relative"
@@ -160,7 +201,6 @@ export const Navbar = () => {
                       No items in wishlist
                     </p>
                   )}
-
                 </div>
               )}
             </div>
