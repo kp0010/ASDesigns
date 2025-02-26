@@ -162,10 +162,16 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   useEffect(() => {
     // Reset wishlist state based on the new product
-    const foundProd = wishlistData.find(
+
+    const foundCartProduct = cartData.find(
+      (prod) => prod.product_id === productId
+    )
+    setCartCurrent(foundCartProduct !== undefined)
+
+    const foundWSProduct = wishlistData.find(
       (prod) => prod.product_id === productId
     );
-    setWishlistCurrent(foundProd !== undefined);
+    setWishlistCurrent(foundWSProduct !== undefined);
 
     // Reset Lottie animation when switching products
     if (lottieRefLarge.current) {
@@ -173,7 +179,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
 
     // If the product is in the wishlist, play animation and stop at frame 30
-    if (foundProd && lottieRefLarge.current) {
+    if (foundWSProduct && lottieRefLarge.current) {
       lottieRefLarge.current.goToAndPlay(0, true);
       setTimeout(() => {
         lottieRefLarge.current.goToAndStop(30, true);
@@ -184,7 +190,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
       lottieRefSmall.current.goToAndStop(0, true);
     }
 
-    if (foundProd && lottieRefSmall.current) {
+    if (foundWSProduct && lottieRefSmall.current) {
       lottieRefSmall.current.goToAndPlay(0, true);
       setTimeout(() => {
         lottieRefSmall.current.goToAndStop(30, true);
