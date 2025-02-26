@@ -302,7 +302,7 @@ export const Shop = ({ className }) => {
         </div>
 
 
-        <div className="shop-content product-grid-container" style={{ "textAlign": "center" }}>
+        <div className="shop-content products-grid-container" style={{ "textAlign": "center" }}>
           {loaded && productData.map((product, idx) => (
             <Item key={idx} product={product} />
           ))}

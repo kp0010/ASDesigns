@@ -45,7 +45,7 @@ export const Product_Carousel = () => {
 			opts={{
 				align: "start",
 			}}
-			className="md:w-[80%] sm:w-full md:ml-40 ml-12"
+			className="md:w-[90%] md:ml-20 lg:w-[85%] xl:w-[90%] sm:w-full ml-12"
 		>
 			<CarouselContent>
 				{loaded && relatedProducts.map((el, idx) => (
@@ -54,7 +54,7 @@ export const Product_Carousel = () => {
 			</CarouselContent>
 
 			<CarouselPrevious />
-			<CarouselNext className="md:ml-5 lg:ml-5" />
+			<CarouselNext className="position-absolute  md:ml-16 lg:ml-5" />
 		</Carousel >
 	)
 }

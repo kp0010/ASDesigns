@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import "../Related_Products/Related_Products.css"
+import "./Product_Carousel_Item.css"
 
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
@@ -52,55 +53,55 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
 
 	return (
 		<CarouselItem
-			className="car-con md:basis-1/2 lg:basis-1/3 xl:basis-1/3 "
+			className="car-con md:basis-1/2 pl-4 lg:basis-1/3 pl-0 xl:basis-1/4 "
 		>
 			<div className="p-1">
-				<div className="item bg-white mb-5 ">
-					<div className="item-image">
+				<div className="carousel_item bg-white mb-5 ">
+					<div className="carousel_item-image">
 						<Link to={`/product/${product.product_id}`} onClick={handleClick}>
 							<img src={`/Products/${product.product_id}.jpeg`} alt="..." />
 						</Link>
-						<div className="item-hover-container">
+						<div className="carousel_item-hover-container">
 							<Link to="/cart">
-								<button className="item-icons-container d-flex rounded-full">
+								<button className="carousel_item-icons-container d-flex rounded-full">
 									<i>
-										<LuShoppingCart className="item-icon" />
+										<LuShoppingCart className="carousel_item-icon" />
 									</i>
-									<span className="item-icon-tag">Add to Cart</span>
+									<span className="carousel_item-icon-tag">Add to Cart</span>
 								</button>
 							</Link>
 
 							<button
 								href=""
-								className="item-icons-container d-flex rounded-full"
+								className="carousel_item-icons-container d-flex rounded-full"
 							>
 								<i>
-									<PiEyeDuotone className="item-icon" />
+									<PiEyeDuotone className="carousel_item-icon" />
 								</i>
-								<span className="item-icon-tag">Quick View</span>
+								<span className="carousel_item-icon-tag">Quick View</span>
 							</button>
 
 							<button
 								onClick={toggleWishlist}
-								className="item-icons-container d-flex rounded-full"
+								className="carousel_item-icons-container d-flex rounded-full"
 							>
 								<i>
 									{wishlistCurrent ? (
-										<FaHeart className='item-icon' />
+										<FaHeart className='carousel_item-icon' />
 									) : (
-										<FaRegHeart className="item-icon" />
+										<FaRegHeart className="carousel_item-icon" />
 									)}
 								</i>
-								<span className="item-icon-tag">Wishlist</span>
+								<span className="carousel_item-icon-tag">Wishlist</span>
 							</button>
 						</div>
 					</div>
 
 					<Link to={`/product/${product.product_id}`} onClick={handleClick}>
-						<div className="item-content">
+						<div className="carousel_item-content">
 							<h2>{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
 						</div>
-						<div className="item-price">
+						<div className="carousel_item-price">
 							<h2>₹{(parseFloat(product["price"]) - 1.0).toFixed(2)}</h2>
 						</div>
 					</Link>

@@ -202,7 +202,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   return (
     <>
-      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay ml-16">
+      <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay xl:ml-16">
         <div className="product-display-left mt-4 ml-8 mb-5">
           {/* <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
@@ -231,7 +231,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
           </Container>
         </div>
 
-        <div className="product-display-right ml-28">
+        <div className="product-display-right xl:ml-28 lg:ml-16 md:ml-8">
           <h2 className="text-4xl mt-4">
             {productId + (product["name"] ? " | " + product["name"] : "")}
           </h2>
@@ -321,8 +321,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
       {/* Small Screens (<md) Layout */}
       < div className="md:hidden productDisplay flex flex-col items-center p-4" >
         {/* Product Image */}
-        < div className="w-full flex justify-center" >
-          <div className="productDiplay-img h-[350px] w-[350px]">
+        <div className="w-full flex justify-center">
+          <div className="productDiplay-img h-[350px] w-[350px] xs: h-[320px] w-[320px] xxs: h-[250px] w-[250px]">
             <img
               src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
@@ -332,8 +332,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         </div >
 
         {/* Product Details */}
-        < div className="w-full text-center mt-6" >
-          <h2 className="text-3xl mt-4 mr-5 ">
+        <div className="w-full text-center mt-6">
+          <h2 className="text-3xl mr-5 ">
             {productId + (product["name"] ? " | " + product["name"] : "")}
           </h2>
 

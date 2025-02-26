@@ -1,15 +1,14 @@
 /* __________________________________________________ */
 /* TODO:  TEMPERORY */
-
-/* .product-grid-container { */
-/*     display: grid; */
-/* grid-template-columns: repeat(3, 1fr); */
-/*     gap: 20px; */
-/*     padding: 10px; */
-/*     padding-left: 130px; */
-/*     padding-right: 70px; */
-/*     margin-bottom: 48px; */
-/* } */
+.products-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 10px;
+    padding-left: 130px;
+    padding-right: 70px;
+    margin-bottom: 48px;
+}
 
 /* __________________________________________________ */
 
@@ -111,7 +110,7 @@
 
 .shop-filters-label:hover input~.checkmark {
     /* background-color: #ccc; */
-    background-color: #262626;
+    background-color: #808080;
     border-color: #262626;
     box-shadow: inset 0 0 0 4px #ffffff;
 }

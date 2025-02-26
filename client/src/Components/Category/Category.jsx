@@ -32,8 +32,8 @@ export const Category = () => {
         </h1>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-10 md:gap-5 lg:gap-20 mb-8">
-        <div className="w-80 flex flex-col items-center text-center lg:mb-20 mt-2">
+      <div className="flex flex-wrap justify-center gap-10 md:gap-5 lg:gap-20  mb-8">
+        <div className="w-80 flex flex-col items-center text-center xl:mb-20 mt-2">
           <div className="relative w-full rounded-xl overflow-hidden">
             <img
               src={sports}
