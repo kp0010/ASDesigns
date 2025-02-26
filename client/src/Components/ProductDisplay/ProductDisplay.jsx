@@ -322,7 +322,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
       < div className="md:hidden productDisplay flex flex-col items-center p-4" >
         {/* Product Image */}
         <div className="w-full flex justify-center">
-          <div className="productDiplay-img h-[350px] w-[350px] xs: h-[320px] w-[320px] xxs: h-[250px] w-[250px]">
+          <div className="productDiplay-img s:h-[350px] w-[350px]">
             <img
               src={`/Products/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"

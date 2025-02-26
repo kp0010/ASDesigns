@@ -33,6 +33,7 @@ import { Slider } from '@/Components/ui/dualrangeslider.jsx'
 import { Badge } from '@/Components/ui/badge'
 import { Item } from '@/Components/Item/Item'
 import { useParams } from 'react-router-dom'
+import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
@@ -270,7 +271,10 @@ export const Shop = ({ className }) => {
           </div>
           <div className="shop-filters-price">
             <h2>Price</h2>
-            <span>{priceRange[0] + "  " + priceRange[1]}</span>
+            <div className="shop-filters-price-range">
+              <span>{priceRange[0]}</span>
+              <span>{priceRange[1]}</span>
+            </div>
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
@@ -306,6 +310,9 @@ export const Shop = ({ className }) => {
           {loaded && productData.map((product, idx) => (
             <Item key={idx} product={product} />
           ))}
+          <div className="demo">
+            <Shop_Item />
+          </div>
         </div>
       </div>
     </div >

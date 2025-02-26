@@ -140,8 +140,23 @@
 
 .shop-filters-price h2 {
     font-weight: 500;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     color: #262626;
+}
+
+.shop-filters-price-range {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-bottom: 14px;
+    font-size: 16px;
+}
+.shop-filters-price-range span {
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 2px solid #808080;
+    border-radius: 20%;
 }
 
 .shop-filters-tags {
