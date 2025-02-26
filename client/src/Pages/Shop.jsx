@@ -32,6 +32,7 @@ import {
 import { Slider } from '@/Components/ui/dualrangeslider.jsx'
 import { Badge } from '@/Components/ui/badge'
 import { Item } from '@/Components/Item/Item'
+import { useParams } from 'react-router-dom'
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
@@ -60,6 +61,8 @@ const sortOptions = [
 ]
 
 export const Shop = ({ className }) => {
+  const { pageNo } = useParams()
+
   const [open, setOpen] = useState(false)
   const [sortValue, setSortValue] = useState("")
 
@@ -72,10 +75,9 @@ export const Shop = ({ className }) => {
   const [loaded, setLoaded] = useState(false)
 
   const getProducts = ({
-    orderBy = null,
-    minPrice = null,
-    maxPrice = null
+    orderBy = null, minPrice = null, maxPrice = null
   } = {}) => {
+
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
     if (orderBy !== null && orderBy !== undefined) {
@@ -90,7 +92,7 @@ export const Shop = ({ className }) => {
       params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1])
     }
 
-    fetch(`/api/products/?${params.toString()}`, {
+    fetch(`/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -163,7 +165,7 @@ export const Shop = ({ className }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
+              <BreadcrumbLink href="/Shop">Shop</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

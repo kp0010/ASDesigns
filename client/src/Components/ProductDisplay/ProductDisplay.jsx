@@ -88,6 +88,9 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     setOpacity(1);
   };
 
+  const lottieRefLarge = useRef(null);
+  const lottieRefSmall = useRef(null);
+
   const {
     wishlistData,
     wishlistLoaded,
@@ -96,10 +99,16 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     refreshWishlist,
   } = useShop();
 
-  const [wishlistCurrent, setWishlistCurrent] = useState(false);
+  const {
+    cartData,
+    cartLoaded,
+    deleteFromCart,
+    addToCart,
+    refreshCart
+  } = useShop()
 
-  const lottieRefLarge = useRef(null);
-  const lottieRefSmall = useRef(null);
+  const [wishlistCurrent, setWishlistCurrent] = useState(false);
+  const [cartCurrent, setCartCurrent] = useState(false)
 
   const toggleWishlist = () => {
     setWishlistCurrent(!wishlistCurrent);
@@ -112,7 +121,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
           lottieRefLarge.current.goToAndStop(30, true);
         }, 800);
       } else {
-        toast("Removed from Wishlist");
+        toast.info("Removed from Wishlist");
         lottieRefLarge.current.goToAndPlay(50, true);
       }
     }
@@ -137,6 +146,19 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
     refreshWishlist();
   };
+
+  const toggleCart = () => {
+    if (cartCurrent) {
+      setCartCurrent(false);
+      deleteFromCart(product.product_id);
+      toast.info("Removed from Cart")
+    } else {
+      setCartCurrent(true);
+      addToCart(product.product_id, product.price);
+      toast.success("Added to Cart")
+    }
+    refreshCart();
+  }
 
   useEffect(() => {
     // Reset wishlist state based on the new product
@@ -168,7 +190,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         lottieRefSmall.current.goToAndStop(30, true);
       }, 800);
     }
-  }, [wishlistLoaded, wishlistData, productId]);
+  }, [productId]);
 
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
@@ -252,8 +274,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex">
             <div className="buy-btns">
-              <Button className="mr-3 w-72 md:mb-3 bg-black">
-                <IoCartOutline /> Add to Cart
+              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${cartCurrent ? "bg-black" : "bg-[#e3c567]"}`}>
+                < IoCartOutline /> Add to Cart
               </Button>
               <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
                 <IoCloudDownloadOutline /> Download
@@ -267,8 +289,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               className="bg-white text-black border-black border-2 md:mb-3 pt-0 "
             >
               {wishlistCurrent ? (
-                // <FaHeart className='item-icon' />
-                // <Lottie animationData={anim}/>
                 <Lottie
                   animationData={anim}
                   lottieRef={lottieRefLarge}
@@ -286,18 +306,16 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                   style={{ transform: "scale(4)" }}
                   className="w-10 mt-2"
                 />
-                // <Lottie animationData={anim}/>
-                // <FaRegHeart className="item-icon" />
               )}
             </Button>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Small Screens (<md) Layout */}
-      <div className="md:hidden productDisplay flex flex-col items-center p-4">
+      < div className="md:hidden productDisplay flex flex-col items-center p-4" >
         {/* Product Image */}
-        <div className="w-full flex justify-center">
+        < div className="w-full flex justify-center" >
           <div className="productDiplay-img h-[350px] w-[350px]">
             <img
               src={`/Products/${productId}.jpeg`}
@@ -305,10 +323,10 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               alt=""
             />
           </div>
-        </div>
+        </div >
 
         {/* Product Details */}
-        <div className="w-full text-center mt-6">
+        < div className="w-full text-center mt-6" >
           <h2 className="text-3xl mt-4 mr-5 ">
             {productId + (product["name"] ? " | " + product["name"] : "")}
           </h2>
@@ -392,8 +410,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               Wishlist
             </Button>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 };

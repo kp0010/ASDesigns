@@ -72,7 +72,6 @@ export const Item = ({ product }) => {
                         <span className="item-icon-tag">Quick View</span>
                     </button>
 
-                    {/* TODO: wishlist count pending */}
                     <button onClick={toggleWishlist} className="item-icons-container d-flex rounded-full">
                         <i>
                             {wishlistCurrent ? (

@@ -68,7 +68,7 @@ const ShopContextProvider = ({ children }) => {
       })
   }
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productId, price) => {
     if (!(isLoaded && isSignedIn)) {
       return { success: false, message: "User not Found" }
     }
@@ -88,7 +88,9 @@ const ShopContextProvider = ({ children }) => {
       .then(resp => resp.json())
       .then(data => {
         if (data.success) {
+          updatePrice("POST", productId, price)
           setCartData([...cartData, data.product])
+          setCartCount(cartCount + 1)
           return { success: true, message: "Product Added to Cart" }
         }
       })
@@ -99,7 +101,7 @@ const ShopContextProvider = ({ children }) => {
       return { success: false, message: "User not Found" }
     }
 
-    updatePrice(productId)
+    updatePrice("DELETE", productId)
     const token = await getToken()
 
     fetch("/api/cart", {
@@ -116,6 +118,7 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setCartData([...cartData.filter(prod => prod.product_id !== productId)])
+          setCartCount(cartCount - 1)
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -170,6 +173,7 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setWishlistData([...wishlistData, data.product])
+          setWishlistCount(wishlistCount + 1)
           return { success: true, message: "Product Added to Wishlist" }
         }
       })
@@ -195,6 +199,7 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setWishlistData([...wishlistData.filter(prod => prod.product_id !== productId)])
+          setWishlistCount(wishlistCount - 1)
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -209,12 +214,14 @@ const ShopContextProvider = ({ children }) => {
     setPrice(acc)
   }
 
-  const updatePrice = (productId) => {
-    const product = cartData.find((product) => productId === product.productId);
+  const updatePrice = (method, productId, productPrice) => {
+    const product = cartData.find((product) => productId === product.product_id);
 
-    if (!product) { return }
-
-    setPrice(price - product.price)
+    if (method === "POST") {
+      setPrice(price + productPrice)
+    } else if (method === "DELETE") {
+      setPrice(price - product.price)
+    }
   }
 
   const refreshCart = () => {

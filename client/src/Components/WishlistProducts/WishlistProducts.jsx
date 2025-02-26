@@ -10,6 +10,7 @@ import { useShop } from "@/Context/ShopContext";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth, useClerk } from "@clerk/clerk-react"
+import { toast, Toaster } from "sonner";
 
 export const WishlistProducts = () => {
 
@@ -43,6 +44,8 @@ export const WishlistProducts = () => {
   };
 
   const removeFromWishilst = async (productId) => {
+    toast.success("Removed from Wishlist")
+    // toast.success("Removed from Wishlist")
     refreshWishlist()
     deleteFromWishlist(productId)
     refreshWishlist()
@@ -51,46 +54,49 @@ export const WishlistProducts = () => {
   return (
     <div className="wish bg-[#edeae7] flex flex-col items-center">
       <h2 className="text-4xl text-center pt-10 mb-5">Your Favourites</h2>
-      {wishlistLoaded && wishlistData.map((product, idx) => (
-        <div key={idx} className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-5 p-4">
-          <Link to={`/product/${product.product_id}`} onClick={handleClick}>
-            <div className="product-display-left mt-4">
-              <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
-                <img
-                  src={`/Products/${product.product_id}.jpeg`}
-                  className="product-display-main-img rounded-lg"
-                  alt=""
-                />
-              </div>
-            </div>
-          </Link>
-
-          <div className="product-display-right md:ml-20 ">
+      <Toaster theme="dark" />
+      {
+        wishlistLoaded && wishlistData.map((product, idx) => (
+          <div key={idx} className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-5 p-4">
             <Link to={`/product/${product.product_id}`} onClick={handleClick}>
-              <h2 className="text-2xl mt-4 break-words ml-9 md:ml-0 md:text-left lg:text-left" >{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
+              <div className="product-display-left mt-4">
+                <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
+                  <img
+                    src={`/Products/${product.product_id}.jpeg`}
+                    className="product-display-main-img rounded-lg"
+                    alt=""
+                  />
+                </div>
+              </div>
             </Link>
 
+            <div className="product-display-right md:ml-20 ">
+              <Link to={`/product/${product.product_id}`} onClick={handleClick}>
+                <h2 className="text-2xl mt-4 break-words ml-9 md:ml-0 md:text-left lg:text-left" >{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
+              </Link>
 
-            <div className="price flex flex-col md:flex-row mt-3 items-center">
-              <h1 className="new-price font-bold text-2xl md:mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
-              <h1 className="old-price text-xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
-              <h3 className="text-xl md:ml-3">(-40% off)</h3>
-            </div>
 
-            <div className="buy-section mt-5 flex flex-col md:flex-col lg:flex-row xl:flex-row md:flex-wrap md:justify-start gap-2 w-full">
-              <Button className="w-full md:w-60 text-sm py-2 bg-black flex items-center justify-center mr-3">
-                <IoCartOutline /> Add to Cart
-              </Button>
-              <Button className="w-full md:w-60 xl:w-70 lg:w-50 text-sm py-2 bg-[#e3c756] flex items-center justify-center mr-3">
-                <IoCloudDownloadOutline /> Download
-              </Button>
-              <Button onClick={() => removeFromWishilst(product.product_id)} className="w-full md:w-32 text-sm py-2 bg-white text-black border-2 border-black flex items-center justify-center mr-3">
-                <FaRegTrashAlt /> Remove
-              </Button>
+              <div className="price flex flex-col md:flex-row mt-3 items-center">
+                <h1 className="new-price font-bold text-2xl md:mr-4">₹{(parseFloat(product.price) - 1.0).toFixed(2)}</h1>
+                <h1 className="old-price text-xl line-through">₹{(parseFloat(product.price) + 200.0).toFixed(2)}</h1>
+                <h3 className="text-xl md:ml-3">(-40% off)</h3>
+              </div>
+
+              <div className="buy-section mt-5 flex flex-col md:flex-col lg:flex-row xl:flex-row md:flex-wrap md:justify-start gap-2 w-full">
+                <Button className="w-full md:w-60 text-sm py-2 bg-black flex items-center justify-center mr-3">
+                  <IoCartOutline /> Add to Cart
+                </Button>
+                <Button className="w-full md:w-60 xl:w-70 lg:w-50 text-sm py-2 bg-[#e3c756] flex items-center justify-center mr-3">
+                  <IoCloudDownloadOutline /> Download
+                </Button>
+                <Button onClick={() => removeFromWishilst(product.product_id)} className="w-full md:w-32 text-sm py-2 bg-white text-black border-2 border-black flex items-center justify-center mr-3">
+                  <FaRegTrashAlt /> Remove
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div >
   );
 };

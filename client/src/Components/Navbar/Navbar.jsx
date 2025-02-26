@@ -8,7 +8,7 @@ import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useShop } from "@/context/ShopContext"; // Import wishlist context
+import { useShop } from "@/Context/ShopContext"
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -26,8 +26,16 @@ import { Skeleton } from "./Skeleton";
 export const Navbar = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn, getToken } = useAuth();
+
   const navigate = useNavigate();
-  const { wishlistData, wishlistLoaded } = useShop();
+
+  const {
+    wishlistData,
+    wishlistCount,
+    wishlistLoaded,
+    cartCount,
+  } = useShop();
+
   const [showWishlist, setShowWishlist] = useState(false);
 
   const writeUserToDB = async () => {
@@ -100,7 +108,7 @@ export const Navbar = () => {
             <NavLink to="/cart" onClick={handleClick}>
               <div className="nav-icons d-flex align-items-center">
                 <LuShoppingCart className="icon me-2" />
-                <span>Cart</span>
+                <span>Cart ({cartCount})</span>
               </div>
             </NavLink>
 
@@ -116,15 +124,15 @@ export const Navbar = () => {
               <NavLink to="/wishlist" onClick={handleClick}>
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
-                  <span>Wishlist ({wishlistData.length})</span>
+                  <span>Wishlist ({wishlistCount})</span>
                 </div>
                 <div className="hidden wishlist-preview"></div>
               </NavLink>
               {showWishlist && (
                 <div
                   className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block"
-                  onMouseEnter={() => setShowWishlist(true)} 
-                  onMouseLeave={() => setShowWishlist(false)} 
+                  onMouseEnter={() => setShowWishlist(true)}
+                  onMouseLeave={() => setShowWishlist(false)}
                 >
                   {wishlistLoaded && wishlistData.length > 0 ? (
                     wishlistData.map((product, idx) => (
@@ -140,7 +148,7 @@ export const Navbar = () => {
                         />
                         <div className="ml-3">
                           <h3 className="text-md font-semibold">
-                            {product.name}
+                            {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
                           </h3>
                           <p className="text-md text-gray-500">
                             ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
@@ -153,7 +161,7 @@ export const Navbar = () => {
                       No items in wishlist
                     </p>
                   )}
-        
+
                 </div>
               )}
             </div>
