@@ -5,11 +5,9 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 
 const ShopContext = createContext({
   cartData: [],
-  cartCount: 0,
   cartLoaded: false,
 
   wishlistData: [],
-  wishlistCount: 0,
   wishtlistLoaded: false,
 
   addToCart: () => { },
@@ -31,12 +29,10 @@ const ShopContextProvider = ({ children }) => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   const [cartData, setCartData] = useState([])
-  const [cartCount, setCartCount] = useState(0);
   const [cartChanged, setCartChanged] = useState(false)
   const [cartLoaded, setCartLoaded] = useState(false)
 
   const [wishlistData, setWishlistData] = useState([])
-  const [wishlistCount, setWishlistCount] = useState(0);
   const [wishlistChanged, setWishlistChanged] = useState(false)
   const [wishlistLoaded, setWishlistLoaded] = useState(false)
 
@@ -45,7 +41,6 @@ const ShopContextProvider = ({ children }) => {
   const getCart = async () => {
     if (!(isLoaded && isSignedIn)) {
       setCartData([])
-      setCartCount(0)
       return { success: false, message: "User not Found" }
     }
 
@@ -62,7 +57,6 @@ const ShopContextProvider = ({ children }) => {
       .then((data) => {
         if (data.success) {
           setCartData(data.cart)
-          setCartCount(data.cart.length)
           return { success: true, message: "Cart Retrieved Successfully" }
         }
       })
@@ -90,7 +84,6 @@ const ShopContextProvider = ({ children }) => {
         if (data.success) {
           updatePrice("POST", productId, price)
           setCartData([...cartData, data.product])
-          setCartCount(cartCount + 1)
           return { success: true, message: "Product Added to Cart" }
         }
       })
@@ -118,7 +111,6 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setCartData([...cartData.filter(prod => prod.product_id !== productId)])
-          setCartCount(cartCount - 1)
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -129,7 +121,6 @@ const ShopContextProvider = ({ children }) => {
   const getWishlist = async () => {
     if (!(isLoaded && isSignedIn)) {
       setWishlistData([])
-      setWishlistCount(0)
       return { success: false, message: "User not Found" }
     }
 
@@ -146,7 +137,6 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setWishlistData(data.wishlist)
-          setWishlistCount(data.wishlist.length)
           return { success: true, message: "Wishlist Retrieved Successfully" }
         }
       })
@@ -173,7 +163,6 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setWishlistData([...wishlistData, data.product])
-          setWishlistCount(wishlistCount + 1)
           return { success: true, message: "Product Added to Wishlist" }
         }
       })
@@ -199,7 +188,6 @@ const ShopContextProvider = ({ children }) => {
       .then(data => {
         if (data.success) {
           setWishlistData([...wishlistData.filter(prod => prod.product_id !== productId)])
-          setWishlistCount(wishlistCount - 1)
           return { success: true, message: "Product Deleted From Cart" }
         }
       })
@@ -254,11 +242,9 @@ const ShopContextProvider = ({ children }) => {
 
   const contextValue = {
     cartData,
-    cartCount,
     cartLoaded,
 
     wishlistData,
-    wishlistCount,
     wishlistLoaded,
 
     addToCart,

@@ -46,13 +46,17 @@ export const postCartItem = async (req, res) => {
 
 		const userId = await getUserIdFromClerkId(clerkId)
 
-		const cartInsertQuery = "INSERT INTO cart values ($1, $2) RETURNING *"
-		const insertResult = await db.query(cartInsertQuery, [userId, productId])
+		const cartInsertQuery = "INSERT INTO carts values ($1, $2)"
+		await db.query(cartInsertQuery, [userId, productId])
+
+		const productSelectQuery = "SELECT * FROM products WHERE product_id = $1"
+		const productResult = await db.query(productSelectQuery, [productId])
 
 		res.status(200).json({
 			success: true,
 			message: "Product Added to Cart Successfully",
-			cartItem: insertResult.rows
+			cartItem: cartInsertQuery.rows,
+			product: productResult.rows[0]
 		})
 
 
@@ -73,7 +77,7 @@ export const deleteCartItem = async (req, res) => {
 
 		const userId = await getUserIdFromClerkId(clerkId)
 
-		const cartDeleteQuery = "DELETE FROM cart WHERE user_id = $1 AND product_id = $2"
+		const cartDeleteQuery = "DELETE FROM carts WHERE user_id = $1 AND product_id = $2"
 		await db.query(cartDeleteQuery, [userId, productId])
 
 		res.status(200).json({

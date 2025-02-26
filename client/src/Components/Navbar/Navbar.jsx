@@ -30,10 +30,9 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const {
+    cartData,
     wishlistData,
-    wishlistCount,
     wishlistLoaded,
-    cartCount,
   } = useShop();
 
   const [showWishlist, setShowWishlist] = useState(false);
@@ -108,7 +107,7 @@ export const Navbar = () => {
             <NavLink to="/cart" onClick={handleClick}>
               <div className="nav-icons d-flex align-items-center">
                 <LuShoppingCart className="icon me-2" />
-                <span>Cart ({cartCount})</span>
+                <span>Cart ({cartData.length})</span>
               </div>
             </NavLink>
 
@@ -124,7 +123,7 @@ export const Navbar = () => {
               <NavLink to="/wishlist" onClick={handleClick}>
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
-                  <span>Wishlist ({wishlistCount})</span>
+                  <span>Wishlist ({wishlistData.length})</span>
                 </div>
                 <div className="hidden wishlist-preview"></div>
               </NavLink>

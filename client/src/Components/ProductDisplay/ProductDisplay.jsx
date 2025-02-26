@@ -280,7 +280,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex">
             <div className="buy-btns">
-              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${cartCurrent ? "bg-black" : "bg-[#e3c567]"}`}>
+              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${cartCurrent ? "bg-black" : "bg-[#e3c756]"}`}>
                 < IoCartOutline /> Add to Cart
               </Button>
               <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
