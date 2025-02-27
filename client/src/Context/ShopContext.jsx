@@ -94,7 +94,6 @@ const ShopContextProvider = ({ children }) => {
       return { success: false, message: "User not Found" }
     }
 
-    console.log("ID", productId)
     updatePrice("DELETE", productId)
     const token = await getToken()
 
@@ -204,7 +203,6 @@ const ShopContextProvider = ({ children }) => {
   }
 
   const updatePrice = (method, productId, productPrice) => {
-    console.log(method, productId, productPrice)
     const product = cartData.find((product) => productId === product.product_id);
 
     if (method === "POST") {

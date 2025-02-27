@@ -111,6 +111,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false)
 
+  const [cartText, setCartText] = useState("Add to Cart")
+
   const toggleWishlist = () => {
     setWishlistCurrent(!wishlistCurrent);
 
@@ -152,10 +154,16 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     if (cartCurrent) {
       setCartCurrent(false);
       deleteFromCart(product.product_id);
+
+      // setCartText("Add to Cart")
+
       toast.info("Removed from Cart")
     } else {
       setCartCurrent(true);
       addToCart(product.product_id, product.price);
+
+      // setCartText("Remove from Cart")
+
       toast.success("Added to Cart")
     }
     refreshCart();
@@ -169,16 +177,17 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   }
 
   useEffect(() => {
-    // Reset wishlist state based on the new product
+    const foundCartProduct = cartData.find((prod) => prod.product_id === productId)
 
-    const foundCartProduct = cartData.find(
-      (prod) => prod.product_id === productId
-    )
     setCartCurrent(foundCartProduct !== undefined)
 
-    const foundWSProduct = wishlistData.find(
-      (prod) => prod.product_id === productId
-    );
+    setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
+  }, [productId, cartData]);
+
+
+  useEffect(() => {
+    const foundWSProduct = wishlistData.find((prod) => prod.product_id === productId);
+
     setWishlistCurrent(foundWSProduct !== undefined);
 
     // Reset Lottie animation when switching products
@@ -204,7 +213,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         lottieRefSmall.current.goToAndStop(30, true);
       }, 800);
     }
-  }, [productId]);
+  }, [productId, wishlistData])
 
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
@@ -288,8 +297,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex">
             <div className="buy-btns">
-              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${cartCurrent ? "bg-black" : "bg-[#e3c756]"}`}>
-                < IoCartOutline /> Add to Cart
+              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${!cartCurrent ? "bg-black" : "bg-[#333333]"}`}>
+                < IoCartOutline /> {cartText}
               </Button>
               <Button onClick={buyNow} className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
                 <IoCloudDownloadOutline /> Download

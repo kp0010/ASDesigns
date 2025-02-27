@@ -21,7 +21,7 @@ import { CgFormatSlash } from "react-icons/cg";
 import { Button } from "../ui/button";
 import { IoCartOutline, IoCloudDownloadOutline } from "react-icons/io5";
 
-const ProductModal = ({ product, triggerButton  }) => {
+const ProductModal = ({ product, triggerButton }) => {
   const [categories, setCategories] = useState([]);
 
   const getProduct = () => {

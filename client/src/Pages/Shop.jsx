@@ -14,6 +14,7 @@ import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/Components/ui/button"
+
 import {
   Command,
   CommandEmpty,
@@ -24,6 +25,16 @@ import {
 } from "@/Components/ui/command"
 
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/Components/ui/pagination"
+
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -31,8 +42,10 @@ import {
 
 import { Slider } from "@/Components/ui/dualrangeslider.jsx"
 import { Badge } from "@/Components/ui/badge"
+
 import { Link, useParams } from "react-router-dom"
-import { Shop_Item } from "@/Components/Shop_Item/Shop_Item"
+
+import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
@@ -73,6 +86,8 @@ export const Shop = ({ className }) => {
   const [totalProducts, setTotalProducts] = useState(0)
 
   const [loaded, setLoaded] = useState(false)
+
+  const [pageIndexes, setPageIndexes] = useState([])
 
   const getProducts = ({
     orderBy = null, minPrice = null, maxPrice = null
@@ -116,9 +131,67 @@ export const Shop = ({ className }) => {
       })
   }
 
+  const calculatePages = (pageNoStr) => {
+    const pageIndexes = [];
+    const addedIndexes = new Set();
+    const bufferLen = 2;
+    const pageNo = parseInt(pageNoStr || "1", 10);
+    const totalPages = Math.ceil(totalProducts / PRODUCT_LIMIT);
+
+    if (pageNo < 1 || pageNo > totalPages) return;
+
+    // Helper function to add a page index if not already added
+    const addPageIndex = (index) => {
+      if (!addedIndexes.has(index) && index > 0 && index <= totalPages) {
+        pageIndexes.push({
+          index,
+          link: index !== 1 ? `/shop/page/${index}` : `/shop`,
+        });
+        addedIndexes.add(index);
+      }
+    };
+
+    // Add Previous Button
+    if (pageNo > 1) {
+      pageIndexes.push({ index: "prev", link: `/shop/page/${pageNo - 1}` });
+    }
+
+    // Add first few pages
+    for (let i = 1; i <= Math.max(bufferLen, pageNo); i++) {
+      addPageIndex(i);
+    }
+
+    // Add middle ellipsis and nearby pages
+    if (pageNo > bufferLen * 2) {
+      pageIndexes.push({ index: "ellipsis" });
+      for (let i = Math.max(bufferLen + 1, pageNo - Math.floor(bufferLen / 2)); i <= Math.min(pageNo + Math.floor(bufferLen / 2), totalPages); i++) {
+        addPageIndex(i);
+      }
+    }
+
+    // Add trailing ellipsis and last few pages
+    if (totalPages > bufferLen * 2 + 1 && pageNo < totalPages - bufferLen * 2) {
+      pageIndexes.push({ index: "ellipsis" });
+      for (let i = totalPages - bufferLen + 1; i <= totalPages; i++) {
+        addPageIndex(i);
+      }
+    }
+
+    // Add Next Button
+    if (pageNo < totalPages) {
+      pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` });
+    }
+
+    setPageIndexes(pageIndexes);
+  };
+
   useEffect(() => {
     getProducts()
-  }, [])
+  }, [pageNo])
+
+  useEffect(() => {
+    calculatePages(pageNo)
+  }, [pageNo, totalProducts])
 
   const sports = [
     "Cricket",
@@ -314,7 +387,30 @@ export const Shop = ({ className }) => {
             <Shop_Item key={idx} product={product} />
           ))}
         </div>
+
       </div>
+
+      <Pagination className="mb-10">
+        <PaginationContent>
+          {pageIndexes.length && pageIndexes.map(page => ((
+
+            <PaginationItem key={page.index}>
+              {["next", "prev", "Ellipsis"].includes(page.index) ? (
+                page.index === "next" ? (
+                  <PaginationNext onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+                ) : (
+                  page.index === "prev" ? (
+                    <PaginationPrevious onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+                  ) : (
+                    <PaginationEllipsis />
+                  ))) : (
+                <PaginationLink onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link}>{page.index}</PaginationLink>
+              )}
+            </PaginationItem>
+          )
+          ))}
+        </PaginationContent>
+      </Pagination>
     </div >
   )
 }
