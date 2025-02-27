@@ -29,11 +29,10 @@ import {
   PopoverTrigger,
 } from "@/Components/ui/popover"
 
-import { Slider } from '@/Components/ui/dualrangeslider.jsx'
-import { Badge } from '@/Components/ui/badge'
-import { Item } from '@/Components/Item/Item'
-import { useParams } from 'react-router-dom'
-import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
+import { Slider } from "@/Components/ui/dualrangeslider.jsx"
+import { Badge } from "@/Components/ui/badge"
+import { Link, useParams } from "react-router-dom"
+import { Shop_Item } from "@/Components/Shop_Item/Shop_Item"
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
@@ -162,11 +161,11 @@ export const Shop = ({ className }) => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              <Link to="/">Home</Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/Shop">Shop</BreadcrumbLink>
+              <Link to="/shop">Shop</Link>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

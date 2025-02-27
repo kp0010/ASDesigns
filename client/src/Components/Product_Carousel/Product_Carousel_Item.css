@@ -21,6 +21,7 @@
     height: 200px;
     transition: all 0.3s ease-in-out;
     border-radius: 10px;
+    object-fit: cover;
     /* margin-bottom: 10px; */
 }
 

@@ -112,7 +112,8 @@ export const Navbar = () => {
               <NavLink to="/cart" onClick={handleClick}>
                 <div className="nav-icons d-flex align-items-center">
                   <LuShoppingCart className="icon me-2" />
-                  <span>Cart ({cartData.length})</span>
+                  <span>Cart</span>
+                  <span className="cart-count nav-indicator">{cartData.length}</span>
                 </div>
               </NavLink>
               {showCart && (
@@ -165,7 +166,8 @@ export const Navbar = () => {
               <NavLink to="/wishlist" onClick={handleClick}>
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
-                  <span>Wishlist ({wishlistData.length})</span>
+                  <span>Wishlist</span>
+                  <span className=" wishlist-count nav-indicator">{wishlistData.length}</span>
                 </div>
                 <div className="hidden wishlist-preview"></div>
               </NavLink>
