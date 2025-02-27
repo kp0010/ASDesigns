@@ -19,6 +19,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import styled from "styled-components";
 import { useShop } from "@/Context/ShopContext";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -160,6 +161,13 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     refreshCart();
   }
 
+  const navigate = useNavigate()
+  const buyNow = () => {
+    console.log("BN", productId)
+
+    navigate(`/cart/?buyNow=${productId}`)
+  }
+
   useEffect(() => {
     // Reset wishlist state based on the new product
 
@@ -283,7 +291,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${cartCurrent ? "bg-black" : "bg-[#e3c756]"}`}>
                 < IoCartOutline /> Add to Cart
               </Button>
-              <Button className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
+              <Button onClick={buyNow} className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
                 <IoCloudDownloadOutline /> Download
               </Button>
             </div>

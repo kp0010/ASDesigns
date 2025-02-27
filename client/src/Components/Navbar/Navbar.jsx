@@ -104,7 +104,7 @@ export const Navbar = () => {
               className="relative"
               onMouseEnter={() => setShowCart(true)}
               onMouseLeave={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
+                if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
                   setShowCart(false);
                 }
               }}
@@ -117,7 +117,7 @@ export const Navbar = () => {
               </NavLink>
               {showCart && (
                 <div
-                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block"
+                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar"
                   onMouseEnter={() => setShowCart(true)}
                   onMouseLeave={() => setShowCart(false)}
                 >
@@ -171,7 +171,7 @@ export const Navbar = () => {
               </NavLink>
               {showWishlist && (
                 <div
-                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block"
+                  className="absolute right-0 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar"
                   onMouseEnter={() => setShowWishlist(true)}
                   onMouseLeave={() => setShowWishlist(false)}
                 >

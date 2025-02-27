@@ -1,27 +1,48 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IoCloudDownloadOutline } from "react-icons/io5";
+
 import { useShop } from "@/Context/ShopContext";
 import { useAuth, useClerk } from "@clerk/clerk-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+
 import { toast } from "sonner";
 
-export const CartProducts = () => {
+export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
   const { isLoaded, isSignedIn } = useAuth();
 
   const { redirectToSignIn } = useClerk();
 
+  const [buyNowProduct, setBuyNowProduct] = useState(null)
   const { cartData, cartLoaded, deleteFromCart, refreshCart, price } = useShop();
 
   useEffect(() => {
-    refreshCart();
     if (isLoaded) {
       if (!isSignedIn) {
         redirectToSignIn();
       }
     }
-  }, [isLoaded, isSignedIn, cartData, cartLoaded, price]);
+
+    if (buyNowProductId) {
+      fetch(`/api/products/${buyNowProductId}`, {
+        "method": "GET",
+        "headers": {
+          "content-type": "application/json"
+        }
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          if (data.success) {
+            setBuyNowProduct(data.product)
+          }
+        })
+    } else {
+      refreshCart()
+    }
+
+  }, [isLoaded, isSignedIn, price]);
 
   const navigate = useNavigate();
 
@@ -48,8 +69,8 @@ export const CartProducts = () => {
       <div className="product-info flex flex-col lg:flex-row justify-center w-full px-4">
         {/* Product List */}
         <div className="product-display-left pb-5 mt-4 flex flex-col w-full lg:w-3/5">
-          {cartLoaded &&
-            cartData.map((product, idx) => (
+          {cartLoaded && (!buyNowProductId || buyNowProduct) &&
+            { true: [buyNowProduct], false: cartData }[!!buyNowProductId].map((product, idx) => (
               <div
                 key={idx}
                 className="cards bg-white pt-2 rounded-lg p-4 flex flex-col md:flex-row items-center w-full"
@@ -91,12 +112,13 @@ export const CartProducts = () => {
                   </div>
 
                   <div className="remove-sec mt-3">
-                    <Button
-                      onClick={() => removeFromCart(product.product_id)}
-                      className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
-                    >
-                      <FaRegTrashAlt /> Remove
-                    </Button>
+                    {!buyNowProductId &&
+                      <Button
+                        onClick={() => removeFromCart(product.product_id)}
+                        className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
+                      >
+                        <FaRegTrashAlt /> Remove
+                      </Button>}
                   </div>
                 </div>
               </div>

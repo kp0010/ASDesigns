@@ -103,7 +103,7 @@ export const Item = ({ product }) => {
 
                     <button onClick={toggleWishlist} className="item-icons-container d-flex rounded-full">
                         <i>
-                            {wishlistCurrent ? (
+                            {wishlistData && wishlistCurrent ? (
                                 <FaHeart className='item-icon' />
                             ) : (
                                 <FaRegHeart className="item-icon" />

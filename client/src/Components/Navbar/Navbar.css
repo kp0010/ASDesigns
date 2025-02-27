@@ -21,7 +21,8 @@
 	align-items: center;
 	margin-bottom: 1rem;
 }
-@media (max-width: 800px) { 
+
+@media (max-width: 800px) {
 	.nav-login-icon {
 		margin: 0 0 0.5rem 0;
 	}
@@ -32,10 +33,24 @@
 	border-radius: 2rem;
 	display: flex;
 	justify-content: center;
-	align-items: center;	
+	align-items: center;
 }
-@media (max-width: 800px) {  
+
+@media (max-width: 800px) {
 	.sign-out {
-	  border: none;
+		border: none;
 	}
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
 }

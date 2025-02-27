@@ -72,7 +72,7 @@
     /* width: 270px; */
 }
 
-.shop_item-hover-container a {
+.shop_item-hover-container button {
     border-right: 1px solid rgba(255, 255, 255, .2);
     color: #fff;
     width: 100%;
@@ -91,24 +91,24 @@
     transition: all 0.3s ease-in-out;
 }
 
-.shop_item-hover-container a i {
+.shop_item-hover-container button i {
     top: 2px;
     font-weight: 400;
     position: relative;
     transition: transform 0.3s ease-in-out;
 }
 
-.shop_item-hover-container a span {
+.shop_item-hover-container button span {
     bottom: -15px;
     position: relative;
     transition: all 0.3s ease-in-out;
 }
 
-.shop_item-hover-container a:hover i {
+.shop_item-hover-container button:hover i {
     transform: translateY(-40px);
 }
 
-.shop_item-hover-container a:hover span {
+.shop_item-hover-container button:hover span {
     bottom: 20px;
     opacity: 1;
 }

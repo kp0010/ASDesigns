@@ -310,8 +310,6 @@ export const Shop = ({ className }) => {
           {loaded && productData.map((product, idx) => (
             <Shop_Item key={idx} product={product} />
           ))}
-          <div className="demo">
-          </div>
         </div>
       </div>
     </div >
