@@ -62,7 +62,6 @@ export const getProducts = async (req, res) => {
 			minPrice: priceExtremesResult.rows[0]["min"],
 			maxPrice: priceExtremesResult.rows[0]["max"],
 			totalProducts: totalProductsResult.rows[0]["count"]
-			// [0]["count"]
 		})
 
 	} catch (error) {
