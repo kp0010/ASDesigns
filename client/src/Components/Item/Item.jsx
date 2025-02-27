@@ -22,8 +22,13 @@ export const Item = ({ product }) => {
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false);
 
-  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } =
-    useShop();
+  const {
+    cartData,
+    cartLoaded,
+    deleteFromCart,
+    addToCart,
+    refreshCart
+  } = useShop()
 
   const {
     wishlistData,
@@ -58,16 +63,13 @@ export const Item = ({ product }) => {
   };
 
   useEffect(() => {
-    const foundCartProd = cartData.find(
-      (prod) => prod.product_id == product_id
-    );
-    const foundWSProd = wishlistData.find(
-      (prod) => prod.product_id == product_id
-    );
+    const foundCartProd = cartData.find((prod) => prod.product_id == product_id);
+    const foundWSProd = wishlistData.find((prod) => prod.product_id == product_id);
 
-    setWishlistCurrent(foundWSProd != undefined);
-    setCartCurrent(foundCartProd != undefined);
-  }, [product_id]);
+    setWishlistCurrent((foundWSProd != undefined))
+    setCartCurrent((foundCartProd != undefined))
+
+  }, [cartData, wishlistData, product_id])
 
   const navigate = useNavigate();
 
@@ -102,19 +104,7 @@ export const Item = ({ product }) => {
             </span>
           </button>
 
-          {/* TODO: modal will be opened by clicking on quick view */}
-
-          <ProductModal
-            product={product}
-            triggerButton={
-              <button className="item-icons-container d-flex rounded-full">
-                <i>
-                  <PiEyeDuotone className="item-icon" />
-                </i>
-                <span className="item-icon-tag">Quick View</span>
-              </button>
-            }
-          />
+          <ProductModal isOpen={isModalOpen} toggleModal={toggleModal} product={product} />
 
           <button
             onClick={toggleWishlist}
@@ -129,8 +119,8 @@ export const Item = ({ product }) => {
             </i>
             <span className="item-icon-tag">Wishlist</span>
           </button>
-        </div>
-      </div>
+        </div >
+      </div >
       <Link to={`/product/${product_id}`}>
         <div className="item-content">
           <h2>{product_id + (name ? " | " + name : "")}</h2>
@@ -139,6 +129,6 @@ export const Item = ({ product }) => {
           <h2>₹ {(parseFloat(price) - 1.0).toFixed(2)}</h2>
         </div>
       </Link>
-    </div>
+    </div >
   );
 };

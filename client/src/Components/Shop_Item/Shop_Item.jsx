@@ -17,6 +17,7 @@ export const Shop_Item = ({ product }) => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   const { product_id, name, price } = product;
 
   const {

@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/Components/ui/dialog";
 import { PiEyeDuotone } from "react-icons/pi";
 import {
   Breadcrumb,
@@ -23,6 +23,7 @@ import { IoCartOutline, IoCloudDownloadOutline } from "react-icons/io5";
 
 const ProductModal = ({ product, triggerButton  }) => {
   const [categories, setCategories] = useState([]);
+
   const getProduct = () => {
     fetch(`/api/products/${product.product_id}`, {
       method: "GET",
@@ -35,6 +36,7 @@ const ProductModal = ({ product, triggerButton  }) => {
         setCategories(data["categories"]);
       });
   };
+
   useEffect(() => {
     getProduct();
   }, [product.product_id]);
@@ -45,7 +47,7 @@ const ProductModal = ({ product, triggerButton  }) => {
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
       <DialogContent className="max-w-2xl md:max-w-4xl lg:max-w-5xl w-full">
         <DialogHeader>
-          <DialogTitle className="text-xl">Product Deatails</DialogTitle>
+          <DialogTitle className="text-xl">Product Details</DialogTitle>
         </DialogHeader>
         <div className="prod-details flex">
           <img
