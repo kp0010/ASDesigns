@@ -325,7 +325,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
       {/* Small Screens (<md) Layout */}
       < div className="md:hidden productDisplay flex flex-col items-center p-4" >
-        {/* Product Image */}
         <div className="w-full flex justify-center">
           <div className="productDiplay-img s:h-[350px] w-[350px]">
             <img
@@ -361,7 +360,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                      {/* TODO: need to add right path */}
                       <BreadcrumbLink>{category["name"]}</BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (
@@ -387,11 +385,11 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           {/* Buttons */}
           <div className="buy-section flex flex-col items-center mt-5 space-y-3">
-            <Button className="w-full bg-black flex items-center justify-center">
+            <Button onClick={toggleCart} className="w-full bg-black flex items-center justify-center">
               <IoCartOutline className="mr-2" />
               Add to Cart
             </Button>
-            <Button className="w-full bg-[#e3c756] flex items-center justify-center">
+            <Button onClick={buyNow} className="w-full bg-[#e3c756] flex items-center justify-center">
               <IoCloudDownloadOutline className="mr-2" />
               Download
             </Button>
