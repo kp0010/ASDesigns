@@ -131,15 +131,9 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
             )}
         </div>
 
-<<<<<<< HEAD
-        {/* Order Summary - Moves Below Products on Small & Medium Screens */}
-        <div className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly pl-6 pr-6 w-full lg:w-[400px] lg:h-[250px] mt-4 lg:mt-0 lg:ml-20 xl:ml-20 mb-16" >
-          <h2 className="text-xl font-bold pt-4 md:pt-0 ">Order Summary</h2>
-=======
         {/* Order Summary (Separate Like Before) */}
         <div className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly p-6 w-full lg:w-[400px] lg:h-[250px] lg:mt-0 lg:ml-10">
           <h2 className="text-xl font-bold pt-4 md:pt-0">Order Summary</h2>
->>>>>>> b2bc44e967cf7ca63fd7eb5dd74bf715c89e6b68
 
           {/* Price Section with Left-Right Alignment */}
           <div className="price w-full pt-4 md:pt-0">
