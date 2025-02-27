@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import "./Item.css"
+import React, { useEffect, useState } from "react";
+import "./Item.css";
 
 import { IoCart, IoCartOutline } from "react-icons/io5";
 import { PiEyeDuotone } from "react-icons/pi";
@@ -9,39 +9,46 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner'
 
 import { useShop } from "@/Context/ShopContext";
+import ProductModal from "../ProductModal/ProductModal";
+
 
 export const Item = ({ product }) => {
-    const { product_id, name, price } = product
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [wishlistCurrent, setWishlistCurrent] = useState(false)
-    const [cartCurrent, setCartCurrent] = useState(false)
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { product_id, name, price } = product;
 
-    const {
-        wishlistData,
-        wishlistLoaded,
-        deleteFromWishlist,
-        addToWishlist,
-        refreshWishlist
-    } = useShop()
+  const [wishlistCurrent, setWishlistCurrent] = useState(false);
+  const [cartCurrent, setCartCurrent] = useState(false)
 
-    const {
-        cartData,
-        cartLoaded,
-        deleteFromCart,
-        addToCart,
-        refreshCart
-    } = useShop()
+  const {
+    cartData,
+    cartLoaded,
+    deleteFromCart,
+    addToCart,
+    refreshCart
+} = useShop()
 
-    const toggleWishlist = () => {
-        if (wishlistCurrent) {
-            setWishlistCurrent(false)
-            deleteFromWishlist(product.product_id)
-        } else {
-            setWishlistCurrent(true)
-            addToWishlist(product.product_id)
-        }
-        refreshWishlist()
+  const {
+    wishlistData,
+    wishlistLoaded,
+    deleteFromWishlist,
+    addToWishlist,
+    refreshWishlist,
+  } = useShop();
+
+  const toggleWishlist = () => {
+    if (wishlistCurrent) {
+      setWishlistCurrent(false);
+      deleteFromWishlist(product.product_id);
+    } else {
+      setWishlistCurrent(true);
+      addToWishlist(product.product_id);
     }
+    refreshWishlist();
+  };
 
     const toggleCart = () => {
         if (cartCurrent) {
@@ -65,15 +72,15 @@ export const Item = ({ product }) => {
 
     }, [product_id])
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleClick = (event) => {
-        event.preventDefault();
-        window.scrollTo({ top: 0, behavoir: "smooth" });
-        const splitLink = event.currentTarget.href.split("/");
-        const productId = splitLink[splitLink.length - 1];
-        navigate(`/product/${productId}`);
-    };
+  const handleClick = (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavoir: "smooth" });
+    const splitLink = event.currentTarget.href.split("/");
+    const productId = splitLink[splitLink.length - 1];
+    navigate(`/product/${productId}`);
+  };
 
     return (
         <div className="item">
@@ -93,13 +100,9 @@ export const Item = ({ product }) => {
                         <span className="item-icon-tag">{cartLoaded && cartCurrent ? "Remove from Cart" : "Add to Cart"}</span>
                     </button>
 
-                    {/* TODO: modal will be opened by clicking on quick view */}
-                    <button href="" className="item-icons-container d-flex rounded-full">
-                        <i>
-                            <PiEyeDuotone className="item-icon" />
-                        </i>
-                        <span className="item-icon-tag">Quick View</span>
-                    </button>
+                        { /* TODO: modal will be opened by clicking on quick view */}
+          
+                        <ProductModal isOpen={isModalOpen} toggleModal={toggleModal} product={product} />
 
                     <button onClick={toggleWishlist} className="item-icons-container d-flex rounded-full">
                         <i>
@@ -122,5 +125,5 @@ export const Item = ({ product }) => {
                 </div>
             </Link>
         </div>
-    )
-}
+  );
+};
