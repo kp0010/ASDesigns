@@ -1,18 +1,17 @@
 import React from 'react'
 import "./Shop_Item.css"
-import exp_1 from "../../Assets/JD001.jpeg"
 
 import { LuShoppingCart } from "react-icons/lu";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa6";
 
-export const Shop_Item = () => {
+export const Shop_Item = ({ product }) => {
   return (
     <div className="shop_item">
       <div className="shop_item-image">
         {/* Link to product */}
-        <img src={exp_1} alt="..." />
+        <img src={`/Products/${product.product_id}.jpeg`} alt="..." />
         <div className="shop_item-hover-container">
           <a href="">
             <i>
@@ -39,10 +38,10 @@ export const Shop_Item = () => {
 
       {/* link  */}
       <div className="shop_item-content">
-        <h2>JD001 | Eco-friendly cricket jersey</h2>
+        <h2>{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
       </div>
       <div className="shop_item-price">
-        <h2>₹ 500.00</h2>
+        <h2>₹ {(parseFloat(product.price) - 1.0).toFixed(2)}</h2>
       </div>
     </div>
   )

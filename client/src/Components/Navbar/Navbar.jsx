@@ -28,8 +28,8 @@ export const Navbar = () => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   const navigate = useNavigate();
-  const { wishlistData, wishlistLoaded, wishlistCount } = useShop();
-  const { cartData, cartLoaded, cartCount } = useShop();
+  const { wishlistData, wishlistLoaded } = useShop();
+  const { cartData, cartLoaded } = useShop();
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
 
@@ -112,7 +112,7 @@ export const Navbar = () => {
               <NavLink to="/cart" onClick={handleClick}>
                 <div className="nav-icons d-flex align-items-center">
                   <LuShoppingCart className="icon me-2" />
-                  <span>Cart ({cartCount})</span>
+                  <span>Cart ({cartData.length})</span>
                 </div>
               </NavLink>
               {showCart && (
@@ -121,6 +121,7 @@ export const Navbar = () => {
                   onMouseEnter={() => setShowCart(true)}
                   onMouseLeave={() => setShowCart(false)}
                 >
+                  <span className="ml-2 text-lg font-semibold">Cart</span>
                   {cartLoaded && cartData.length > 0 ? (
                     cartData.map((product, idx) => (
                       <div
@@ -135,7 +136,7 @@ export const Navbar = () => {
                         />
                         <div className="ml-3">
                           <h3 className="text-md font-semibold">
-                            {product.name}
+                            {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
                           </h3>
                           <p className="text-md text-gray-500">
                             ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
@@ -156,7 +157,7 @@ export const Navbar = () => {
               className="relative"
               onMouseEnter={() => setShowWishlist(true)}
               onMouseLeave={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
+                if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
                   setShowWishlist(false);
                 }
               }}
@@ -174,6 +175,7 @@ export const Navbar = () => {
                   onMouseEnter={() => setShowWishlist(true)}
                   onMouseLeave={() => setShowWishlist(false)}
                 >
+                  <span className="ml-2 text-lg font-semibold">Wishlist</span>
                   {wishlistLoaded && wishlistData.length > 0 ? (
                     wishlistData.map((product, idx) => (
                       <div

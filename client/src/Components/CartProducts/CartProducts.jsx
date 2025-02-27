@@ -5,12 +5,15 @@ import { useShop } from "@/Context/ShopContext";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
-export const CartProducts = ({ product, productId }) => {
+export const CartProducts = () => {
   const { isLoaded, isSignedIn } = useAuth();
+
   const { redirectToSignIn } = useClerk();
-  const { cartData, cartLoaded, deleteFromCart, refreshCart, getPrice } =
-    useShop();
+
+  const { cartData, cartLoaded, deleteFromCart, refreshCart, price } = useShop();
+
   useEffect(() => {
     refreshCart();
     if (isLoaded) {
@@ -18,7 +21,8 @@ export const CartProducts = ({ product, productId }) => {
         redirectToSignIn();
       }
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, cartData, cartLoaded, price]);
+
   const navigate = useNavigate();
 
   const handleClick = (event) => {
@@ -30,6 +34,7 @@ export const CartProducts = ({ product, productId }) => {
   };
 
   const removeFromCart = async (productId) => {
+    toast.success("Removed from Cart")
     refreshCart();
     deleteFromCart(productId);
     refreshCart();
@@ -70,14 +75,14 @@ export const CartProducts = ({ product, productId }) => {
                     onClick={handleClick}
                   >
                     <h2 className="text-2xl mt-4 break-words md:ml-0">
-                      {product["product_id"] +
+                      {product.product_id +
                         (product["name"] ? " | " + product["name"] : "")}
                     </h2>
                   </Link>
 
                   <div className="price flex flex-col md:flex-row mt-3 items-center">
                     <h1 className="new-price font-bold text-2xl md:mr-4">
-                      ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                      ₹ {(parseFloat(product.price) - 1.0).toFixed(2)}
                     </h1>
                     <h1 className="old-price text-xl line-through">
                       ₹{(parseFloat(product.price) + 200.0).toFixed(2)}
@@ -87,7 +92,7 @@ export const CartProducts = ({ product, productId }) => {
 
                   <div className="remove-sec mt-3">
                     <Button
-                      onClick={removeFromCart}
+                      onClick={() => removeFromCart(product.product_id)}
                       className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
                     >
                       <FaRegTrashAlt /> Remove
@@ -105,12 +110,12 @@ export const CartProducts = ({ product, productId }) => {
           {/* Price Section with Left-Right Alignment */}
           <div className="price w-full pt-4 md:pt-0">
             <div className="flex justify-between w-full text-lg">
-              <h2>Price (X items)</h2>
-              <span className="font-bold">₹ 599.90</span>
+              <h2>Price ({cartData.length} items)</h2>
+              <span className="font-bold">₹ {(price - (1.0 * cartData.length)).toFixed(2)}</span>
             </div>
             <div className="flex justify-between w-full text-lg mt-2">
               <h2>Total Price</h2>
-              <span className="font-bold">₹ 599.90</span>
+              <span className="font-bold">₹ {(price - (1.0 * cartData.length)).toFixed(2)}</span>
             </div>
           </div>
 

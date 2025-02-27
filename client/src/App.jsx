@@ -14,12 +14,15 @@ import { Product } from "./Pages/Product";
 import { Cart } from "./Pages/Cart";
 import { Wishlist } from "./Pages/Wishlist";
 
+import { Toaster } from "sonner";
+
 
 function App() {
   return (
     <>
       <div>
         <Router>
+          <Toaster theme='dark' />
           <Navbar />
           <RoutesList />
           <Footer />

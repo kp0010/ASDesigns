@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import "./Item.css"
 
-import { LuShoppingCart } from "react-icons/lu";
+import { IoCart, IoCartOutline } from "react-icons/io5";
 import { PiEyeDuotone } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner'
 
 import { useShop } from "@/Context/ShopContext";
 
@@ -13,6 +14,7 @@ export const Item = ({ product }) => {
     const { product_id, name, price } = product
 
     const [wishlistCurrent, setWishlistCurrent] = useState(false)
+    const [cartCurrent, setCartCurrent] = useState(false)
 
     const {
         wishlistData,
@@ -20,6 +22,14 @@ export const Item = ({ product }) => {
         deleteFromWishlist,
         addToWishlist,
         refreshWishlist
+    } = useShop()
+
+    const {
+        cartData,
+        cartLoaded,
+        deleteFromCart,
+        addToCart,
+        refreshCart
     } = useShop()
 
     const toggleWishlist = () => {
@@ -33,10 +43,27 @@ export const Item = ({ product }) => {
         refreshWishlist()
     }
 
+    const toggleCart = () => {
+        if (cartCurrent) {
+            setCartCurrent(false);
+            deleteFromCart(product.product_id);
+            toast.info("Removed from Cart")
+        } else {
+            setCartCurrent(true);
+            addToCart(product.product_id, product.price);
+            toast.success("Added to Cart")
+        }
+        refreshCart();
+    }
+
     useEffect(() => {
-        const foundProd = wishlistData.find(prod => prod.product_id == product_id)
-        setWishlistCurrent((foundProd != undefined))
-    }, [wishlistLoaded, wishlistData, product_id])
+        const foundCartProd = cartData.find(prod => prod.product_id == product_id)
+        const foundWSProd = wishlistData.find(prod => prod.product_id == product_id)
+
+        setWishlistCurrent((foundWSProd != undefined))
+        setCartCurrent((foundCartProd != undefined))
+
+    }, [product_id])
 
     const navigate = useNavigate();
 
@@ -55,14 +82,16 @@ export const Item = ({ product }) => {
                     <img src={`/Products/${product_id}.jpeg`} alt="..." />
                 </Link>
                 <div className="item-hover-container">
-                    <Link to="/cart">
-                        <button className="item-icons-container d-flex rounded-full">
-                            <i>
-                                <LuShoppingCart className="item-icon" />
-                            </i>
-                            <span className="item-icon-tag">Add to Cart</span>
-                        </button>
-                    </Link>
+                    <button onClick={toggleCart} className="item-icons-container d-flex rounded-full">
+                        <i>
+                            {cartLoaded && cartCurrent ? (
+                                <IoCart className="item-icon" />
+                            ) : (
+                                <IoCartOutline className="item-icon" />
+                            )}
+                        </i>
+                        <span className="item-icon-tag">{cartLoaded && cartCurrent ? "Remove from Cart" : "Add to Cart"}</span>
+                    </button>
 
                     {/* TODO: modal will be opened by clicking on quick view */}
                     <button href="" className="item-icons-container d-flex rounded-full">

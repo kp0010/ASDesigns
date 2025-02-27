@@ -10,7 +10,7 @@ import { useShop } from "@/Context/ShopContext";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth, useClerk } from "@clerk/clerk-react"
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 export const WishlistProducts = () => {
 
@@ -44,20 +44,18 @@ export const WishlistProducts = () => {
   };
 
   const removeFromWishilst = async (productId) => {
-    toast.success("Removed from Wishlist")
-    // toast.success("Removed from Wishlist")
+    toast.info("Removed from Wishlist")
     refreshWishlist()
     deleteFromWishlist(productId)
     refreshWishlist()
   }
 
   return (
-    <div className="wish bg-[#edeae7] flex flex-col items-center">
+    <div className="wish pb-5 bg-[#edeae7] flex flex-col items-center">
       <h2 className="text-4xl text-center pt-10 mb-5">Your Favourites</h2>
-      <Toaster theme="dark" />
       {
         wishlistLoaded && wishlistData.map((product, idx) => (
-          <div key={idx} className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-5 p-4">
+          <div key={idx} className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3 p-4">
             <Link to={`/product/${product.product_id}`} onClick={handleClick}>
               <div className="product-display-left mt-4">
                 <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
@@ -97,6 +95,6 @@ export const WishlistProducts = () => {
           </div>
         ))
       }
-    </div >
+    </div>
   );
 };

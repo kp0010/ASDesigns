@@ -308,10 +308,9 @@ export const Shop = ({ className }) => {
 
         <div className="shop-content products-grid-container" style={{ "textAlign": "center" }}>
           {loaded && productData.map((product, idx) => (
-            <Item key={idx} product={product} />
+            <Shop_Item key={idx} product={product} />
           ))}
           <div className="demo">
-            <Shop_Item />
           </div>
         </div>
       </div>

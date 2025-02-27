@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import anim from "./anim.json";
 import Lottie from "lottie-react";
@@ -287,9 +287,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 <IoCloudDownloadOutline /> Download
               </Button>
             </div>
-            <Toaster
-              theme="dark"
-            />
             <Button
               onClick={toggleWishlist}
               className="bg-white text-black border-black border-2 md:mb-3 pt-0 "
