@@ -21,7 +21,7 @@ import { CgFormatSlash } from "react-icons/cg";
 import { Button } from "../ui/button";
 import { IoCartOutline, IoCloudDownloadOutline } from "react-icons/io5";
 
-const ProductModal = ({ product }) => {
+const ProductModal = ({ product, triggerButton  }) => {
   const [categories, setCategories] = useState([]);
   const getProduct = () => {
     fetch(`/api/products/${product.product_id}`, {
@@ -42,14 +42,7 @@ const ProductModal = ({ product }) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button className="item-icons-container d-flex rounded-full">
-          <i>
-            <PiEyeDuotone className="item-icon" />
-          </i>
-          <span className="item-icon-tag">Quick View</span>
-        </button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
       <DialogContent className="max-w-2xl md:max-w-4xl lg:max-w-5xl w-full">
         <DialogHeader>
           <DialogTitle className="text-xl">Product Deatails</DialogTitle>

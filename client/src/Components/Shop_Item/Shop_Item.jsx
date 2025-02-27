@@ -1,68 +1,73 @@
-import React, { useState, useEffect } from 'react'
-import "./Shop_Item.css"
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "./Shop_Item.css";
+import { useNavigate, Link } from "react-router-dom";
 
-import { useShop } from '@/Context/ShopContext';
+import { useShop } from "@/Context/ShopContext";
 
 import { IoCart, IoCartOutline } from "react-icons/io5";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { PiEyeDuotone } from "react-icons/pi";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
+import ProductModal from "../ProductModal/ProductModal";
 
 export const Shop_Item = ({ product }) => {
-  const { product_id, name, price } = product
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { product_id, name, price } = product;
 
   const {
     wishlistData,
     wishlistLoaded,
     deleteFromWishlist,
     addToWishlist,
-    refreshWishlist
-  } = useShop()
+    refreshWishlist,
+  } = useShop();
 
-  const {
-    cartData,
-    cartLoaded,
-    deleteFromCart,
-    addToCart,
-    refreshCart
-  } = useShop()
+  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } =
+    useShop();
 
-  const [wishlistCurrent, setWishlistCurrent] = useState(false)
-  const [cartCurrent, setCartCurrent] = useState(false)
+  const [wishlistCurrent, setWishlistCurrent] = useState(false);
+  const [cartCurrent, setCartCurrent] = useState(false);
 
   const toggleWishlist = () => {
     if (wishlistCurrent) {
-      setWishlistCurrent(false)
-      deleteFromWishlist(product.product_id)
+      setWishlistCurrent(false);
+      deleteFromWishlist(product.product_id);
     } else {
-      setWishlistCurrent(true)
-      addToWishlist(product.product_id)
+      setWishlistCurrent(true);
+      addToWishlist(product.product_id);
     }
-    refreshWishlist()
-  }
+    refreshWishlist();
+  };
 
   const toggleCart = () => {
     if (cartCurrent) {
       setCartCurrent(false);
       deleteFromCart(product.product_id);
-      toast.info("Removed from Cart")
+      toast.info("Removed from Cart");
     } else {
       setCartCurrent(true);
       addToCart(product.product_id, product.price);
-      toast.success("Added to Cart")
+      toast.success("Added to Cart");
     }
     refreshCart();
-  }
+  };
 
   useEffect(() => {
-    const foundCartProd = cartData.find(prod => prod.product_id == product_id)
-    const foundWSProd = wishlistData.find(prod => prod.product_id == product_id)
+    const foundCartProd = cartData.find(
+      (prod) => prod.product_id == product_id
+    );
+    const foundWSProd = wishlistData.find(
+      (prod) => prod.product_id == product_id
+    );
 
-    setWishlistCurrent((foundWSProd != undefined))
-    setCartCurrent((foundCartProd != undefined))
-  }, [cartData, wishlistData, product_id])
+    setWishlistCurrent(foundWSProd != undefined);
+    setCartCurrent(foundCartProd != undefined);
+  }, [cartData, wishlistData, product_id]);
 
   const navigate = useNavigate();
 
@@ -73,7 +78,6 @@ export const Shop_Item = ({ product }) => {
     const productId = splitLink[splitLink.length - 1];
     navigate(`/product/${productId}`);
   };
-
 
   return (
     <div className="shop_item">
@@ -93,21 +97,31 @@ export const Shop_Item = ({ product }) => {
             </i>
             <span>{cartCurrent ? "Remove" : "Add to Cart"}</span>
           </button>
-          <button>
-            <i>
-              <PiEyeDuotone className="item-icon" />
-            </i>
-            <span>Quick View</span>
-          </button>
+          <ProductModal
+            product={product}
+            triggerButton={
+              <button>
+                <i>
+                  <PiEyeDuotone className="item-icon" />
+                </i>
+                <span>Quick View</span>
+              </button>
+            }
+          />
         </div>
         <div className="shop_item-wishlist">
-          <span className="wishlist-text">{cartCurrent ? "Remove from Wishlist" : "Add to Wishlist"}</span>
-          <button className="shop_item-wishlist-button" onClick={toggleWishlist}>
+          <span className="wishlist-text">
+            {cartCurrent ? "Remove from Wishlist" : "Add to Wishlist"}
+          </span>
+          <button
+            className="shop_item-wishlist-button"
+            onClick={toggleWishlist}
+          >
             <i>
               {wishlistLoaded && wishlistCurrent ? (
                 <FaHeart className="item-icon" />
               ) : (
-                <FaRegHeart className='shop_item-icon' />
+                <FaRegHeart className="shop_item-icon" />
               )}
             </i>
           </button>
@@ -123,5 +137,5 @@ export const Shop_Item = ({ product }) => {
         </div>
       </Link>
     </div>
-  )
-}
+  );
+};
