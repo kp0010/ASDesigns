@@ -104,7 +104,18 @@ export const Item = ({ product }) => {
             </span>
           </button>
 
-          <ProductModal isOpen={isModalOpen} toggleModal={toggleModal} product={product} />
+          <ProductModal
+            isOpen={isModalOpen}
+            product={product}
+            triggerButton={
+              <button className="item-icons-container d-flex rounded-full">
+                <i>
+                  <PiEyeDuotone className="item-icon" />
+                </i>
+                <span className="item-icon-tag">Quick View</span>
+              </button>
+            }
+          />
 
           <button
             onClick={toggleWishlist}

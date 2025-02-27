@@ -98,6 +98,8 @@ export const Shop_Item = ({ product }) => {
             </i>
             <span>{cartCurrent ? "Remove" : "Add to Cart"}</span>
           </button>
+
+          {/* TODO: Try to add div or span tag instead of button  */}
           <ProductModal
             product={product}
             triggerButton={

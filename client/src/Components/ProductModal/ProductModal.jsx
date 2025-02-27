@@ -45,7 +45,7 @@ const ProductModal = ({ product, triggerButton  }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent className="max-w-2xl md:max-w-4xl lg:max-w-5xl w-full">
+      <DialogContent className="max-w-2xl md:max-w-4xl lg:max-w-5xl w-full mt-10">
         <DialogHeader>
           <DialogTitle className="text-xl">Product Details</DialogTitle>
         </DialogHeader>

@@ -238,7 +238,8 @@ export const Shop = ({ className }) => {
               <li>
                 <label htmlFor="" className="shop-filters-label">
                   <input type="checkbox" />
-                  <span className="checkmark" onClick={handleCheckboxClick}></span> <span>Sports</span>
+                  <span className="checkmark" onClick={handleCheckboxClick}></span>
+                  <span className="shop-filters-label-name">Sports</span>
                 </label>
               </li>
               <ul className="shop-filters-ul-inner">
@@ -246,7 +247,8 @@ export const Shop = ({ className }) => {
                   <li key={index}>
                     <label htmlFor="" className="shop-filters-label">
                       <input type="checkbox" />
-                      <span className="checkmark" onClick={handleCheckboxClick}></span>{sport}
+                      <span className="checkmark" onClick={handleCheckboxClick}></span>
+                      <span className="shop-filters-label-name">{sport}</span>
                     </label>
                   </li>
                 ))}
@@ -254,7 +256,8 @@ export const Shop = ({ className }) => {
               <li>
                 <label htmlFor="" className="shop-filters-label">
                   <input type="checkbox" />
-                  <span className="checkmark" onClick={handleCheckboxClick}></span>Festivals
+                  <span className="checkmark" onClick={handleCheckboxClick}></span>
+                  <span className="shop-filters-label-name">Festivals</span>
                 </label>
               </li>
               <ul className="shop-filters-ul-inner">
@@ -262,7 +265,8 @@ export const Shop = ({ className }) => {
                   <li key={index}>
                     <label htmlFor="" className="shop-filters-label">
                       <input type="checkbox" />
-                      <span className="checkmark" onClick={handleCheckboxClick}></span>{festival}
+                      <span className="checkmark" onClick={handleCheckboxClick}></span>
+                      <span className="shop-filters-label-name">{festival}</span>
                     </label>
                   </li>
                 ))}
