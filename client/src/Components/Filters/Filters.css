@@ -1,36 +1,4 @@
-/* __________________________________________________ */
-/* TODO:  TEMPERORY */
-.products-grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 10px;
-    padding-left: 130px;
-    padding-right: 70px;
-    margin-bottom: 48px;
-}
-
-/* __________________________________________________ */
-
-.shop-header {
-    font-size: 50px;
-    text-align: center;
-    padding: 20px;
-    background-color: #edeaea;
-}
-
-.shop-sort {
-    text-align: right;
-    padding: 10px;
-    padding-right: 100px;
-}
-
-.shop-main {
-    display: flex;
-    padding: 50px;
-}
-
-/* .shop-filters {
+.shop-filters {
     width: 20%;
     display: flex;
     justify-content: center;
@@ -59,14 +27,14 @@
     margin-bottom: 15px;
 }
 
-.shop-flters-ul {
+.shop-filters-ul {
     font-size: 17px;
     color: #808080;
+    line-height: normal;
 }
 
-.shop-flters-ul li {
+.shop-filters-ul li {
     line-height: normal;
-    margin-bottom: 8px;
 }
 
 .shop-filters-label {
@@ -74,6 +42,7 @@
     cursor: pointer;
     width: 100%;
     padding-left: 30px;
+    margin-bottom: 8px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -109,7 +78,7 @@
 }
 
 .shop-filters-label:hover input~.checkmark {
-    /* background-color: #ccc; *
+    /* background-color: #ccc; */
     background-color: #808080;
     border-color: #262626;
     box-shadow: inset 0 0 0 4px #ffffff;
@@ -181,4 +150,4 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
-} */
+}

@@ -46,6 +46,8 @@ import { Badge } from "@/Components/ui/badge"
 import { Link, useParams } from "react-router-dom"
 
 import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
+import { Sort } from '@/Components/Sort/Sort'
+import { Filters } from '@/Components/Filters/Filters'
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
@@ -76,7 +78,7 @@ const sortOptions = [
 export const Shop = ({ className }) => {
   const { pageNo } = useParams()
 
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [sortValue, setSortValue] = useState("")
 
   const [priceRange, setPriceRange] = useState([null, null]);
@@ -246,7 +248,8 @@ export const Shop = ({ className }) => {
 
       {/* sorting combobox */}
       <div className="shop-sort">
-        <Popover open={open} onOpenChange={setOpen}>
+        <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
+        {/* <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -295,11 +298,18 @@ export const Shop = ({ className }) => {
               </CommandList>
             </Command>
           </PopoverContent>
-        </Popover>
+        </Popover> */}
       </div>
 
       <div className="shop-main">
-        <div className="shop-filters">
+        <Filters
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          priceExtremes={priceExtremes}
+          getProducts={getProducts}
+          sortValue={sortValue}
+        />
+        {/* <div className="shop-filters">
           <div className="shop-filters-head">
             <h2>Filters</h2>
           </div>
@@ -379,7 +389,7 @@ export const Shop = ({ className }) => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
 
         <div className="shop-content products-grid-container" style={{ "textAlign": "center" }}>
