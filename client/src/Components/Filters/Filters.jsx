@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./Filters.css"
 import "../../App.css"
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
+import { useState } from 'react';
 
 export const Filters = ({ priceRange,
     setPriceRange,
@@ -15,14 +16,21 @@ export const Filters = ({ priceRange,
     setSelectedFilters,
 }) => {
 
-    // TODO: If admin wants to add Tags and Categories, then it should come from database
-    // const sports = ["Cricket", "Football", "Basketball"];
-    // const festivals = ["Ganesh Jayanti", "Diwali", "New Year Special"];
+    const [categories, setCategories] = useState([])
 
-    const categories = {
-        Sports: ["Cricket", "Football", "Basketball"],
-        Festival: ["Ganesh Jayanti", "Diwali", "New Year Special"]
-    };
+    useEffect(() => {
+        fetch('/api/categories', {
+            method: "GET",
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.success) { setCategories(data.categoryTree); console.log("DATA", data.categoryTree) }
+            })
+    }, [])
+
 
     const tags = [
         "CDR File",
@@ -38,10 +46,82 @@ export const Filters = ({ priceRange,
     ];
 
     const handleCheckboxClick = (category) => {
-        setSelectedFilters((prev) =>
-            prev.includes(category) ? prev.filter((item) => item !== category) : [...prev, category]
-        );
+        setSelectedFilters((prevFilters) => {
+            let newFilters = new Set(prevFilters);
+
+            if (newFilters.has(category.name)) {
+                // If category is already selected, remove it
+                newFilters.delete(category.name);
+                // Uncheck all children recursively
+                uncheckChildren(category, newFilters);
+            } else {
+                // If category is not selected, add it
+                newFilters.add(category.name);
+                // Check all children recursively
+                checkChildren(category, newFilters);
+            }
+
+            updateParentSelection(category, newFilters);
+
+            return Array.from(newFilters);
+        });
     };
+
+    const checkChildren = (category, filters) => {
+        if (category.children) {
+            category.children.forEach(child => {
+                filters.add(child.name);
+                checkChildren(child, filters);
+            });
+        }
+    };
+
+    const uncheckChildren = (category, filters) => {
+        if (category.children) {
+            category.children.forEach(child => {
+                filters.delete(child.name);
+                uncheckChildren(child, filters);
+            });
+        }
+    };
+
+    const updateParentSelection = (category, filters) => {
+        if (!category.parent) return;
+
+        let allSiblingsChecked = category.parent.children.every(child => filters.has(child.name));
+
+        if (allSiblingsChecked) {
+            filters.add(category.parent.name);
+        } else {
+            filters.delete(category.parent.name);
+        }
+
+        updateParentSelection(category.parent, filters);
+    };
+
+    const renderCategories = (categories, parent = null) => {
+        if (!categories.length) { return }
+
+        return (
+            categories.map((category, index) => {
+                let categoryWithParent = { ...category, parent };
+                console.log(categoryWithParent)
+
+                return (
+                    < li key={index} >
+                        <label className="shop-filters-label">
+                            <input type="checkbox" checked={selectedFilters.includes(category.name)} onChange={() => handleCheckboxClick(categoryWithParent)} />
+                            <span className="checkmark"></span>
+                            <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(categoryWithParent)}>{category.name}</span>
+                        </label>
+                        <ul className="shop-filters-ul-inner">
+                            {category.children.length > 0 && renderCategories(category.children, categoryWithParent)}
+                        </ul>
+                    </li >
+                )
+            })
+        )
+    }
 
     return (
         <div className="shop-filters">
@@ -92,26 +172,7 @@ export const Filters = ({ priceRange,
                     </ul>
                 </ul> */}
                 <ul className="shop-filters-ul">
-                    {Object.entries(categories).map(([category, subcategories], index) => (
-                        <li key={index}>
-                            <label className="shop-filters-label">
-                                <input type="checkbox" checked={selectedFilters.includes(category)} onChange={() => handleCheckboxClick(category)} />
-                                <span className="checkmark"></span>
-                                <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(category)}>{category}</span>
-                            </label>
-                            <ul className="shop-filters-ul-inner">
-                                {subcategories.map((sub, subIndex) => (
-                                    <li key={subIndex}>
-                                        <label className="shop-filters-label">
-                                            <input type="checkbox" checked={selectedFilters.includes(sub)} onChange={() => handleCheckboxClick(sub)} />
-                                            <span className="checkmark" ></span>
-                                            <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(sub)}>{sub}</span>
-                                        </label>
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    ))}
+                    {categories.length > 0 && renderCategories(categories)}
                 </ul>
             </div>
 

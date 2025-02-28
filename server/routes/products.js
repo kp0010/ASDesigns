@@ -242,3 +242,43 @@ export const deleteProduct = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 }
+
+export const getAllCategories = async (_, res) => {
+	try {
+		const query = "SELECT * FROM get_categories_levelwise() ORDER BY name DESC";
+		const result = await db.query(query);
+
+		const categoryTree = buildCategoryTree(result.rows);
+
+		res.json({
+			success: true,
+			categoryTree: categoryTree,
+		});
+
+	} catch (err) {
+		console.error("Error fetching categories:", err);
+		res.status(500).json({ error: "Internal Server error" });
+	}
+}
+
+const buildCategoryTree = (categories) => {
+	const categoryMap = new Map();
+
+	categories.forEach(({ id, name }) => {
+		categoryMap.set(id, { name, children: [] });
+	});
+
+	const rootCategories = [];
+	categories.forEach(({ id, parent_id }) => {
+		if (parent_id === null) {
+			rootCategories.push(categoryMap.get(id));
+		} else {
+			if (categoryMap.has(parent_id)) {
+				categoryMap.get(parent_id).children.push(categoryMap.get(id));
+			}
+		}
+	});
+
+	console.log(rootCategories)
+	return rootCategories;
+};

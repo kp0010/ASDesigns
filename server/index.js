@@ -11,7 +11,8 @@ import {
 	getProducts,
 	getIndividualProduct,
 	deleteProduct,
-	postProduct
+	postProduct,
+	getAllCategories
 } from "./routes/products.js"
 
 import {
@@ -148,6 +149,9 @@ POST	:	/api/products/
 DELETE	:	/api/products/:productId
 		Delete Product with Specified Product Id (Protected Admin)
 
+GET	:	/api/categories
+		Get all Categories nested Levelwise
+
 // TODO:
 // PATCH:	/api/products/:productId
 //		Update Product with Specified Product Id (Protected Admin)
@@ -230,6 +234,9 @@ app.post("/api/products", requireAdmin(), upload.array("files"), postProduct)
 
 // Delete Products from DB
 app.delete("/api/products", requireAdmin(), deleteProduct)
+
+// Get All Categories Levelwise
+app.get("/api/categories", getAllCategories)
 
 
 // CART
