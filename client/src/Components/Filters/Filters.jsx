@@ -121,15 +121,16 @@ export const Filters = ({ priceRange,
 
     return (
         <div className="shop-filters">
-            <div className="shop-filters-head">
-                <h2>Filters</h2>
-            </div>
+            <div className="shop-filters-laptop">
+                <div className="shop-filters-head">
+                    <h2>Filters</h2>
+                </div>
 
-            <span className='mt-2'>Showing {productLength} Results out of {totalProducts}</span>
+                <span className='mt-2'>Showing {productLength} Results out of {totalProducts}</span>
 
-            <div className="shop-filters-category">
-                <h2>Category</h2>
-                {/* <ul className="shop-flters-ul">
+                <div className="shop-filters-category">
+                    <h2>Category</h2>
+                    {/* <ul className="shop-flters-ul">
                     <li>
                         <label className="shop-filters-label">
                             <input type="checkbox" />
@@ -167,44 +168,119 @@ export const Filters = ({ priceRange,
                         ))}
                     </ul>
                 </ul> */}
-                <ul className="shop-filters-ul">
-                    {categories.length > 0 && renderCategories(categories)}
-                </ul>
+                    <ul className="shop-filters-ul">
+                        {categories.length > 0 && renderCategories(categories)}
+                    </ul>
+                </div>
+
+                <div className="shop-filters-price">
+                    <h2>Price</h2>
+                    <div className="shop-filters-price-range">
+                        <span>{priceRange[0]}</span>
+                        <span>{priceRange[1]}</span>
+                    </div>
+                    <Slider
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        onValueCommit={(...args) =>
+                            getProducts({
+                                orderBy: sortValue,
+                                minPrice: args[0][0],
+                                maxPrice: args[0][1],
+                            })
+                        }
+                        min={priceExtremes[0] - 50}
+                        max={priceExtremes[1] + 50}
+                        step={50}
+                        minStepsBetweenThumbs={1}
+                        className="w-[90%]"
+                    />
+                </div>
+
+                <div className="shop-filters-tags">
+                    <h2>Tags</h2>
+                    <div className="shop-filters-tags-content">
+                        {tags.map((tag, index) => (
+                            <Badge key={index} className="shop-filters-tags-badge">
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="shop-filters-price">
-                <h2>Price</h2>
-                <div className="shop-filters-price-range">
-                    <span>{priceRange[0]}</span>
-                    <span>{priceRange[1]}</span>
-                </div>
-                <Slider
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                    onValueCommit={(...args) =>
-                        getProducts({
-                            orderBy: sortValue,
-                            minPrice: args[0][0],
-                            maxPrice: args[0][1],
-                        })
-                    }
-                    min={priceExtremes[0] - 50}
-                    max={priceExtremes[1] + 50}
-                    step={50}
-                    minStepsBetweenThumbs={1}
-                    className="w-[90%]"
-                />
-            </div>
+            {/* filters for mobile and tab  */}
+            <div className="shop-filters-mobile">
+                {/* TODO: design a button  */}
+                <button
+                    className="filter-button"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#filtersOffcanvas"
+                    aria-controls="filtersOffcanvas"
+                >
+                    Filters
+                </button>
+                <div
+                    // TODO: adjust width
+                    className="offcanvas offcanvas-start w-50"
+                    tabIndex="-1"
+                    id="filtersOffcanvas"
+                    aria-labelledby="filtersOffcanvasLabel"
+                >
+                    <div className="offcanvas-header">
+                        <h5 id="filtersOffcanvasLabel">Filters</h5>
+                        <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div className="offcanvas-body">
+                        <span className='mt-2'>Showing {productLength} Results out of {totalProducts}</span>
+                        <h2 className="shop-filters-category">Category</h2>
+                        <ul className="filter-list">
+                            {categories.length > 0 && renderCategories(categories)}
+                        </ul>
+                        <div className="shop-filters-price">
+                            <h2>Price</h2>
+                            <div className="shop-filters-price-range">
+                                <span>{priceRange[0]}</span>
+                                <span>{priceRange[1]}</span>
+                            </div>
+                            <Slider
+                                value={priceRange}
+                                onValueChange={setPriceRange}
+                                onValueCommit={(...args) =>
+                                    getProducts({
+                                        orderBy: sortValue,
+                                        minPrice: args[0][0],
+                                        maxPrice: args[0][1],
+                                    })
+                                }
+                                min={priceExtremes[0] - 50}
+                                max={priceExtremes[1] + 50}
+                                step={50}
+                                minStepsBetweenThumbs={1}
+                                className="w-[90%]"
+                            />
+                        </div>
 
-            <div className="shop-filters-tags">
-                <h2>Tags</h2>
-                <div className="shop-filters-tags-content">
-                    {tags.map((tag, index) => (
-                        <Badge key={index} className="shop-filters-tags-badge">
-                            {tag}
-                        </Badge>
-                    ))}
+                        <div className="shop-filters-tags">
+                            <h2>Tags</h2>
+                            <div className="shop-filters-tags-content">
+                                {tags.map((tag, index) => (
+                                    <Badge key={index} className="shop-filters-tags-badge">
+                                        {tag}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 .shop_item {
-    width: 300px;
+    width: 270px;
+    height: fit-content;
     overflow: hidden;
     text-align: center;
     position: relative;
@@ -27,8 +28,8 @@
 }
 
 .shop_item-image img {
-    width: 270px;
-    height: 270px;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -189,5 +190,15 @@
 .shop_item-price h2 {
     color: #000;
     padding-top: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 450px) {
+    .shop_item {
+        width: 190px;
+    }
+    .shop_item-image img {
+        width: 160px;
+        height: 160px;
+    }
 }

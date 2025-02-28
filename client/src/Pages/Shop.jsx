@@ -309,6 +309,7 @@ export const Shop = ({ className }) => {
           totalProducts={totalProducts}
           setSelectedFilters={setSelectedFilters}
           selectedFilters={selectedFilters}
+          className="shop-filter"
         />
         {/* <div className="shop-filters">
           <div className="shop-filters-head">

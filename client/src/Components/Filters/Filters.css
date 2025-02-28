@@ -1,5 +1,10 @@
 .shop-filters {
-    width: 20%;
+    display: flex;
+    /* width: 20%; */
+    flex-direction: column;
+}
+.shop-filters-laptop {
+    width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -151,4 +156,23 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+}
+
+
+.shop-filters-mobile {
+    display: none;
+}
+
+@media (max-width: 450px) {
+    .shop-filters {
+        width: 100%;
+        display: block;
+        flex-direction: row;
+    }
+    .shop-filters-laptop {
+        display: none;
+    }
+    .shop-filters-mobile {
+        display: flex;
+    }
 }
