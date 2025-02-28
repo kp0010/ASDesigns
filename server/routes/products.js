@@ -7,53 +7,67 @@ import {
 
 dotenv.config({ path: "../.env.dev" })
 
+const createGetProductsQuery = (req) => {
+	const params = []
+
+	const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
+
+	const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
+	const limit = req.query["limit"] ? req.query["limit"] : 0
+
+	const maxPrice = req.query["maxPrice"] ? req.query["maxPrice"] : null
+	const minPrice = req.query["minPrice"] ? req.query["minPrice"] : null
+
+	const categories = req.query["categories"] ? req.query["categories"].split(",") : []
+
+	let selectQuery = "SELECT * FROM "
+	if (categories.length) {
+		selectQuery += "get_products_by_categories($1)"; params.push(categories)
+	} else {
+		selectQuery += "products"
+	}
+
+	// Add Price Min Max Clauses and Categories
+	const priceClauses = []
+
+	if (maxPrice !== null) { priceClauses.push(`price <= ${maxPrice}`) }
+	if (minPrice !== null) { priceClauses.push(`price >= ${minPrice}`) }
+
+	if (priceClauses.length) {
+		selectQuery += " WHERE " + priceClauses.join(" AND ")
+	}
+
+	// Get total Products before Offsets and Limits
+	const totalProductsQuery = `SELECT COUNT(*) FROM ${categories.length ? "get_products_by_categories($1)" : "products"}` +
+		(priceClauses.length !== 0 ? " WHERE " : "") +
+		priceClauses.join(" AND ")
+
+	// Add Order By method
+	// TODO: Add Popular Sort
+	const sortToSql = {
+		"default": "random()",
+		"popular": "random()",
+		"recent": "updated_at DESC",
+		"price_desc": "price DESC",
+		"price_asc": "price"
+	}
+	selectQuery += " ORDER BY " + sortToSql[orderBy]
+
+	// Add Page Offset and Limit
+	selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
+	selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
+
+	return { totalProductsQuery, selectQuery, params }
+}
+
 
 export const getProducts = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
-		const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
+		const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
 
-		const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
-		const limit = req.query["limit"] ? req.query["limit"] : 0
-
-		const maxPrice = req.query["maxPrice"] ? req.query["maxPrice"] : null
-		const minPrice = req.query["minPrice"] ? req.query["minPrice"] : null
-
-		let selectQuery = "SELECT * FROM products"
-
-		// Add Price Min Max Clauses
-		const priceClauses = []
-
-		if (maxPrice !== null) { priceClauses.push(`price <= ${maxPrice}`) }
-		if (minPrice !== null) { priceClauses.push(`price >= ${minPrice}`) }
-
-		if (priceClauses.length) {
-			selectQuery += " WHERE " + priceClauses.join(" AND ")
-		}
-
-		// Get total Products before Offsets and Limits
-		const totalProductsQuery = "SELECT COUNT(*) FROM products" +
-			(priceClauses.length !== 0 ? " WHERE " : "") +
-			priceClauses.join(" AND ")
-		const totalProductsResult = await db.query(totalProductsQuery)
-
-		// Add Order By method
-		// TODO: Add Popular Sort
-		const sortToSql = {
-			"default": "random()",
-			"popular": "random()",
-			"recent": "updated_at DESC",
-			"price_desc": "price DESC",
-			"price_asc": "price"
-		}
-		selectQuery += " ORDER BY " + sortToSql[orderBy]
-
-		// Add Page Offset and Limit
-		selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
-		selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
-
-		const result = await db.query(selectQuery)
-
+		const result = await db.query(selectQuery, params)
+		const totalProductsResult = await db.query(totalProductsQuery, params)
 		const priceExtremesResult = await db.query("SELECT MIN(price), MAX(price) FROM products")
 
 		res.status(200).json({

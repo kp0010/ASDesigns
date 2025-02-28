@@ -78,7 +78,6 @@ const sortOptions = [
 export const Shop = ({ className }) => {
   const { pageNo } = useParams()
 
-  // const [open, setOpen] = useState(false)
   const [sortValue, setSortValue] = useState("")
 
   const [priceRange, setPriceRange] = useState([null, null]);
@@ -87,29 +86,27 @@ export const Shop = ({ className }) => {
   const [productData, setProductData] = useState([])
   const [totalProducts, setTotalProducts] = useState(0)
 
+  const [selectedFilters, setSelectedFilters] = useState([])
+
   const [loaded, setLoaded] = useState(false)
 
   const [pageIndexes, setPageIndexes] = useState([])
 
-  const getProducts = ({
-    orderBy = null, minPrice = null, maxPrice = null
-  } = {}) => {
 
+  const getProducts = ({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
-    if (orderBy !== null && orderBy !== undefined) {
-      params.append("orderBy", orderBy)
-    }
+    if (orderBy !== null && orderBy !== undefined) { params.append("orderBy", orderBy) }
 
-    if ((minPrice !== null && minPrice !== undefined)) {
-      params.append("minPrice", minPrice !== null ? minPrice : sortValue[0])
-    }
+    if ((minPrice !== null && minPrice !== undefined)) { params.append("minPrice", minPrice !== null ? minPrice : sortValue[0]) }
 
-    if ((maxPrice !== null && maxPrice !== undefined)) {
-      params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1])
-    }
+    if ((maxPrice !== null && maxPrice !== undefined)) { params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1]) }
 
-    fetch(`/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`, {
+    if (selectedFilters.length) { params.append("categories", selectedFilters.join(",")) }
+
+    const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`
+
+    fetch(apiQuery, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -134,62 +131,62 @@ export const Shop = ({ className }) => {
   }
 
   const calculatePages = (pageNoStr) => {
-    const pageIndexes = [];
-    const addedIndexes = new Set();
-    const bufferLen = 2;
-    const pageNo = parseInt(pageNoStr || "1", 10);
-    const totalPages = Math.ceil(totalProducts / PRODUCT_LIMIT);
+    const pageIndexes = []
+    const bufferLen = 2
+    const pageNo = parseInt(pageNoStr ? pageNoStr : "1")
+    const totalPages = parseInt(totalProducts / PRODUCT_LIMIT) + 1
 
-    if (pageNo < 1 || pageNo > totalPages) return;
+    if (pageNo > 1) { pageIndexes.push({ index: "prev", link: `/shop/page/${pageNo - 1}` }) }
 
-    // Helper function to add a page index if not already added
-    const addPageIndex = (index) => {
-      if (!addedIndexes.has(index) && index > 0 && index <= totalPages) {
+    let i = 1
+
+    for (i; i <= ((bufferLen < pageNo) ? bufferLen : pageNo); i++) {
+      if (i <= totalPages) {
         pageIndexes.push({
-          index,
-          link: index !== 1 ? `/shop/page/${index}` : `/shop`,
-        });
-        addedIndexes.add(index);
+          index: i,
+          link: i !== 1 ? `/shop/page/${i}` : `/shop`
+        })
       }
-    };
-
-    // Add Previous Button
-    if (pageNo > 1) {
-      pageIndexes.push({ index: "prev", link: `/shop/page/${pageNo - 1}` });
-    }
-
-    // Add first few pages
-    for (let i = 1; i <= Math.max(bufferLen, pageNo); i++) {
-      addPageIndex(i);
-    }
-
-    // Add middle ellipsis and nearby pages
-    if (pageNo > bufferLen * 2) {
-      pageIndexes.push({ index: "ellipsis" });
-      for (let i = Math.max(bufferLen + 1, pageNo - Math.floor(bufferLen / 2)); i <= Math.min(pageNo + Math.floor(bufferLen / 2), totalPages); i++) {
-        addPageIndex(i);
+      if (pageNo === 1) {
+        pageIndexes.push({
+          index: 2,
+          link: `/shop/page/2`
+        })
       }
     }
 
-    // Add trailing ellipsis and last few pages
-    if (totalPages > bufferLen * 2 + 1 && pageNo < totalPages - bufferLen * 2) {
-      pageIndexes.push({ index: "ellipsis" });
-      for (let i = totalPages - bufferLen + 1; i <= totalPages; i++) {
-        addPageIndex(i);
+    if (pageNo + parseInt(bufferLen / 2) > bufferLen) {
+      if (pageNo > bufferLen * 2) { pageIndexes.push({ index: "ellipsis" }) }
+
+      for (i = pageNo - parseInt(bufferLen / 2); i <= pageNo + parseInt(bufferLen / 2); i++) {
+        if (!pageIndexes.find((pageIdx) => pageIdx.index === i) && (i < totalPages))
+          pageIndexes.push({
+            index: i,
+            link: `/shop/page/${i}`
+          })
       }
     }
 
-    // Add Next Button
-    if (pageNo < totalPages) {
-      pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` });
+    if (totalPages - bufferLen > 3) {
+      if (pageNo < (totalPages - (bufferLen * 2) + 1)) { pageIndexes.push({ index: "ellipsis" }) }
+
+      for (i = totalPages - bufferLen + 1; i <= totalPages; i++) {
+        if (!pageIndexes.find((pageIdx) => pageIdx.index === i))
+          pageIndexes.push({
+            index: i,
+            link: `/shop/page/${i}`
+          })
+      }
     }
 
-    setPageIndexes(pageIndexes);
-  };
+    if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` }) }
+
+    setPageIndexes(pageIndexes)
+  }
 
   useEffect(() => {
-    getProducts()
-  }, [pageNo])
+    getProducts({ orderBy: sortValue, minPrice: priceRange[0], maxPrice: priceRange[1] })
+  }, [pageNo, selectedFilters])
 
   useEffect(() => {
     calculatePages(pageNo)
@@ -308,6 +305,10 @@ export const Shop = ({ className }) => {
           priceExtremes={priceExtremes}
           getProducts={getProducts}
           sortValue={sortValue}
+          productLength={productData.length}
+          totalProducts={totalProducts}
+          setSelectedFilters={setSelectedFilters}
+          selectedFilters={selectedFilters}
         />
         {/* <div className="shop-filters">
           <div className="shop-filters-head">
@@ -403,24 +404,25 @@ export const Shop = ({ className }) => {
       <Pagination className="mb-10">
         <PaginationContent>
           {pageIndexes.length && pageIndexes.map(page => ((
-
-            <PaginationItem key={page.index}>
-              {["next", "prev", "Ellipsis"].includes(page.index) ? (
-                page.index === "next" ? (
-                  <PaginationNext onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
-                ) : (
-                  page.index === "prev" ? (
-                    <PaginationPrevious onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+            < PaginationItem key={page.index} >
+              {
+                ["next", "prev", "ellipsis"].includes(page.index) ? (
+                  page.index === "next" ? (
+                    <PaginationNext onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
                   ) : (
-                    <PaginationEllipsis />
-                  ))) : (
-                <PaginationLink onClick={window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link}>{page.index}</PaginationLink>
-              )}
+                    page.index === "prev" ? (
+                      <PaginationPrevious onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+                    ) : (
+                      <PaginationEllipsis />
+                    ))) : (
+                  <PaginationLink onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link}>{page.index}</PaginationLink>
+                )
+              }
             </PaginationItem>
           )
           ))}
         </PaginationContent>
-      </Pagination>
+      </Pagination >
     </div >
   )
 }

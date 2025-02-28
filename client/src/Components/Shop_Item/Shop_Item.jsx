@@ -12,12 +12,6 @@ import { toast } from "sonner";
 import ProductModal from "../ProductModal/ProductModal";
 
 export const Shop_Item = ({ product }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   const { product_id, name, price } = product;
 
   const {
@@ -47,11 +41,11 @@ export const Shop_Item = ({ product }) => {
 
   const toggleCart = () => {
     if (cartCurrent) {
-      setCartCurrent(false);
+      // setCartCurrent(false);
       deleteFromCart(product.product_id);
       toast.info("Removed from Cart");
     } else {
-      setCartCurrent(true);
+      // setCartCurrent(true);
       addToCart(product.product_id, product.price);
       toast.success("Added to Cart");
     }
@@ -114,7 +108,7 @@ export const Shop_Item = ({ product }) => {
         </div>
         <div className="shop_item-wishlist">
           <span className="wishlist-text">
-            {cartCurrent ? "Remove from Wishlist" : "Add to Wishlist"}
+            {wishlistCurrent ? "Remove from Wishlist" : "Add to Wishlist"}
           </span>
           <button
             className="shop_item-wishlist-button"

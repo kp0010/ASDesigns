@@ -4,14 +4,24 @@ import "../../App.css"
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
 
-export const Filters = ({ priceRange, setPriceRange, priceExtremes, getProducts, sortValue }) => {
+export const Filters = ({ priceRange,
+    setPriceRange,
+    priceExtremes,
+    getProducts,
+    sortValue,
+    productLength,
+    totalProducts,
+    selectedFilters,
+    setSelectedFilters,
+}) => {
 
     // TODO: If admin wants to add Tags and Categories, then it should come from database
     // const sports = ["Cricket", "Football", "Basketball"];
     // const festivals = ["Ganesh Jayanti", "Diwali", "New Year Special"];
+
     const categories = {
         Sports: ["Cricket", "Football", "Basketball"],
-        Festivals: ["Ganesh Jayanti", "Diwali", "New Year Special"]
+        Festival: ["Ganesh Jayanti", "Diwali", "New Year Special"]
     };
 
     const tags = [
@@ -27,15 +37,19 @@ export const Filters = ({ priceRange, setPriceRange, priceExtremes, getProducts,
         "Lightweight Fabric",
     ];
 
-    const handleCheckboxClick = (event) => {
-        const checkbox = event.currentTarget.previousSibling;
-        checkbox.checked = !checkbox.checked;
+    const handleCheckboxClick = (category) => {
+        setSelectedFilters((prev) =>
+            prev.includes(category) ? prev.filter((item) => item !== category) : [...prev, category]
+        );
     };
+
     return (
         <div className="shop-filters">
             <div className="shop-filters-head">
                 <h2>Filters</h2>
             </div>
+
+            <span className='mt-2'>Showing {productLength} Results out of {totalProducts}</span>
 
             <div className="shop-filters-category">
                 <h2>Category</h2>
@@ -81,17 +95,17 @@ export const Filters = ({ priceRange, setPriceRange, priceExtremes, getProducts,
                     {Object.entries(categories).map(([category, subcategories], index) => (
                         <li key={index}>
                             <label className="shop-filters-label">
-                                <input type="checkbox" />
-                                <span className="checkmark" onClick={handleCheckboxClick}></span>
-                                <span className="shop-filters-label-name">{category}</span>
+                                <input type="checkbox" checked={selectedFilters.includes(category)} onChange={() => handleCheckboxClick(category)} />
+                                <span className="checkmark"></span>
+                                <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(category)}>{category}</span>
                             </label>
                             <ul className="shop-filters-ul-inner">
                                 {subcategories.map((sub, subIndex) => (
                                     <li key={subIndex}>
                                         <label className="shop-filters-label">
-                                            <input type="checkbox" />
-                                            <span className="checkmark" onClick={handleCheckboxClick}></span>
-                                            <span className="shop-filters-label-name">{sub}</span>
+                                            <input type="checkbox" checked={selectedFilters.includes(sub)} onChange={() => handleCheckboxClick(sub)} />
+                                            <span className="checkmark" ></span>
+                                            <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(sub)}>{sub}</span>
                                         </label>
                                     </li>
                                 ))}

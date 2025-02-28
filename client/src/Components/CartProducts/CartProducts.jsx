@@ -138,15 +138,15 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
           {/* Price Section with Left-Right Alignment */}
           <div className="price w-full pt-4 md:pt-0">
             <div className="flex justify-between w-full text-lg">
-              <h2>Price ({cartData.length} items)</h2>
+              <h2>Price ({buyNowProductId ? 1 : cartData.length} items)</h2>
               <span className="font-bold">
-                ₹ {(price - 1.0 * cartData.length).toFixed(2)}
+                ₹ {((buyNowProduct !== null ? buyNowProduct.price : price) - 1.0 * (buyNowProduct !== null ? 1 : cartData.length)).toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between w-full text-lg mt-2">
               <h2>Total Price</h2>
               <span className="font-bold">
-                ₹ {(price - 1.0 * cartData.length).toFixed(2)}
+                ₹ {((buyNowProduct !== null ? buyNowProduct.price : price) - 1.0 * (buyNowProduct !== null ? 1 : cartData.length)).toFixed(2)}
               </span>
             </div>
           </div>
