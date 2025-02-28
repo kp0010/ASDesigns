@@ -50,14 +50,10 @@ export const Filters = ({ priceRange,
             let newFilters = new Set(prevFilters);
 
             if (newFilters.has(category.name)) {
-                // If category is already selected, remove it
                 newFilters.delete(category.name);
-                // Uncheck all children recursively
                 uncheckChildren(category, newFilters);
             } else {
-                // If category is not selected, add it
                 newFilters.add(category.name);
-                // Check all children recursively
                 checkChildren(category, newFilters);
             }
 

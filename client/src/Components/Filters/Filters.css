@@ -59,7 +59,7 @@
 }
 
 .shop-filters-ul-inner {
-    padding-left: 10px;
+    padding-left: 20px;
 }
 
 .checkmark {
@@ -89,6 +89,7 @@
     border-color: #262626;
     box-shadow: inset 0 0 0 4px #ffffff;
 }
+
 .shop-filters-label input:checked~.shop-filters-label-name {
     color: #262626;
     font-weight: 500;
