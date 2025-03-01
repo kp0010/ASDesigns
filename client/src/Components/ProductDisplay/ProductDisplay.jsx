@@ -54,6 +54,7 @@ const Target = styled.div`
 `;
 
 export const ProductDisplay = ({ productId, product, categories }) => {
+  // Animation Data
   const sourceRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -92,9 +93,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   const lottieRefLarge = useRef(null);
   const lottieRefSmall = useRef(null);
 
+  // Animation Data End
+  // --------------------------------------
+  // Cart and Wishlist Data and Setup
+
   const {
     wishlistData,
-    wishlistLoaded,
     deleteFromWishlist,
     addToWishlist,
     refreshWishlist,
@@ -102,43 +106,49 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   const {
     cartData,
-    cartLoaded,
     deleteFromCart,
     addToCart,
     refreshCart
   } = useShop()
+
+  const useStableState = value => {
+    const [stableValue, setStableValue] = useState(value);
+    const ref = useRef(value);
+
+    useEffect(() => {
+      if (JSON.stringify(ref.current) !== JSON.stringify(value)) {
+        ref.current = value;
+        setStableValue(value)
+      }
+    }, [value]);
+
+    return stableValue;
+  }
+
+  const stableWishlistData = useStableState(wishlistData)
+  const stableCartData = useStableState(cartData)
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false)
 
   const [cartText, setCartText] = useState("Add to Cart")
 
+
   const toggleWishlist = () => {
     setWishlistCurrent(!wishlistCurrent);
 
-    if (lottieRefLarge.current) {
+    [lottieRefLarge, lottieRefSmall].forEach(ref => {
       if (!wishlistCurrent) {
         toast.success("Added to Wishlist");
-        lottieRefLarge.current.goToAndPlay(0, true);
+        ref.current.goToAndPlay(0, true);
         setTimeout(() => {
           lottieRefLarge.current.goToAndStop(30, true);
         }, 800);
       } else {
         toast.info("Removed from Wishlist");
-        lottieRefLarge.current.goToAndPlay(50, true);
+        ref.current.goToAndPlay(50, true);
       }
-    }
-
-    if (lottieRefSmall.current) {
-      if (!wishlistCurrent) {
-        lottieRefSmall.current.goToAndPlay(0, true);
-        setTimeout(() => {
-          lottieRefSmall.current.goToAndStop(30, true);
-        }, 800);
-      } else {
-        lottieRefSmall.current.goToAndPlay(50, true);
-      }
-    }
+    })
 
     if (wishlistCurrent) {
       setWishlistCurrent(false);
@@ -155,14 +165,10 @@ export const ProductDisplay = ({ productId, product, categories }) => {
       setCartCurrent(false);
       deleteFromCart(product.product_id);
 
-      // setCartText("Add to Cart")
-
       toast.info("Removed from Cart")
     } else {
       setCartCurrent(true);
       addToCart(product.product_id, product.price);
-
-      // setCartText("Remove from Cart")
 
       toast.success("Added to Cart")
     }
@@ -171,22 +177,20 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
   const navigate = useNavigate()
   const buyNow = () => {
-    console.log("BN", productId)
-
     navigate(`/cart/?buyNow=${productId}`)
   }
 
   useEffect(() => {
-    const foundCartProduct = cartData.find((prod) => prod.product_id === productId)
+    const foundCartProduct = stableCartData.find((prod) => prod.product_id === productId)
 
     setCartCurrent(foundCartProduct !== undefined)
 
     setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
-  }, [productId, cartData]);
+  }, [productId, stableCartData]);
 
 
   useEffect(() => {
-    const foundWSProduct = wishlistData.find((prod) => prod.product_id === productId);
+    const foundWSProduct = stableWishlistData.find((prod) => prod.product_id === productId);
 
     setWishlistCurrent(foundWSProduct !== undefined);
 
@@ -213,7 +217,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         lottieRefSmall.current.goToAndStop(30, true);
       }, 800);
     }
-  }, [productId, wishlistData])
+  }, [productId, stableWishlistData])
 
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
@@ -394,14 +398,15 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           {/* Buttons */}
           <div className="buy-section flex flex-col items-center mt-5 space-y-3">
-            <Button onClick={toggleCart} className="w-full bg-black flex items-center justify-center">
+            <Button onClick={toggleCart} className={`w-full bg-black flex items-center justify-center ${!cartCurrent ? "bg-black" : "bg-[#333333]"}`}>
               <IoCartOutline className="mr-2" />
-              Add to Cart
+              {cartText}
             </Button>
             <Button onClick={buyNow} className="w-full bg-[#e3c756] flex items-center justify-center">
               <IoCloudDownloadOutline className="mr-2" />
               Download
             </Button>
+
             <Button
               onClick={toggleWishlist}
               className="w-full bg-white text-black border-black border-2 flex items-center justify-center px-[100px]"

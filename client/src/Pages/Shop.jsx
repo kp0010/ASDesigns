@@ -10,20 +10,6 @@ import {
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb"
 
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/Components/ui/button"
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/Components/ui/command"
-
 import {
   Pagination,
   PaginationContent,
@@ -34,15 +20,6 @@ import {
   PaginationPrevious,
 } from "@/Components/ui/pagination"
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/Components/ui/popover"
-
-import { Slider } from "@/Components/ui/dualrangeslider.jsx"
-import { Badge } from "@/Components/ui/badge"
-
 import { Link, useParams } from "react-router-dom"
 
 import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
@@ -52,37 +29,15 @@ import { Filters } from '@/Components/Filters/Filters'
 // WARN: Test Limit
 const PRODUCT_LIMIT = 6
 
-const sortOptions = [
-  {
-    value: "default",
-    label: "Relevance",
-  },
-  {
-    value: "popular",
-    label: "Popular",
-  },
-  {
-    value: "price_asc",
-    label: "Price: Low to High",
-  },
-  {
-    value: "price_desc",
-    label: "Price: High to Low",
-  },
-  {
-    value: "recent",
-    label: "New Arrivals",
-  },
-]
 
-export const Shop = ({ className }) => {
+export const Shop = () => {
   const { pageNo } = useParams()
 
   const [sortValue, setSortValue] = useState("")
-
   const [priceRange, setPriceRange] = useState([null, null]);
-
   const [priceExtremes, setPriceExtremes] = useState([0, 0])
+  const [pageIndexes, setPageIndexes] = useState([])
+
   const [productData, setProductData] = useState([])
   const [totalProducts, setTotalProducts] = useState(0)
 
@@ -90,18 +45,13 @@ export const Shop = ({ className }) => {
 
   const [loaded, setLoaded] = useState(false)
 
-  const [pageIndexes, setPageIndexes] = useState([])
-
 
   const getProducts = ({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
     if (orderBy !== null && orderBy !== undefined) { params.append("orderBy", orderBy) }
-
     if ((minPrice !== null && minPrice !== undefined)) { params.append("minPrice", minPrice !== null ? minPrice : sortValue[0]) }
-
     if ((maxPrice !== null && maxPrice !== undefined)) { params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1]) }
-
     if (selectedFilters.length) { params.append("categories", selectedFilters.join(",")) }
 
     const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`
@@ -147,7 +97,7 @@ export const Shop = ({ className }) => {
           link: i !== 1 ? `/shop/page/${i}` : `/shop`
         })
       }
-      if (pageNo === 1) {
+      if (pageNo === 1 && totalPages >= 2) {
         pageIndexes.push({
           index: 2,
           link: `/shop/page/2`
@@ -181,7 +131,7 @@ export const Shop = ({ className }) => {
 
     if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` }) }
 
-    setPageIndexes(pageIndexes)
+    setPageIndexes(pageIndexes.length > 1 ? pageIndexes : [])
   }
 
   useEffect(() => {
@@ -191,36 +141,6 @@ export const Shop = ({ className }) => {
   useEffect(() => {
     calculatePages(pageNo)
   }, [pageNo, totalProducts])
-
-  const sports = [
-    "Cricket",
-    "Football",
-    "Basketball"
-  ];
-
-  const festivals = [
-    "Ganesh Jayanti",
-    "Diwali",
-    "New Year Special"
-  ];
-
-  const tags = [
-    "CDR File",
-    "PSD File",
-    "Vector Design",
-    "Jersey Type",
-    "Limited Edition",
-    "Premium Quality",
-    "Customizable",
-    "High Resolution",
-    "Eco-friendly",
-    "Lightweight Fabric"
-  ]
-
-  const handleCheckboxClick = (event) => {
-    const checkbox = event.currentTarget.previousSibling;
-    checkbox.checked = !checkbox.checked;
-  };
 
   return (
     <div>
@@ -404,7 +324,7 @@ export const Shop = ({ className }) => {
 
       <Pagination className="mb-10">
         <PaginationContent>
-          {pageIndexes.length && pageIndexes.map(page => ((
+          {pageIndexes.length ? (pageIndexes.map(page => ((
             < PaginationItem key={page.index} >
               {
                 ["next", "prev", "ellipsis"].includes(page.index) ? (
@@ -421,7 +341,9 @@ export const Shop = ({ className }) => {
               }
             </PaginationItem>
           )
-          ))}
+          ))) : (
+            <></>
+          )}
         </PaginationContent>
       </Pagination >
     </div >

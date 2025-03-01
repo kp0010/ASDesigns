@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
 import { useContext } from "react";
 
 import { useUser, useAuth } from "@clerk/clerk-react";
@@ -29,10 +29,12 @@ const ShopContextProvider = ({ children }) => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   const [cartData, setCartData] = useState([])
+  const cartDataMemo = useMemo(() => cartData, [cartData])
   const [cartChanged, setCartChanged] = useState(false)
   const [cartLoaded, setCartLoaded] = useState(false)
 
   const [wishlistData, setWishlistData] = useState([])
+  const wishlistDataMemo = useMemo(() => wishlistData, [wishlistData])
   const [wishlistChanged, setWishlistChanged] = useState(false)
   const [wishlistLoaded, setWishlistLoaded] = useState(false)
 
@@ -241,10 +243,10 @@ const ShopContextProvider = ({ children }) => {
   useEffect(() => { getPrice() }, [cartData])
 
   const contextValue = {
-    cartData,
+    cartData: cartDataMemo,
     cartLoaded,
 
-    wishlistData,
+    wishlistData: wishlistDataMemo,
     wishlistLoaded,
 
     addToCart,

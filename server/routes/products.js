@@ -279,6 +279,5 @@ const buildCategoryTree = (categories) => {
 		}
 	});
 
-	console.log(rootCategories)
 	return rootCategories;
 };

@@ -28,7 +28,7 @@ export const Filters = ({ priceRange,
         })
             .then(resp => resp.json())
             .then(data => {
-                if (data.success) { setCategories(data.categoryTree); console.log("DATA", data.categoryTree) }
+                if (data.success) { setCategories(data.categoryTree) }
             })
     }, [])
 
@@ -102,7 +102,6 @@ export const Filters = ({ priceRange,
         return (
             categories.map((category, index) => {
                 let categoryWithParent = { ...category, parent };
-                console.log(categoryWithParent)
 
                 return (
                     < li key={index} >
@@ -220,7 +219,7 @@ export const Filters = ({ priceRange,
                     data-bs-target="#filtersOffcanvas"
                     aria-controls="filtersOffcanvas"
                 >
-                    <LuListFilter className="m-1 ml-0"/>Filters
+                    <LuListFilter className="m-1 ml-0" />Filters
                 </button>
                 <div
                     // TODO: adjust width
@@ -279,9 +278,7 @@ export const Filters = ({ priceRange,
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     );
