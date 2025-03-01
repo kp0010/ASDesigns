@@ -4,6 +4,7 @@ import "../../App.css"
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
 import { useState } from 'react';
+import { LuListFilter } from "react-icons/lu";
 
 export const Filters = ({ priceRange,
     setPriceRange,
@@ -219,7 +220,7 @@ export const Filters = ({ priceRange,
                     data-bs-target="#filtersOffcanvas"
                     aria-controls="filtersOffcanvas"
                 >
-                    Filters
+                    <LuListFilter className="m-1 ml-0"/>Filters
                 </button>
                 <div
                     // TODO: adjust width
@@ -228,8 +229,8 @@ export const Filters = ({ priceRange,
                     id="filtersOffcanvas"
                     aria-labelledby="filtersOffcanvasLabel"
                 >
-                    <div className="offcanvas-header">
-                        <h5 id="filtersOffcanvasLabel">Filters</h5>
+                    <div className="offcanvas-header shadow-md">
+                        <h5 id="filtersOffcanvasLabel" className="text-3xl ">Filters</h5>
                         <button
                             type="button"
                             className="btn-close"
@@ -238,8 +239,8 @@ export const Filters = ({ priceRange,
                         ></button>
                     </div>
                     <div className="offcanvas-body">
-                        <span className='mt-2'>Showing {productLength} Results out of {totalProducts}</span>
-                        <h2 className="shop-filters-category">Category</h2>
+                        <span className='mt-1'>Showing {productLength} Results out of {totalProducts}</span>
+                        <h2 className="shop-filters-category text-2xl font-medium">Category</h2>
                         <ul className="filter-list">
                             {categories.length > 0 && renderCategories(categories)}
                         </ul>

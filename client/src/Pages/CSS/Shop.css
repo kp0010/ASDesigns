@@ -32,15 +32,44 @@
     padding-right: 20px;
 }
 
-@media (max-width: 850px) {
+@media (min-width: 1500px) {
+    .products-grid-container {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .shop-main {
+        padding-left: 35px;
+    }
+
+    .shop-filter {
+        width: 20%;
+    }
+}
+
+@media (max-width: 1050px) {
     .products-grid-container {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .shop-main {
+        padding-left: 35px;
+    }
+}
+
+@media (max-width: 850px) {
+    .products-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .shop-main {
+        padding-left: 35px;
     }
 }
 
 @media (max-width: 450px) {
     .shop-sort {
         padding: 10px;
+        padding-right: 20px;
     }
 
     .shop-filter {

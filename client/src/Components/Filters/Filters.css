@@ -158,9 +158,33 @@
     gap: 4px;
 }
 
-
+/* For mobile view  */
 .shop-filters-mobile {
     display: none;
+}
+
+.filter-button {
+    display: flex;
+    border: 1px solid #edeaea;
+    border-radius: 5px;
+    padding: 5px 10px 5px 5px;
+    background-color: #262626;
+    color: #ffffff;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.filter-list {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 800px) {
+    .shop-filters-laptop {
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 450px) {
