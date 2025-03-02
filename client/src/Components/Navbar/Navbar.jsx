@@ -8,7 +8,7 @@ import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useShop } from "@/Context/ShopContext"
+import { useShop } from "@/Context/ShopContext";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -36,9 +36,9 @@ export const Navbar = () => {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
-  const [searchInput, setSearchInput] = useState("")
+  const [searchInput, setSearchInput] = useState("");
 
-  const [searchProducts, setSearchProducts] = useState([])
+  const [searchProducts, setSearchProducts] = useState([]);
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -70,25 +70,25 @@ export const Navbar = () => {
 
   const handleSearchChange = (search) => {
     if (!search.length) {
-      setSearchProducts([])
-      return
+      setSearchProducts([]);
+      return;
     }
 
-    const params = new URLSearchParams({ "q": search })
+    const params = new URLSearchParams({ q: search });
 
     fetch(`/api/products/?${params.toString()}`, {
       method: "GET",
       headers: {
-        "content-type": "application/json"
-      }
+        "content-type": "application/json",
+      },
     })
-      .then(resp => resp.json())
-      .then(data => {
+      .then((resp) => resp.json())
+      .then((data) => {
         if (data.success) {
-          setSearchProducts(data.products)
+          setSearchProducts(data.products);
         }
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -121,9 +121,15 @@ export const Navbar = () => {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                onFocus={() => { setShowSearch(true) }}
-                onBlur={() => { setShowSearch(false) }}
-                onChange={(e) => { handleSearchChange(e.target.value) }}
+                onFocus={() => {
+                  setShowSearch(true);
+                }}
+                onBlur={() => {
+                  setShowSearch(false);
+                }}
+                onChange={(e) => {
+                  handleSearchChange(e.target.value);
+                }}
               />
               <button
                 className="input-group-text bg-light border-0"
@@ -133,34 +139,59 @@ export const Navbar = () => {
               </button>
             </div>
             {showSearch && (
-              <div
-                className="absolute top-14 w-80 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar"
-              >
+              <div className="absolute top-20 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar">
                 {searchProducts.length > 0 ? (
-                  searchProducts.map((product, idx) => (
-                    <div
-                      key={idx}
-                      className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                      onClick={() => handleProductClick(product.product_id)}
-                    >
-                      <img
-                        src={`/Products/${product.product_id}.jpeg`}
-                        className="w-20 h-20 object-cover rounded"
-                        alt={product.name}
-                      />
-                      <div className="ml-3">
-                        <h3 className="text-md font-semibold">
-                          {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
-                        </h3>
-                        <p className="text-md text-gray-500">
-                          ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
-                        </p>
+                  searchProducts.map((product, idx) => {
+                    const isCategory = product.product_id === "category"; // ✅ Dynamically check
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md 
+          ${
+            isCategory
+              ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3"
+              : ""
+          }`}
+                        onClick={() => handleProductClick(product.product_id)}
+                      >
+                        {/* // Category specific div  */}
+                        {isCategory ? (
+                          <div>
+                            <h3 className="text-md font-semibold">
+                              {product.name}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              Browse all related products
+                            </p>
+                          </div>
+                        ) : (
+                          // Regular product display 
+                          <>
+                            <img
+                              src={`/Products/${product.product_id}.jpeg`}
+                              className="w-20 h-20 object-cover rounded"
+                              alt={product.name}
+                            />
+                            <div className="ml-3">
+                              <h3 className="text-md font-semibold">
+                                {product["product_id"] +
+                                  (product["name"]
+                                    ? " | " + product["name"]
+                                    : "")}
+                              </h3>
+                              <p className="text-md text-gray-500">
+                                ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <p className="text-center text-gray-500 text-sm">
-                    No items in Cart
+                    No items to search
                   </p>
                 )}
               </div>
@@ -172,7 +203,10 @@ export const Navbar = () => {
               className="relative"
               onMouseEnter={() => setShowCart(true)}
               onMouseLeave={(e) => {
-                if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
+                if (
+                  !e.relatedTarget ||
+                  !e.currentTarget.contains(e.relatedTarget)
+                ) {
                   setShowCart(false);
                 }
               }}
@@ -181,7 +215,9 @@ export const Navbar = () => {
                 <div className="nav-icons d-flex align-items-center">
                   <LuShoppingCart className="icon me-2" />
                   <span>Cart</span>
-                  <span className="cart-count nav-indicator">{cartData.length}</span>
+                  <span className="cart-count nav-indicator">
+                    {cartData.length}
+                  </span>
                 </div>
               </NavLink>
               {showCart && (
@@ -205,7 +241,8 @@ export const Navbar = () => {
                         />
                         <div className="ml-3">
                           <h3 className="text-md font-semibold">
-                            {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
+                            {product["product_id"] +
+                              (product["name"] ? " | " + product["name"] : "")}
                           </h3>
                           <p className="text-md text-gray-500">
                             ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
@@ -226,7 +263,10 @@ export const Navbar = () => {
               className="relative"
               onMouseEnter={() => setShowWishlist(true)}
               onMouseLeave={(e) => {
-                if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
+                if (
+                  !e.relatedTarget ||
+                  !e.currentTarget.contains(e.relatedTarget)
+                ) {
                   setShowWishlist(false);
                 }
               }}
@@ -235,7 +275,9 @@ export const Navbar = () => {
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
                   <span>Wishlist</span>
-                  <span className=" wishlist-count nav-indicator">{wishlistData.length}</span>
+                  <span className=" wishlist-count nav-indicator">
+                    {wishlistData.length}
+                  </span>
                 </div>
                 <div className="hidden wishlist-preview"></div>
               </NavLink>
@@ -260,7 +302,8 @@ export const Navbar = () => {
                         />
                         <div className="ml-3">
                           <h3 className="text-md font-semibold">
-                            {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
+                            {product["product_id"] +
+                              (product["name"] ? " | " + product["name"] : "")}
                           </h3>
                           <p className="text-md text-gray-500">
                             ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
