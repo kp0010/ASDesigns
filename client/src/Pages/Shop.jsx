@@ -93,17 +93,12 @@ export const Shop = () => {
 
     let i = 1
 
-    for (i; i <= ((bufferLen < pageNo) ? bufferLen : pageNo); i++) {
+    for (i; i <= ((bufferLen < totalPages) ? bufferLen : totalPages); i++) {
+      // if (pageIndexes.find((pageIdx) => pageIdx.index === i)) { break }
       if (i <= totalPages) {
         pageIndexes.push({
           index: i,
           link: i !== 1 ? `/shop/page/${i}` : `/shop`
-        })
-      }
-      if (pageNo === 1 && totalPages >= 2) {
-        pageIndexes.push({
-          index: 2,
-          link: `/shop/page/2`
         })
       }
     }
@@ -112,7 +107,7 @@ export const Shop = () => {
       if (pageNo > bufferLen * 2) { pageIndexes.push({ index: "ellipsis" }) }
 
       for (i = pageNo - parseInt(bufferLen / 2); i <= pageNo + parseInt(bufferLen / 2); i++) {
-        if (!pageIndexes.find((pageIdx) => pageIdx.index === i) && (i < totalPages))
+        if (!pageIndexes.find((pageIdx) => pageIdx.index === i) && (i <= totalPages))
           pageIndexes.push({
             index: i,
             link: `/shop/page/${i}`

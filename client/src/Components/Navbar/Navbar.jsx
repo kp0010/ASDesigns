@@ -39,7 +39,7 @@ export const Navbar = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
 
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q"))
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") ? searchParams.get("q") : "")
   const [searchProducts, setSearchProducts] = useState([]);
 
   const inputRef = useRef(null)
