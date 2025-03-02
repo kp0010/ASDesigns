@@ -12,7 +12,8 @@ import {
 	getIndividualProduct,
 	deleteProduct,
 	postProduct,
-	getAllCategories
+	getAllCategories,
+
 } from "./routes/products.js"
 
 import {

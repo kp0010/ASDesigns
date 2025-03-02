@@ -17,7 +17,9 @@ import { IoCloudDownloadOutline } from "react-icons/io5";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+
 import styled from "styled-components";
+
 import { useShop } from "@/Context/ShopContext";
 import { useNavigate } from "react-router-dom";
 

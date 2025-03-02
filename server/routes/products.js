@@ -64,6 +64,13 @@ const createGetProductsQuery = (req) => {
 export const getProducts = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
+		const searchQuery = req.query["q"]
+
+		if (searchQuery) {
+			getProdAndCatSearch(req, res)
+			return
+		}
+
 		const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
 
 		const result = await db.query(selectQuery, params)
@@ -80,6 +87,31 @@ export const getProducts = async (req, res) => {
 
 	} catch (error) {
 		console.error("Error Reading Products", error)
+		res.status(500).json({ error: "Internal Server Error" })
+	}
+}
+
+
+const getProdAndCatSearch = async (req, res) => {
+	// Get Products LIMIT 8 and Categories LIMIT 2 with SEARCH
+	try {
+		const searchQuery = req.query["q"]
+
+		if (!searchQuery) {
+			res.status(400).json({ error: "No Search Query Provided" })
+		}
+
+		const selectSearchedProductsQ = "SELECT * FROM search_products_and_categories($1)"
+		const searchResults = await db.query(selectSearchedProductsQ, [searchQuery])
+
+		res.status(200).json({
+			success: true,
+			message: "Products Searched Successfully",
+			products: searchResults.rows
+		})
+
+	} catch (error) {
+		console.error("Error Searching Products", error)
 		res.status(500).json({ error: "Internal Server Error" })
 	}
 }

@@ -28,10 +28,17 @@ export const Navbar = () => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   const navigate = useNavigate();
+
   const { wishlistData, wishlistLoaded } = useShop();
   const { cartData, cartLoaded } = useShop();
+
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+
+  const [searchInput, setSearchInput] = useState("")
+
+  const [searchProducts, setSearchProducts] = useState([])
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -47,7 +54,9 @@ export const Navbar = () => {
         // TODO: Error Handling
       });
   };
+
   const handleProductClick = (productId) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     navigate(`/product/${productId}`);
     setShowWishlist(false); // Close the wishlist dropdown after navigation
   };
@@ -58,6 +67,28 @@ export const Navbar = () => {
     const splitLink = event.currentTarget.href.split("/");
     navigate(splitLink[splitLink.length - 1]);
   };
+
+  const handleSearchChange = (search) => {
+    if (!search.length) {
+      setSearchProducts([])
+      return
+    }
+
+    const params = new URLSearchParams({ "q": search })
+
+    fetch(`/api/products/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json"
+      }
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.success) {
+          setSearchProducts(data.products)
+        }
+      })
+  }
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -90,6 +121,9 @@ export const Navbar = () => {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
+                onFocus={() => { setShowSearch(true) }}
+                onBlur={() => { setShowSearch(false) }}
+                onChange={(e) => { handleSearchChange(e.target.value) }}
               />
               <button
                 className="input-group-text bg-light border-0"
@@ -98,7 +132,41 @@ export const Navbar = () => {
                 <FaSearch className="text-muted" />
               </button>
             </div>
+            {showSearch && (
+              <div
+                className="absolute top-14 w-80 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar"
+              >
+                {searchProducts.length > 0 ? (
+                  searchProducts.map((product, idx) => (
+                    <div
+                      key={idx}
+                      className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+                      onClick={() => handleProductClick(product.product_id)}
+                    >
+                      <img
+                        src={`/Products/${product.product_id}.jpeg`}
+                        className="w-20 h-20 object-cover rounded"
+                        alt={product.name}
+                      />
+                      <div className="ml-3">
+                        <h3 className="text-md font-semibold">
+                          {product["product_id"] + (product["name"] ? " | " + product["name"] : "")}
+                        </h3>
+                        <p className="text-md text-gray-500">
+                          ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500 text-sm">
+                    No items in Cart
+                  </p>
+                )}
+              </div>
+            )}
           </form>
+
           <div className="d-flex align-items-center gap-lg-3 gap-1">
             <div
               className="relative"

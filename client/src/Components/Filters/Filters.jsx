@@ -5,6 +5,7 @@ import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
 import { useState } from 'react';
 import { LuListFilter } from "react-icons/lu";
+import { useNavigate } from 'react-router-dom';
 
 export const Filters = ({ priceRange,
     setPriceRange,
@@ -46,7 +47,11 @@ export const Filters = ({ priceRange,
         "Lightweight Fabric",
     ];
 
+    const navigate = useNavigate()
+
     const handleCheckboxClick = (category) => {
+        navigate("/shop/page/1")
+
         setSelectedFilters((prevFilters) => {
             let newFilters = new Set(prevFilters);
 
