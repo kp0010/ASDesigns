@@ -2,7 +2,7 @@ import "./Navbar.css";
 import "../../App.css";
 import logo from "../../Assets/Logos/AS_logo_b.png";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
@@ -10,7 +10,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useShop } from "@/Context/ShopContext";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import {
   SignedIn,
@@ -36,9 +36,14 @@ export const Navbar = () => {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
-  const [searchInput, setSearchInput] = useState("");
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
 
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q"))
   const [searchProducts, setSearchProducts] = useState([]);
+
+  const inputRef = useRef(null)
+
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -69,12 +74,14 @@ export const Navbar = () => {
   };
 
   const handleSearchChange = (search) => {
+    setSearchQuery(search)
+
     if (!search.length) {
       setSearchProducts([]);
       return;
     }
 
-    const params = new URLSearchParams({ q: search });
+    const params = new URLSearchParams({ q: search, minimal: true });
 
     fetch(`/api/products/?${params.toString()}`, {
       method: "GET",
@@ -90,11 +97,20 @@ export const Navbar = () => {
       });
   };
 
+  const handleSearchEnter = (e) => {
+    e.preventDefault()
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    inputRef.current?.blur()
+    setShowSearch(false)
+    navigate(`/shop/?q=${searchQuery}`)
+  }
+
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       writeUserToDB();
     }
   }, [isLoaded, getToken]);
+
 
   return (
     <nav
@@ -116,19 +132,19 @@ export const Navbar = () => {
           <form className="d-none d-md-flex mx-auto ">
             <div className="input-group">
               <input
+                ref={inputRef}
+                value={searchQuery}
                 className="form-control border-0 bg-light"
-                style={{ width: "18rem", height: "2rem" }}
+                style={{ width: "22rem", height: "2rem" }}
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                onFocus={() => {
-                  setShowSearch(true);
-                }}
-                onBlur={() => {
-                  setShowSearch(false);
-                }}
-                onChange={(e) => {
-                  handleSearchChange(e.target.value);
+                onFocus={() => { setShowSearch(true); }}
+                onBlur={() => { setShowSearch(false); }}
+                onChange={(e) => { handleSearchChange(e.target.value); }}
+                onKeyDown={(e) => {
+                  // e.preventDefault()
+                  if (e.key === "Enter") { handleSearchEnter(e) }
                 }}
               />
               <button
@@ -138,62 +154,50 @@ export const Navbar = () => {
                 <FaSearch className="text-muted" />
               </button>
             </div>
-            {showSearch && (
-              <div className="absolute top-20 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar">
-                {searchProducts.length > 0 ? (
-                  searchProducts.map((product, idx) => {
-                    const isCategory = product.product_id === "category"; // ✅ Dynamically check
+            {showSearch && searchProducts.length > 0 && (
+              <div className="absolute top-16 w-96 bg-white shadow-lg border rounded-md z-50 max-h-80 overflow-y-auto p-3 hidden sm:block no-scrollbar">
+                {searchProducts.map((product, idx) => {
+                  const isCategory = product.product_id === "category";
 
-                    return (
-                      <div
-                        key={idx}
-                        className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md 
-          ${
-            isCategory
-              ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3"
-              : ""
-          }`}
-                        onClick={() => handleProductClick(product.product_id)}
-                      >
-                        {/* // Category specific div  */}
-                        {isCategory ? (
-                          <div>
+                  return (
+                    <div
+                      key={idx}
+                      className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md 
+                                    ${isCategory ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3" : ""}`}
+                      onClick={() => handleProductClick(product.product_id)}
+                    >
+                      {isCategory ? (
+                        <div>
+                          <h3 className="text-md font-semibold">
+                            {product.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            Browse all related products
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <img
+                            src={`/Products/${product.product_id}.jpeg`}
+                            className="w-20 h-20 object-cover rounded"
+                            alt={product.name}
+                          />
+                          <div className="ml-3">
                             <h3 className="text-md font-semibold">
-                              {product.name}
+                              {product["product_id"] +
+                                (product["name"]
+                                  ? " | " + product["name"]
+                                  : "")}
                             </h3>
-                            <p className="text-sm text-gray-500">
-                              Browse all related products
+                            <p className="text-md text-gray-500">
+                              ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
                             </p>
                           </div>
-                        ) : (
-                          // Regular product display 
-                          <>
-                            <img
-                              src={`/Products/${product.product_id}.jpeg`}
-                              className="w-20 h-20 object-cover rounded"
-                              alt={product.name}
-                            />
-                            <div className="ml-3">
-                              <h3 className="text-md font-semibold">
-                                {product["product_id"] +
-                                  (product["name"]
-                                    ? " | " + product["name"]
-                                    : "")}
-                              </h3>
-                              <p className="text-md text-gray-500">
-                                ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
-                              </p>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-center text-gray-500 text-sm">
-                    No items to search
-                  </p>
-                )}
+                        </>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </form>

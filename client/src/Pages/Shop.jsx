@@ -20,15 +20,14 @@ import {
   PaginationPrevious,
 } from "@/Components/ui/pagination"
 
-import { Link, useParams } from "react-router-dom"
+import { Link, useLocation, useParams } from "react-router-dom"
 
 import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
 import { Sort } from '@/Components/Sort/Sort'
 import { Filters } from '@/Components/Filters/Filters'
 
 // WARN: Test Limit
-const PRODUCT_LIMIT = 6
-
+const PRODUCT_LIMIT = 4 * 3
 
 export const Shop = () => {
   const { pageNo } = useParams()
@@ -45,10 +44,14 @@ export const Shop = () => {
 
   const [loaded, setLoaded] = useState(false)
 
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const searchQueryPreset = queryParams.get("q")
 
   const getProducts = ({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
+    if (searchQueryPreset !== null && searchQueryPreset !== undefined) { params.append("q", searchQueryPreset) }
     if (orderBy !== null && orderBy !== undefined) { params.append("orderBy", orderBy) }
     if ((minPrice !== null && minPrice !== undefined)) { params.append("minPrice", minPrice !== null ? minPrice : sortValue[0]) }
     if ((maxPrice !== null && maxPrice !== undefined)) { params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1]) }
@@ -136,7 +139,7 @@ export const Shop = () => {
 
   useEffect(() => {
     getProducts({ orderBy: sortValue, minPrice: priceRange[0], maxPrice: priceRange[1] })
-  }, [pageNo, selectedFilters])
+  }, [pageNo, selectedFilters, location])
 
   useEffect(() => {
     calculatePages(pageNo)

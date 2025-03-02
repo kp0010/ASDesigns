@@ -10,6 +10,8 @@ dotenv.config({ path: "../.env.dev" })
 const createGetProductsQuery = (req) => {
 	const params = []
 
+	const searchQuery = req.query["q"] ? req.query["q"] : ""
+
 	const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
 
 	const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
@@ -20,12 +22,8 @@ const createGetProductsQuery = (req) => {
 
 	const categories = req.query["categories"] ? req.query["categories"].split(",") : []
 
-	let selectQuery = "SELECT * FROM "
-	if (categories.length) {
-		selectQuery += "get_products_by_categories($1)"; params.push(categories)
-	} else {
-		selectQuery += "products"
-	}
+	let selectQuery = "SELECT * FROM search_products($1, $2)"
+	params.push(searchQuery, categories)
 
 	// Add Price Min Max Clauses and Categories
 	const priceClauses = []
@@ -38,7 +36,7 @@ const createGetProductsQuery = (req) => {
 	}
 
 	// Get total Products before Offsets and Limits
-	const totalProductsQuery = `SELECT COUNT(*) FROM ${categories.length ? "get_products_by_categories($1)" : "products"}` +
+	const totalProductsQuery = `SELECT COUNT(*) FROM search_products($1, $2)` +
 		(priceClauses.length !== 0 ? " WHERE " : "") +
 		priceClauses.join(" AND ")
 
@@ -54,8 +52,8 @@ const createGetProductsQuery = (req) => {
 	selectQuery += " ORDER BY " + sortToSql[orderBy]
 
 	// Add Page Offset and Limit
-	selectQuery += pageNo ? ` OFFSET ${pageNo * limit}` : ""
-	selectQuery += limit || pageNo ? ` LIMIT ${limit || 16}` : ""
+	selectQuery += pageNo ? ` OFFSET ${pageNo * limit} ` : ""
+	selectQuery += limit || pageNo ? ` LIMIT ${limit || 16} ` : ""
 
 	return { totalProductsQuery, selectQuery, params }
 }
@@ -64,9 +62,9 @@ const createGetProductsQuery = (req) => {
 export const getProducts = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
-		const searchQuery = req.query["q"]
+		const minimalQuery = req.query["minimal"]
 
-		if (searchQuery) {
+		if (minimalQuery) {
 			getProdAndCatSearch(req, res)
 			return
 		}
