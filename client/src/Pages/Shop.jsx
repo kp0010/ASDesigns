@@ -67,8 +67,8 @@ export const Shop = () => {
     })
       .then(resp => resp.json())
       .then(data => {
-        const minPrice = parseInt(data["minPrice"])
-        const maxPrice = parseInt(data["maxPrice"])
+        const minPrice = parseInt(data["minPrice"] / 50) * 50
+        const maxPrice = parseInt(data["maxPrice"] / 50) * 50
 
         setPriceExtremes([minPrice, maxPrice])
 
@@ -134,6 +134,7 @@ export const Shop = () => {
 
     if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` }) }
 
+    console.log(pageIndexes)
     setPageIndexes(pageIndexes.length > 1 ? pageIndexes : [])
   }
 

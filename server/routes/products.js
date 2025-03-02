@@ -71,6 +71,8 @@ export const getProducts = async (req, res) => {
 
 		const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
 
+		console.log(selectQuery, params)
+
 		const result = await db.query(selectQuery, params)
 		const totalProductsResult = await db.query(totalProductsQuery, params)
 		const priceExtremesResult = await db.query("SELECT MIN(price), MAX(price) FROM products")
