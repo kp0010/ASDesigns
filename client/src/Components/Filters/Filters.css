@@ -1,6 +1,6 @@
 .shop-filters {
     display: flex;
-    /* width: 20%; */
+    width: 20%;
     flex-direction: column;
 }
 
@@ -182,7 +182,21 @@
     margin-bottom: 20px;
 }
 
+@media (min-width: 1850px) {
+
+    .shop-filters {
+        width: 20%;
+    }
+    .shop-filters-laptop {
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 800px) {
+
+    .shop-filters {
+        width: 30%;
+    }
     .shop-filters-laptop {
         justify-content: flex-start;
     }
