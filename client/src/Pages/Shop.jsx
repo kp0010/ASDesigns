@@ -87,9 +87,11 @@ export const Shop = () => {
     const pageIndexes = []
     const bufferLen = 2
     const pageNo = parseInt(pageNoStr ? pageNoStr : "1")
-    const totalPages = parseInt(totalProducts / PRODUCT_LIMIT) + 1
+    const totalPages = Math.ceil(totalProducts / PRODUCT_LIMIT)
 
-    if (pageNo > 1) { pageIndexes.push({ index: "prev", link: `/shop/page/${pageNo - 1}` }) }
+    if (pageNo > 1) {
+      pageIndexes.push({ index: "prev", link: pageNo - 1 !== 1 ? `/shop/page/${pageNo - 1}` : `/shop` })
+    }
 
     let i = 1
 
@@ -115,7 +117,7 @@ export const Shop = () => {
       }
     }
 
-    if (totalPages - bufferLen > 3) {
+    if (totalPages - bufferLen > 0) {
       if (pageNo < (totalPages - (bufferLen * 2) + 1)) { pageIndexes.push({ index: "ellipsis" }) }
 
       for (i = totalPages - bufferLen + 1; i <= totalPages; i++) {
@@ -129,7 +131,6 @@ export const Shop = () => {
 
     if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` }) }
 
-    console.log(pageIndexes)
     setPageIndexes(pageIndexes.length > 1 ? pageIndexes : [])
   }
 

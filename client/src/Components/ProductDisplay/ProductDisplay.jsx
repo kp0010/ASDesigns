@@ -22,6 +22,8 @@ import styled from "styled-components";
 
 import { useShop } from "@/Context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import AddToCart from "../ui/addToCartBtn";
+import Download from "../ui/downloadBtn";
 
 const Container = styled.div`
   position: relative;
@@ -106,12 +108,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     refreshWishlist,
   } = useShop();
 
-  const {
-    cartData,
-    deleteFromCart,
-    addToCart,
-    refreshCart
-  } = useShop()
+  // const {
+  //   cartData,
+  //   deleteFromCart,
+  //   addToCart,
+  //   refreshCart
+  // } = useShop()
 
   const useStableState = value => {
     const [stableValue, setStableValue] = useState(value);
@@ -128,12 +130,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   }
 
   const stableWishlistData = useStableState(wishlistData)
-  const stableCartData = useStableState(cartData)
+  // const stableCartData = useStableState(cartData)
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
-  const [cartCurrent, setCartCurrent] = useState(false)
+  // const [cartCurrent, setCartCurrent] = useState(false)
 
-  const [cartText, setCartText] = useState("Add to Cart")
+  // const [cartText, setCartText] = useState("Add to Cart")
 
 
   const toggleWishlist = () => {
@@ -162,33 +164,33 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     refreshWishlist();
   };
 
-  const toggleCart = () => {
-    if (cartCurrent) {
-      setCartCurrent(false);
-      deleteFromCart(product.product_id);
-
-      toast.info("Removed from Cart")
-    } else {
-      setCartCurrent(true);
-      addToCart(product.product_id, product.price);
-
-      toast.success("Added to Cart")
-    }
-    refreshCart();
-  }
+  // const toggleCart = () => {
+  //   if (cartCurrent) {
+  //     setCartCurrent(false);
+  //     deleteFromCart(product.product_id);
+  //
+  //     toast.info("Removed from Cart")
+  //   } else {
+  //     setCartCurrent(true);
+  //     addToCart(product.product_id, product.price);
+  //
+  //     toast.success("Added to Cart")
+  //   }
+  //   refreshCart();
+  // }
 
   const navigate = useNavigate()
   const buyNow = () => {
     navigate(`/cart/?buyNow=${productId}`)
   }
 
-  useEffect(() => {
-    const foundCartProduct = stableCartData.find((prod) => prod.product_id === productId)
-
-    setCartCurrent(foundCartProduct !== undefined)
-
-    setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
-  }, [productId, stableCartData]);
+  // useEffect(() => {
+  //   const foundCartProduct = stableCartData.find((prod) => prod.product_id === productId)
+  //
+  //   setCartCurrent(foundCartProduct !== undefined)
+  //
+  //   setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
+  // }, [productId, stableCartData]);
 
 
   useEffect(() => {
@@ -303,12 +305,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex">
             <div className="buy-btns">
-              <Button onClick={toggleCart} className={`mr-3 w-72 md:mb-3 ${!cartCurrent ? "bg-black" : "bg-[#333333]"}`}>
-                < IoCartOutline /> {cartText}
-              </Button>
-              <Button onClick={buyNow} className="w-72 mr-3 md:mb-3 bg-[#e3c756]">
-                <IoCloudDownloadOutline /> Download
-              </Button>
+              <AddToCart className="mr-3 w-72 md:mb-3" product={product} />
+              <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id} />
             </div>
             <Button
               onClick={toggleWishlist}
@@ -400,14 +398,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           {/* Buttons */}
           <div className="buy-section flex flex-col items-center mt-5 space-y-3">
-            <Button onClick={toggleCart} className={`w-full bg-black flex items-center justify-center ${!cartCurrent ? "bg-black" : "bg-[#333333]"}`}>
-              <IoCartOutline className="mr-2" />
-              {cartText}
-            </Button>
-            <Button onClick={buyNow} className="w-full bg-[#e3c756] flex items-center justify-center">
-              <IoCloudDownloadOutline className="mr-2" />
-              Download
-            </Button>
+            <AddToCart className="w-full bg-black flex items-center justify-center" product={product} />
+            <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id} />
 
             <Button
               onClick={toggleWishlist}

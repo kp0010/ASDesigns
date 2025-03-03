@@ -1,3 +1,7 @@
+.offcanvas {
+    width: 65% !important
+}
+
 .shop-filters {
     display: flex;
     width: 20%;
@@ -187,6 +191,7 @@
     .shop-filters {
         width: 20%;
     }
+
     .shop-filters-laptop {
         justify-content: flex-start;
     }
@@ -197,6 +202,7 @@
     .shop-filters {
         width: 30%;
     }
+
     .shop-filters-laptop {
         justify-content: flex-start;
     }

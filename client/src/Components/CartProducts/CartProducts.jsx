@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { FaRegTrashAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IoCloudDownloadOutline } from "react-icons/io5";
 
@@ -9,6 +8,8 @@ import { useShop } from "@/Context/ShopContext";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 
 import { toast } from "sonner";
+
+import CartProductItem from "./CartProductItem";
 
 export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -75,57 +76,14 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
               (!buyNowProductId || buyNowProduct) &&
               { true: [buyNowProduct], false: cartData }[!!buyNowProductId].map(
                 (product, idx) => (
-                  <div
-                    key={idx}
-                    className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none"
-                  >
-                    <Link
-                      to={`/product/${product.product_id}`}
-                      onClick={handleClick}
-                    >
-                      <div className="mt-4">
-                        <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
-                          <img
-                            src={`/Products/${product.product_id}.jpeg`}
-                            className="product-display-main-img rounded-lg"
-                            alt=""
-                          />
-                        </div>
-                      </div>
-                    </Link>
-
-                    <div className="md:ml-6 flex flex-col items-center md:items-start text-center md:text-left w-full">
-                      <Link
-                        to={`/product/${product.product_id}`}
-                        onClick={handleClick}
-                      >
-                        <h2 className="text-2xl mt-4 break-words">
-                          {product.product_id +
-                            (product["name"] ? " | " + product["name"] : "")}
-                        </h2>
-                      </Link>
-
-                      <div className="price flex flex-col md:flex-row mt-3 items-center">
-                        <h1 className="new-price font-bold text-2xl md:mr-4">
-                          ₹ {(parseFloat(product.price) - 1.0).toFixed(2)}
-                        </h1>
-                        <h1 className="old-price text-xl line-through">
-                          ₹{(parseFloat(product.price) + 200.0).toFixed(2)}
-                        </h1>
-                        <h3 className="text-xl md:ml-3">(-40% off)</h3>
-                      </div>
-
-                      <div className="remove-sec mt-3">
-                        {!buyNowProductId && (
-                          <Button
-                            onClick={() => removeFromCart(product.product_id)}
-                            className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
-                          >
-                            <FaRegTrashAlt /> Remove
-                          </Button>
-                        )}
-                      </div>
-                    </div>
+                  <div className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none" >
+                    <CartProductItem
+                      key={idx}
+                      product={product}
+                      handleClick={handleClick}
+                      removeFromCart={removeFromCart}
+                      buyNowProductId={buyNowProductId}
+                    />
                   </div>
                 )
               )}

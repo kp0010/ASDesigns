@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -6,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/Components/ui/dialog";
-import { PiEyeDuotone } from "react-icons/pi";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,12 +16,13 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
+
 import { Badge } from "../ui/badge";
-import { useEffect, useState } from "react";
-import React from "react";
+
 import { CgFormatSlash } from "react-icons/cg";
-import { Button } from "../ui/button";
-import { IoCartOutline, IoCloudDownloadOutline } from "react-icons/io5";
+
+import AddToCart from "../ui/addToCartBtn";
+import Download from "../ui/downloadBtn";
 
 const ProductModal = ({ product, triggerButton }) => {
   const [categories, setCategories] = useState([]);
@@ -97,15 +100,8 @@ const ProductModal = ({ product, triggerButton }) => {
               ))}
             </div>
             <div className="buy-section">
-              <Button
-                // onClick={toggleCart}
-                className={`w-60 md:mb-3 ml-10 mt-5 bg-black`}
-              >
-                <IoCartOutline /> Add to Cart
-              </Button>
-              <Button className="w-60 md:mb-3 bg-[#e3c756] ml-10 mt-5">
-                <IoCloudDownloadOutline /> Download
-              </Button>
+              <AddToCart className="w-60 md:mb-3 ml-10 mt-5" product={product} />
+              <Download className="w-60 md:mb-3 bg-[#e3c756] ml-10 mt-5" productId={product.product_id} />
             </div>
           </div>
         </div>

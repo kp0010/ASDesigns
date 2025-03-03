@@ -228,7 +228,7 @@ export const Filters = ({ priceRange,
                 </button>
                 <div
                     // TODO: adjust width
-                    className="offcanvas offcanvas-start w-50"
+                    className="offcanvas offcanvas-start"
                     tabIndex="-1"
                     id="filtersOffcanvas"
                     aria-labelledby="filtersOffcanvasLabel"
