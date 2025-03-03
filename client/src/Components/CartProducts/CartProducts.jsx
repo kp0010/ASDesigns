@@ -90,7 +90,7 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
           </div>
 
           {/* Order Summary (Separate Like Before) */}
-          <div className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly p-6 w-full lg:w-[400px] lg:h-[250px] lg:mt-0 lg:ml-10">
+          <div className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly p-6 w-full lg:w-[400px] lg:h-[250px] lg:mt-0 lg:ml-10 xs:mt-5 sm:mt-10 ">
             <h2 className="text-xl font-bold pt-4 md:pt-0">Order Summary</h2>
 
             {/* Price Section with Left-Right Alignment */}
