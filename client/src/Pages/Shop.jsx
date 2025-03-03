@@ -163,163 +163,61 @@ export const Shop = () => {
         </Breadcrumb>
       </div>
 
-      {/* sorting combobox */}
-      <div className="shop-sort">
-        <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
-        {/* <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="w-[200px] justify-between"
-            >
-              {sortValue
-                ? sortOptions.find((sortOption) => sortOption.value === sortValue)?.label
-                : "Sort by..."}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0">
-            <Command>
-              <CommandInput placeholder="Sort by..." />
-              <CommandList>
-                <CommandEmpty>No Sort by found.</CommandEmpty>
-                <CommandGroup>
-                  {sortOptions.map((sortOption) => (
-                    <CommandItem
-                      key={sortOption.value}
-                      value={sortOption.value}
-                      onSelect={(currentValue) => {
-                        setSortValue(currentValue === sortValue ? "" : currentValue)
-                        if (currentValue !== sortValue) {
-                          getProducts({
-                            orderBy: currentValue,
-                            minPrice: priceRange[0],
-                            maxPrice: priceRange[1]
-                          })
-                        }
-                        setOpen(false)
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          sortValue === sortOption.value ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {sortOption.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover> */}
-      </div>
-
-      <div className="shop-main">
-        <Filters
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          priceExtremes={priceExtremes}
-          getProducts={getProducts}
-          sortValue={sortValue}
-          productLength={productData.length}
-          totalProducts={totalProducts}
-          setSelectedFilters={setSelectedFilters}
-          selectedFilters={selectedFilters}
-          className="shop-filter"
-        />
-        {/* <div className="shop-filters">
-          <div className="shop-filters-head">
-            <h2>Filters</h2>
-          </div>
-          <span className='mt-2'>{`Showing ${productData.length} Results Out Of ${totalProducts !== 0 && totalProducts}`}</span>
-          <div className="shop-filters-category">
-            <h2>Category</h2>
-            <ul className="shop-flters-ul">
-              <li>
-                <label htmlFor="" className="shop-filters-label">
-                  <input type="checkbox" />
-                  <span className="checkmark" onClick={handleCheckboxClick}></span>
-                  <span className="shop-filters-label-name">Sports</span>
-                </label>
-              </li>
-              <ul className="shop-filters-ul-inner">
-                {sports.map((sport, index) => (
-                  <li key={index}>
-                    <label htmlFor="" className="shop-filters-label">
-                      <input type="checkbox" />
-                      <span className="checkmark" onClick={handleCheckboxClick}></span>
-                      <span className="shop-filters-label-name">{sport}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-              <li>
-                <label htmlFor="" className="shop-filters-label">
-                  <input type="checkbox" />
-                  <span className="checkmark" onClick={handleCheckboxClick}></span>
-                  <span className="shop-filters-label-name">Festivals</span>
-                </label>
-              </li>
-              <ul className="shop-filters-ul-inner">
-                {festivals.map((festival, index) => (
-                  <li key={index}>
-                    <label htmlFor="" className="shop-filters-label">
-                      <input type="checkbox" />
-                      <span className="checkmark" onClick={handleCheckboxClick}></span>
-                      <span className="shop-filters-label-name">{festival}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </ul>
-          </div>
-          <div className="shop-filters-price">
-            <h2>Price</h2>
-            <div className="shop-filters-price-range">
-              <span>{priceRange[0]}</span>
-              <span>{priceRange[1]}</span>
-            </div>
-            <Slider
-              value={priceRange}
-              onValueChange={setPriceRange}
-
-              onValueCommit={(...args) => getProducts({
-                orderBy: sortValue,
-                minPrice: args[0][0],
-                maxPrice: args[0][1]
-              })}
-
-              min={priceExtremes[0] - 50}
-              max={priceExtremes[1] + 50}
-
-              step={50}
-              minStepsBetweenThumbs={1}
-
-              className={cn('w-[90%]', className)} />
-          </div>
-          <div className="shop-filters-tags">
-            <h2>Tags</h2>
-            <div className="shop-filters-tags-content">
-              {tags.map((tag, index) => (
-                <Badge key={index} className="shop-filters-tags-badge">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </div> */}
-
-
-        <div className="shop-content products-grid-container" style={{ "textAlign": "center" }}>
-          {loaded && productData.map((product, idx) => (
-            <Shop_Item key={idx} product={product} />
-          ))}
+      {/* For large screens  */}
+      <div className="shop-main hidden md:block">
+        <div className="shop-sort">
+          <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
         </div>
 
+        <div className="shop-content">
+          <Filters
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            priceExtremes={priceExtremes}
+            getProducts={getProducts}
+            sortValue={sortValue}
+            productLength={productData.length}
+            totalProducts={totalProducts}
+            setSelectedFilters={setSelectedFilters}
+            selectedFilters={selectedFilters}
+            className="shop-filter"
+          />
+
+          <div className="products-grid-container" style={{ "textAlign": "center" }}>
+            {loaded && productData.map((product, idx) => (
+              <Shop_Item key={idx} product={product} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* For Small Screens  */}
+      <div className="shop-main-mobile md:hidden">
+        <div className="shop-sort-filter flex justify-center items-center pt-3">
+          <Filters
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            priceExtremes={priceExtremes}
+            getProducts={getProducts}
+            sortValue={sortValue}
+            productLength={productData.length}
+            totalProducts={totalProducts}
+            setSelectedFilters={setSelectedFilters}
+            selectedFilters={selectedFilters}
+            className="shop-filter"
+          />
+          <div className="shop-sort">
+            <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
+          </div>
+        </div>
+
+        <div className="shop-content">
+          <div className="products-grid-container" style={{ "textAlign": "center" }}>
+            {loaded && productData.map((product, idx) => (
+              <Shop_Item key={idx} product={product} />
+            ))}
+          </div>
+        </div>
       </div>
 
       <Pagination className="mb-10">

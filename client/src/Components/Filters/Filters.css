@@ -11,7 +11,7 @@
 .shop-filters-laptop {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
     height: 100%;
     z-index: 3;
@@ -175,7 +175,8 @@
     padding: 5px 10px 5px 5px;
     background-color: #262626;
     color: #ffffff;
-    margin-left: 15px;
+    margin-top: 10px;
+    margin-left: 32px;
     margin-bottom: 10px;
     font-weight: 500;
 }
@@ -194,6 +195,27 @@
 
     .shop-filters-laptop {
         justify-content: flex-start;
+    }
+
+    .shop-filters-head {
+        font-size: 40px;
+        border-bottom: 2px solid #e4e4e4;
+    }
+
+    .shop-filters-category {
+        font-size: 25px;
+    }
+
+    .shop-filters-ul {
+        font-size: 18px;
+    }
+
+    .shop-filters-price {
+        font-size: 25px;
+    }
+
+    .shop-filters-tags {
+        font-size: 25px;
     }
 }
 
