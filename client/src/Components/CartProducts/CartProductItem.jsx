@@ -22,7 +22,7 @@ const CartProductItem = ({ product, handleClick, removeFromCart, buyNowProductId
       initial={{ opacity: 1, scale: 1 }}
       animate={{ opacity: isRemoving ? 0 : 1, scale: isRemoving ? 0.8 : 1 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3 p-4"
+      className="cards bg-white pt-2 w-[90%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3"
     >
       <Link
         to={`/product/${product.product_id}`}
@@ -39,7 +39,7 @@ const CartProductItem = ({ product, handleClick, removeFromCart, buyNowProductId
         </div>
       </Link>
 
-      <div className="md:ml-6 flex flex-col items-center md:items-start text-center md:text-left w-full">
+      <div className="md:ml-10 flex flex-col items-center justify-start md:items-start text-center md:text-left w-full">
         <Link
           to={`/product/${product.product_id}`}
           onClick={handleClick}
