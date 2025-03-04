@@ -255,7 +255,18 @@
     }
 }
 
-@media (max-width: 450px) {
+@media (min-width: 620px) and (max-width:700px) {
+    .shop_item {
+        width: 260px;
+    }
+
+    .shop_item-image img {
+        width: 230px;
+        height: 230px;
+    }
+}
+
+@media (max-width: 520px) {
     .shop_item {
         width: 190px;
     }
