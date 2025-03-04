@@ -180,6 +180,7 @@ export const Shop = () => {
             totalProducts={totalProducts}
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
+            filterSidebarRender={false}
             className="shop-filter"
           />
 
@@ -204,6 +205,7 @@ export const Shop = () => {
             totalProducts={totalProducts}
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
+            filterSidebarRender={true}
             className="shop-filter"
           />
           <div className="shop-sort">

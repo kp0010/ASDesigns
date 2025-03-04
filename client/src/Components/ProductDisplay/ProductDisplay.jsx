@@ -12,8 +12,6 @@ import { toast } from "sonner";
 import anim from "./anim.json";
 import Lottie from "lottie-react";
 
-import { IoCartOutline } from "react-icons/io5";
-import { IoCloudDownloadOutline } from "react-icons/io5";
 import { CgFormatSlash } from "react-icons/cg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -108,13 +106,6 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     refreshWishlist,
   } = useShop();
 
-  // const {
-  //   cartData,
-  //   deleteFromCart,
-  //   addToCart,
-  //   refreshCart
-  // } = useShop()
-
   const useStableState = value => {
     const [stableValue, setStableValue] = useState(value);
     const ref = useRef(value);
@@ -130,15 +121,10 @@ export const ProductDisplay = ({ productId, product, categories }) => {
   }
 
   const stableWishlistData = useStableState(wishlistData)
-  // const stableCartData = useStableState(cartData)
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
-  // const [cartCurrent, setCartCurrent] = useState(false)
 
-  // const [cartText, setCartText] = useState("Add to Cart")
-
-
-  const toggleWishlist = () => {
+  const toggleWishlist = async () => {
     setWishlistCurrent(!wishlistCurrent);
 
     [lottieRefLarge, lottieRefSmall].forEach(ref => {
@@ -156,41 +142,13 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
     if (wishlistCurrent) {
       setWishlistCurrent(false);
-      deleteFromWishlist(product.product_id);
+      await deleteFromWishlist(product.product_id);
     } else {
       setWishlistCurrent(true);
-      addToWishlist(product.product_id);
+      await addToWishlist(product.product_id);
     }
     refreshWishlist();
   };
-
-  // const toggleCart = () => {
-  //   if (cartCurrent) {
-  //     setCartCurrent(false);
-  //     deleteFromCart(product.product_id);
-  //
-  //     toast.info("Removed from Cart")
-  //   } else {
-  //     setCartCurrent(true);
-  //     addToCart(product.product_id, product.price);
-  //
-  //     toast.success("Added to Cart")
-  //   }
-  //   refreshCart();
-  // }
-
-  const navigate = useNavigate()
-  const buyNow = () => {
-    navigate(`/cart/?buyNow=${productId}`)
-  }
-
-  // useEffect(() => {
-  //   const foundCartProduct = stableCartData.find((prod) => prod.product_id === productId)
-  //
-  //   setCartCurrent(foundCartProduct !== undefined)
-  //
-  //   setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
-  // }, [productId, stableCartData]);
 
 
   useEffect(() => {
@@ -221,7 +179,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         lottieRefSmall.current.goToAndStop(30, true);
       }, 800);
     }
-  }, [productId, stableWishlistData])
+  }, [productId])
 
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 

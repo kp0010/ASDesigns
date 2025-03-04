@@ -22,8 +22,7 @@ export const Shop_Item = ({ product }) => {
     refreshWishlist,
   } = useShop();
 
-  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } =
-    useShop();
+  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } = useShop();
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false);
@@ -41,11 +40,11 @@ export const Shop_Item = ({ product }) => {
 
   const toggleCart = () => {
     if (cartCurrent) {
-      // setCartCurrent(false);
+      setCartCurrent(false);
       deleteFromCart(product.product_id);
       toast.info("Removed from Cart");
     } else {
-      // setCartCurrent(true);
+      setCartCurrent(true);
       addToCart(product.product_id, product.price);
       toast.success("Added to Cart");
     }
@@ -62,7 +61,7 @@ export const Shop_Item = ({ product }) => {
 
     setWishlistCurrent(foundWSProd != undefined);
     setCartCurrent(foundCartProd != undefined);
-  }, [cartData, wishlistData, product_id]);
+  }, [product_id]);
 
   const navigate = useNavigate();
 

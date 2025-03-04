@@ -16,6 +16,7 @@ export const Filters = ({ priceRange,
     totalProducts,
     selectedFilters,
     setSelectedFilters,
+    filterSidebarRender
 }) => {
 
     const [categories, setCategories] = useState([])
@@ -215,76 +216,78 @@ export const Filters = ({ priceRange,
             </div>
 
             {/* filters for mobile and tab  */}
-            <div className="shop-filters-mobile">
-                {/* TODO: design a button  */}
-                <button
-                    className="filter-button"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#filtersOffcanvas"
-                    aria-controls="filtersOffcanvas"
-                >
-                    <LuListFilter className="m-1 ml-0" />Filters
-                </button>
-                <div
-                    // TODO: adjust width
-                    className="offcanvas offcanvas-start"
-                    tabIndex="-1"
-                    id="filtersOffcanvas"
-                    aria-labelledby="filtersOffcanvasLabel"
-                >
-                    <div className="offcanvas-header shadow-md">
-                        <h5 id="filtersOffcanvasLabel" className="text-3xl ">Filters</h5>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div className="offcanvas-body">
-                        <span className='mt-1'>Showing {productLength} Results out of {totalProducts}</span>
-                        <h2 className="shop-filters-category text-2xl font-medium">Category</h2>
-                        <ul className="filter-list">
-                            {categories.length > 0 && renderCategories(categories)}
-                        </ul>
-                        <div className="shop-filters-price">
-                            <h2>Price</h2>
-                            <div className="shop-filters-price-range">
-                                <span>{priceRange[0]}</span>
-                                <span>{priceRange[1]}</span>
-                            </div>
-                            <Slider
-                                value={priceRange}
-                                onValueChange={setPriceRange}
-                                onValueCommit={(...args) =>
-                                    getProducts({
-                                        orderBy: sortValue,
-                                        minPrice: args[0][0],
-                                        maxPrice: args[0][1],
-                                    })
-                                }
-                                min={priceExtremes[0] - 50}
-                                max={priceExtremes[1] + 50}
-                                step={50}
-                                minStepsBetweenThumbs={1}
-                                className="w-[90%]"
-                            />
+            {filterSidebarRender &&
+                <div className="shop-filters-mobile">
+                    {/* TODO: design a button  */}
+                    <button
+                        className="filter-button"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#filtersOffcanvas"
+                        aria-controls="filtersOffcanvas"
+                    >
+                        <LuListFilter className="m-1 ml-0" />Filters
+                    </button>
+                    <div
+                        // TODO: adjust width
+                        className="offcanvas offcanvas-start"
+                        tabIndex="-1"
+                        id="filtersOffcanvas"
+                        aria-labelledby="filtersOffcanvasLabel"
+                    >
+                        <div className="offcanvas-header shadow-md">
+                            <h5 id="filtersOffcanvasLabel" className="text-3xl ">Filters</h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"
+                            ></button>
                         </div>
+                        <div className="offcanvas-body">
+                            <span className='mt-1'>Showing {productLength} Results out of {totalProducts}</span>
+                            <h2 className="shop-filters-category text-2xl font-medium">Category</h2>
+                            <ul className="filter-list">
+                                {categories.length > 0 && renderCategories(categories)}
+                            </ul>
+                            <div className="shop-filters-price">
+                                <h2>Price</h2>
+                                <div className="shop-filters-price-range">
+                                    <span>{priceRange[0]}</span>
+                                    <span>{priceRange[1]}</span>
+                                </div>
+                                <Slider
+                                    value={priceRange}
+                                    onValueChange={setPriceRange}
+                                    onValueCommit={(...args) =>
+                                        getProducts({
+                                            orderBy: sortValue,
+                                            minPrice: args[0][0],
+                                            maxPrice: args[0][1],
+                                        })
+                                    }
+                                    min={priceExtremes[0] - 50}
+                                    max={priceExtremes[1] + 50}
+                                    step={50}
+                                    minStepsBetweenThumbs={1}
+                                    className="w-[90%]"
+                                />
+                            </div>
 
-                        <div className="shop-filters-tags">
-                            <h2>Tags</h2>
-                            <div className="shop-filters-tags-content">
-                                {tags.map((tag, index) => (
-                                    <Badge key={index} className="shop-filters-tags-badge">
-                                        {tag}
-                                    </Badge>
-                                ))}
+                            <div className="shop-filters-tags">
+                                <h2>Tags</h2>
+                                <div className="shop-filters-tags-content">
+                                    {tags.map((tag, index) => (
+                                        <Badge key={index} className="shop-filters-tags-badge">
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     );
 };

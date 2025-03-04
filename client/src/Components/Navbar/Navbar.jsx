@@ -368,92 +368,94 @@ export const Navbar = () => {
               </span>
             </div>
           </form>
-          <button
-            className="navbar-toggler ms-2 flex-shrink-0"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasNavbar"
-            aria-controls="offcanvasNavbar"
-            aria-label="Toggle navigation"
-            style={{ width: "20%" }}
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div
-            className="offcanvas offcanvas-end w-50"
-            tabIndex="-1"
-            id="offcanvasNavbar"
-            aria-labelledby="offcanvasNavbarLabel"
-          >
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-                Welcome{isLoaded && isSignedIn ? ", " + user.firstName : null}
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="offcanvas-body bg-[#dcdada]">
-              <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link active"
-                    aria-current="page"
-                    to="/"
-                    onClick={handleClick}
-                  >
-                    Home
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/shop"
-                    onClick={handleClick}
-                  >
-                    Shop
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/sports"
-                    onClick={handleClick}
-                  >
-                    Sports
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/festival"
-                    onClick={handleClick}
-                  >
-                    Festival
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/others"
-                    onClick={handleClick}
-                  >
-                    Others
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to="/about"
-                    onClick={handleClick}
-                  >
-                    About
-                  </NavLink>
-                </li>
-              </ul>
+
+          <div className="shop-filters-mobile">
+            <button
+              className="navbar-toggler ms-2 flex-shrink-0"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div
+              className="offcanvas offcanvas-end w-50"
+              tabIndex="-1"
+              id="offcanvasNavbar"
+              aria-labelledby="offcanvasNavbarLabel"
+            >
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
+                  Welcome{isLoaded && isSignedIn ? ", " + user.firstName : null}
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="offcanvas-body bg-[#dcdada]">
+                <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link active"
+                      aria-current="page"
+                      to="/"
+                      onClick={handleClick}
+                    >
+                      Home
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/shop"
+                      onClick={handleClick}
+                    >
+                      Shop
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/sports"
+                      onClick={handleClick}
+                    >
+                      Sports
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/festival"
+                      onClick={handleClick}
+                    >
+                      Festival
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/others"
+                      onClick={handleClick}
+                    >
+                      Others
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/about"
+                      onClick={handleClick}
+                    >
+                      About
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

@@ -89,6 +89,7 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
 		const productId = splitLink[splitLink.length - 1];
 		navigate(`/product/${productId}`);
 	};
+
 	return (
 		<CarouselItem
 			className="car-con md:basis-1/2 pl-4 lg:basis-1/3 xl:basis-1/4 "
@@ -100,18 +101,16 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
 							<img src={`/Products/${product.product_id}.jpeg`} alt="..." />
 						</Link>
 						<div className="carousel_item-hover-container">
-							<Link to="/cart">
-								<button onClick={toggleCart} className="carousel_item-icons-container d-flex rounded-full">
-									<i>
-										{cartLoaded && cartCurrent ? (
-											<IoCart className="item-icon" />
-										) : (
-											<IoCartOutline className="item-icon" />
-										)}
-									</i>
-									<span className="carousel_item-icon-tag">Add to Cart</span>
-								</button>
-							</Link>
+							<button onClick={toggleCart} className="carousel_item-icons-container d-flex rounded-full">
+								<i>
+									{cartLoaded && cartCurrent ? (
+										<IoCart className="item-icon" />
+									) : (
+										<IoCartOutline className="item-icon" />
+									)}
+								</i>
+								<span className="carousel_item-icon-tag">Add to Cart</span>
+							</button>
 
 							<ProductModal
 								product={product}

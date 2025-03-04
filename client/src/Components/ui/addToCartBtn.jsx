@@ -32,15 +32,19 @@ const AddToCart = ({ className, product, ...props }) => {
   const [cartCurrent, setCartCurrent] = useState(false)
   const [cartText, setCartText] = useState("Add to Cart")
 
-  const toggleCart = () => {
+  const toggleCart = async () => {
     if (cartCurrent) {
+      console.log(cartCurrent, "DELETE")
+      await deleteFromCart(product.product_id);
       setCartCurrent(false);
-      deleteFromCart(product.product_id);
+      setCartText("Add to Cart")
 
       toast.info("Removed from Cart")
     } else {
+      console.log(cartCurrent, "ADD")
+      await addToCart(product.product_id, product.price);
       setCartCurrent(true);
-      addToCart(product.product_id, product.price);
+      setCartText("Remove from Cart")
 
       toast.success("Added to Cart")
     }
@@ -52,7 +56,7 @@ const AddToCart = ({ className, product, ...props }) => {
     setCartCurrent(foundCartProduct !== undefined)
 
     setCartText((foundCartProduct !== undefined) ? "Remove from Cart" : "Add to Cart")
-  }, [product, stableCartData]);
+  }, [product,]);
 
 
   return (
