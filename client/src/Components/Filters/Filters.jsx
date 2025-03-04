@@ -218,7 +218,6 @@ export const Filters = ({ priceRange,
             {/* filters for mobile and tab  */}
             {filterSidebarRender &&
                 <div className="shop-filters-mobile">
-                    {/* TODO: design a button  */}
                     <button
                         className="filter-button"
                         type="button"
@@ -229,7 +228,6 @@ export const Filters = ({ priceRange,
                         <LuListFilter className="m-1 ml-0" />Filters
                     </button>
                     <div
-                        // TODO: adjust width
                         className="offcanvas offcanvas-start"
                         tabIndex="-1"
                         id="filtersOffcanvas"
