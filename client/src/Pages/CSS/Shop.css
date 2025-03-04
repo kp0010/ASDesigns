@@ -58,6 +58,22 @@
     }
 }
 
+@media (min-width: 1200px) and (max-width: 1400px) {
+    .products-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        width: 80%;
+        padding-left: 30px;
+    }
+
+    .shop-sort {
+        padding-right: 100px;
+    }
+
+    .shop-content {
+        padding-left: 35px;
+    }
+}
+
 @media (max-width: 1200px) {
     .products-grid-container {
         grid-template-columns: repeat(3, 1fr);
@@ -72,9 +88,10 @@
     }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 960px) {
     .products-grid-container {
         grid-template-columns: repeat(2, 1fr);
+        width: 70%;
     }
 
     .shop-sort {
@@ -90,6 +107,73 @@
     }
 }
 
+@media (min-width: 700px) {
+    .shop-main {
+        display: block;
+    }
+}
+
+@media (max-width:700px) {
+    .shop-content {
+        padding-top: 35px;
+    }
+
+    .products-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        width: 100%;
+        padding-left: 20px;
+    }
+}
+
+@media (min-width: 520px) and (max-width:590px) {
+    .shop-sort {
+        padding: 10px;
+        padding-right: 20px;
+    }
+
+    .shop-filter {
+        width: 100%;
+    }
+
+    .shop-content {
+        flex-direction: column;
+        padding: 25px;
+    }
+
+    .products-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        width: 100%;
+        padding: 0;
+    }
+}
+
+@media (min-width: 451px) and (max-width: 520px) {
+    .shop-sort {
+        padding: 10px;
+        padding-right: 30px;
+    }
+
+    .shop-filter {
+        width: 100%;
+    }
+
+    .shop-content {
+        flex-direction: column;
+        padding: 15px;
+        padding-left: 40px;
+    }
+
+    .products-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        width: 100%;
+        padding: 0;
+    }
+}
+
+
 @media (max-width: 450px) {
     .shop-sort {
         padding: 10px;
@@ -102,13 +186,12 @@
 
     .shop-content {
         flex-direction: column;
-        padding-left: 15px;
         padding: 15px;
     }
 
     .products-grid-container {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0px;
+        gap: 5px;
         width: 100%;
         padding: 0;
     }
