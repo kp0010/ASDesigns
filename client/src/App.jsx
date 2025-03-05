@@ -15,6 +15,7 @@ import { Cart } from "./Pages/Cart";
 import { Wishlist } from "./Pages/Wishlist";
 
 import { Toaster } from "sonner";
+import { Checkout } from "./Pages/Checkout";
 
 
 function App() {
@@ -42,6 +43,7 @@ const RoutesList = () => {
       </Route>
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   )
 }
