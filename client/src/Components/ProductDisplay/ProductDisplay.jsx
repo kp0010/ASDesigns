@@ -32,7 +32,13 @@ const Container = styled.div`
   height: 500px;
   border-radius: 15px;
   cursor: crosshair;
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    width: 400px;
+    height: 400px;
+  }
 `;
+
 
 const Image = styled.img.attrs((props) => ({
   src: props.source,
@@ -215,12 +221,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
           </Container>
         </div>
 
-        <div className="product-display-right xl:ml-28 lg:ml-16 md:ml-8">
+        <div className="product-display-right xl:ml-28 lg:ml-16 md:ml-8 product-text-center">
           <h2 className="text-4xl mt-4">
             {productId + (product["name"] ? " | " + product["name"] : "")}
           </h2>
 
-          <div className="price flex mt-3 items-center">
+          <div className="price flex mt-3">
             <h1 className="new-price font-bold text-3xl mr-4">
               ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
             </h1>
@@ -264,12 +270,12 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex wishlist-wrap">
             <div className="buy-btns">
-              <AddToCart className="mr-3 w-72 md:mb-3" product={product} />
-              <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id} />
+              <AddToCart className="mr-3 w-72 md:mb-3" product={product}/>
+              <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id}/>
             </div>
             <Button
               onClick={toggleWishlist}
-              className="bg-white text-black border-black border-2 md:mb-3 pt-0  "
+              className="bg-white text-black border-black border-2 md:mb-3 pt-0"
             >
               {wishlistCurrent ? (
                 <Lottie
@@ -296,7 +302,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
       </div >
 
       {/* Small Screens (<md) Layout */}
-      < div className="md:hidden productDisplay flex flex-col items-center p-4" >
+      <div className="md:hidden productDisplay flex flex-col items-center p-4">
         <div className="w-full flex justify-center">
           <div className="productDiplay-img s:h-[350px] w-[350px]">
             <img
@@ -357,8 +363,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           {/* Buttons */}
           <div className="buy-section flex flex-col items-center mt-5 space-y-3">
-            <AddToCart className="w-full bg-black flex items-center justify-center" product={product} />
-            <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id} />
+            <AddToCart className="w-full bg-black flex items-center justify-center" product={product}/>
+            <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id}/>
 
             <Button
               onClick={toggleWishlist}
@@ -386,8 +392,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               Wishlist
             </Button>
           </div>
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   );
 };

@@ -4,3 +4,26 @@
     }
   }
   
+  @media (min-width: 768px) and (max-width: 1024px) {
+    
+    
+    .buy-section {
+      align-items: center !important;
+      flex-direction: column !important;
+    }
+    .productDisplay{
+        align-items: center;
+        text-align: center;
+    }
+    .tags{
+        justify-content: center;
+    }
+    .category{
+        justify-content: center;
+    }
+    .price{
+        justify-content: center;
+    }
+
+  }
+  
