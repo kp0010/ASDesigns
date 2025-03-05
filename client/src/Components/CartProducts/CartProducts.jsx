@@ -6,6 +6,7 @@ import { IoCloudDownloadOutline } from "react-icons/io5";
 
 import { useShop } from "@/Context/ShopContext";
 import { useAuth, useClerk } from "@clerk/clerk-react";
+import styled from "styled-components";
 
 import { toast } from "sonner";
 
@@ -48,6 +49,13 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
   }, [isLoaded, isSignedIn, price]);
 
   const navigate = useNavigate();
+  const StyledDiv = styled.div`
+    margin-top: 1.25rem; /* Default for small screens */
+
+    @media (min-width: 1024px) {
+      margin-top: 0;
+    }
+  `;
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -66,7 +74,9 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
 
   return (
     <div className="cart bg-[#edeae7] min-h-screen flex flex-col items-center pb-5">
-      <h2 className="text-5xl text-center pt-10 mb-5 mt-1">Your Cart {cartLoaded && !cartData.length && "is Empty"}</h2>
+      <h2 className="text-5xl text-center pt-10 mb-5 mt-1">
+        Your Cart {cartLoaded && !cartData.length && "is Empty"}
+      </h2>
 
       {cartLoaded && cartData.length ? (
         <div className="product-info flex flex-col lg:flex-row justify-center w-full px-4">
@@ -76,7 +86,7 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
               (!buyNowProductId || buyNowProduct) &&
               { true: [buyNowProduct], false: cartData }[!!buyNowProductId].map(
                 (product, idx) => (
-                  <div className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none" >
+                  <div className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none">
                     <CartProductItem
                       key={idx}
                       product={product}
@@ -90,7 +100,7 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
           </div>
 
           {/* Order Summary (Separate Like Before) */}
-          <div className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly p-6 w-full lg:w-[400px] lg:h-[250px] lg:mt-0 lg:ml-10 xs:mt-5 sm:mt-10 ">
+          <StyledDiv className="total-price-right bg-white rounded-lg flex flex-col items-center justify-evenly p-6 w-full lg:w-[400px] lg:h-[250px] lg:ml-10">
             <h2 className="text-xl font-bold pt-4 md:pt-0">Order Summary</h2>
 
             {/* Price Section with Left-Right Alignment */}
@@ -98,13 +108,21 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
               <div className="flex justify-between w-full text-lg">
                 <h2>Price ({buyNowProductId ? 1 : cartData.length} items)</h2>
                 <span className="font-bold">
-                  ₹ {((buyNowProduct !== null ? buyNowProduct.price : price) - 1.0 * (buyNowProduct !== null ? 1 : cartData.length)).toFixed(2)}
+                  ₹{" "}
+                  {(
+                    (buyNowProduct !== null ? buyNowProduct.price : price) -
+                    1.0 * (buyNowProduct !== null ? 1 : cartData.length)
+                  ).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between w-full text-lg mt-2">
                 <h2>Total Price</h2>
                 <span className="font-bold">
-                  ₹ {((buyNowProduct !== null ? buyNowProduct.price : price) - 1.0 * (buyNowProduct !== null ? 1 : cartData.length)).toFixed(2)}
+                  ₹{" "}
+                  {(
+                    (buyNowProduct !== null ? buyNowProduct.price : price) -
+                    1.0 * (buyNowProduct !== null ? 1 : cartData.length)
+                  ).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -115,10 +133,13 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
                 <IoCloudDownloadOutline /> Place Order
               </Button>
             </div>
-          </div>
+          </StyledDiv>
         </div>
-      ) : (<h1 className="mt-2 text-2xl">Pick your favorite items and come back here to check out</h1>)
-      }
-    </div >
+      ) : (
+        <h1 className="mt-2 text-2xl">
+          Pick your favorite items and come back here to check out
+        </h1>
+      )}
+    </div>
   );
 };

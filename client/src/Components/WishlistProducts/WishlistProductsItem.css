@@ -1,0 +1,12 @@
+@media (max-width: 1306px) {
+    .custom-flex-wrap {
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .custom-text-center {
+      text-align: center !important;
+    }
+  }
+  

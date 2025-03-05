@@ -22,6 +22,7 @@ import { useShop } from "@/Context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import AddToCart from "../ui/addToCartBtn";
 import Download from "../ui/downloadBtn";
+import './ProductDisplay.css'
 
 const Container = styled.div`
   position: relative;
@@ -261,14 +262,14 @@ export const ProductDisplay = ({ productId, product, categories }) => {
             ))}
           </div>
 
-          <div className="buy-section mt-5 flex">
+          <div className="buy-section mt-5 flex wishlist-wrap">
             <div className="buy-btns">
               <AddToCart className="mr-3 w-72 md:mb-3" product={product} />
               <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id} />
             </div>
             <Button
               onClick={toggleWishlist}
-              className="bg-white text-black border-black border-2 md:mb-3 pt-0 "
+              className="bg-white text-black border-black border-2 md:mb-3 pt-0  "
             >
               {wishlistCurrent ? (
                 <Lottie

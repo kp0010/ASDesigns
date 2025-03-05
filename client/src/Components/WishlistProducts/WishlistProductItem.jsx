@@ -9,6 +9,7 @@ import Download from "../ui/downloadBtn";
 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import './WishlistProductsItem.css';
 
 const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
   const [isRemoving, setIsRemoving] = useState(false)
@@ -26,7 +27,7 @@ const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
       initial={{ opacity: 1, scale: 1 }}
       animate={{ opacity: isRemoving ? 0 : 1, scale: isRemoving ? 0.8 : 1 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="cards bg-white pt-2 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3 p-4"
+      className="cards bg-white pt-2 md:mr-60 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3 p-4 md:pr-0"
     >
       <Link to={`/product/${product.product_id}`} onClick={handleClick}>
         <div className="product-display-left mt-4">
@@ -42,7 +43,7 @@ const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
 
       <div className="product-display-right md:ml-20 ">
         <Link to={`/product/${product.product_id}`} onClick={handleClick}>
-          <h2 className="text-2xl mt-4 break-words ml-9 md:ml-0 md:text-left lg:text-left" >{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
+          <h2 className="text-2xl mt-4 break-words md:ml-0 custom-text-center  md:text-left" >{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
         </Link>
 
 
@@ -52,12 +53,12 @@ const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
           <h3 className="text-xl md:ml-3">(-40% off)</h3>
         </div>
 
-        <div className="buy-section mt-5 flex flex-col md:flex-col lg:flex-row xl:flex-row md:flex-wrap md:justify-start gap-2 w-full">
-          <AddToCart className="w-full md:w-60 text-sm py-2 flex items-center justify-center mr-3" product={product} />
-          <Download className="w-full md:w-60 xl:w-70 lg:w-50 text-sm py-2 bg-[#e3c756] flex items-center justify-center mr-3" productId={product.product_id} />
+        <div className="buy-section custom-flex-wrap mt-5 flex flex-col md:flex-col lg:flex-row xl:flex-row md:flex-wrap lg:flex-nowrap xl:flex-nowrap md:justify-start gap-2 w-full">
+          <AddToCart className="w-full md:w-60 text-sm py-2  mr-3" product={product} />
+          <Download className="w-full md:w-60  text-sm py-2 bg-[#e3c756] mr-3" productId={product.product_id} />
           <Button
             onClick={() => handleRemove(product.product_id)}
-            className="w-full md:w-32 text-sm py-2 bg-white text-black border-2 border-black flex items-center justify-center"
+            className="w-full md:w-32 text-sm py-2 bg-white text-black border-2 border-black"
           >
             <FaRegTrashAlt /> Remove
           </Button>
