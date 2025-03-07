@@ -19,7 +19,7 @@ import { Button } from "../ui/button";
 import styled from "styled-components";
 
 import { useShop } from "@/Context/ShopContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddToCart from "../ui/addToCartBtn";
 import Download from "../ui/downloadBtn";
 import './ProductDisplay.css'
@@ -243,9 +243,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
-                      {/* need to add right path */}
-                      <BreadcrumbLink href="/">
-                        {category["name"]}
+                      <BreadcrumbLink asChild>
+                        <Link to={`/shop/?cat=${category["name"]}`}> {category["name"]}</Link>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     {index < categories.length - 1 && (
@@ -270,8 +269,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="buy-section mt-5 flex wishlist-wrap">
             <div className="buy-btns">
-              <AddToCart className="mr-3 w-72 md:mb-3" product={product}/>
-              <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id}/>
+              <AddToCart className="mr-3 w-72 md:mb-3" product={product} />
+              <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id} />
             </div>
             <Button
               onClick={toggleWishlist}
@@ -337,9 +336,9 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               <BreadcrumbList className="flex flex-wrap justify-center">
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
-                    <BreadcrumbItem>
-                      <BreadcrumbLink>{category["name"]}</BreadcrumbLink>
-                    </BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Link to={`/shop/?cat=${category['name']}`}> {category["name"]}</Link>
+                    </BreadcrumbLink>
                     {index < categories.length - 1 && (
                       <BreadcrumbSeparator>
                         <CgFormatSlash />
@@ -363,8 +362,8 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           {/* Buttons */}
           <div className="buy-section flex flex-col items-center mt-5 space-y-3">
-            <AddToCart className="w-full bg-black flex items-center justify-center" product={product}/>
-            <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id}/>
+            <AddToCart className="w-full bg-black flex items-center justify-center" product={product} />
+            <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id} />
 
             <Button
               onClick={toggleWishlist}

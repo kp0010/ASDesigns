@@ -61,14 +61,13 @@ export const Navbar = () => {
   };
 
   const handleItemClick = (product, isCategory = false) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
     if (isCategory) {
       navigate(`/shop/?cat=${product.name}`);
     } else {
       navigate(`/product/${product.product_id}`);
     }
 
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setShowWishlist(false)
     setShowCart(false)
     setShowSearch(false)

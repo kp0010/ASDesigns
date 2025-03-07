@@ -14,9 +14,6 @@ import ProductModal from "../ProductModal/ProductModal";
 export const Item = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
   const { product_id, name, price } = product;
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);

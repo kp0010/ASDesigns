@@ -23,6 +23,7 @@ import { CgFormatSlash } from "react-icons/cg";
 
 import AddToCart from "../ui/addToCartBtn";
 import Download from "../ui/downloadBtn";
+import { Link } from "react-router-dom";
 
 const ProductModal = ({ product, triggerButton }) => {
   const [categories, setCategories] = useState([]);
@@ -77,16 +78,17 @@ const ProductModal = ({ product, triggerButton }) => {
                   {categories.map((category, index) => (
                     <React.Fragment key={index}>
                       <BreadcrumbItem>
-                        {/* need to add right path */}
-                        <BreadcrumbLink href="/">
-                          {category["name"]}
+                        <BreadcrumbLink asChild>
+                          <Link to={`/shop/?cat=${category['name']}`}> {category["name"]}</Link>
                         </BreadcrumbLink>
                       </BreadcrumbItem>
-                      {index < categories.length - 1 && (
-                        <BreadcrumbSeparator>
-                          <CgFormatSlash />
-                        </BreadcrumbSeparator>
-                      )}
+                      {
+                        index < categories.length - 1 && (
+                          <BreadcrumbSeparator>
+                            <CgFormatSlash />
+                          </BreadcrumbSeparator>
+                        )
+                      }
                     </React.Fragment>
                   ))}
                 </BreadcrumbList>
@@ -107,7 +109,7 @@ const ProductModal = ({ product, triggerButton }) => {
           </div>
         </div>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 };
 
