@@ -20,7 +20,6 @@ export const Filters = ({ priceRange,
 }) => {
 
     const [categories, setCategories] = useState([])
-    const [catWParents, setCatWParents] = useState([])
 
     const location = useLocation()
 
@@ -34,27 +33,33 @@ export const Filters = ({ priceRange,
             .then(resp => resp.json())
             .then(async data => {
                 if (data.success) { setCategories(data.categoryTree) }
-
-                const result = []
-                function pushCategoriesRecursive(categories, parent = null) {
-                    categories.map((category) => {
-                        let categoryWithParent = { ...category, parent };
-                        result.push(categoryWithParent)
-                        pushCategoriesRecursive(category.children, categoryWithParent)
-                    })
-                }
-
-                pushCategoriesRecursive(data.categoryTree)
-                setCatWParents(result)
             })
     }, [])
 
-    useEffect(() => {
-        const urlParams = new URLSearchParams(location.search)
-        const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : []
-        setSelectedFilters(categoriesPreset)
-    }, [location])
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : [];
+
+        const newFilters = new Set(categoriesPreset);
+
+        function checkChildrenAndParents(categories, selectedCategories, parent = null) {
+            categories.forEach((category) => {
+                const catWParent = { ...category, parent }
+                if (selectedCategories.has(category.name.toLowerCase())) {
+                    checkChildren(catWParent, selectedCategories);
+                    updateParentSelection(catWParent, selectedCategories);
+                }
+                if (category.children.length) {
+                    checkChildrenAndParents(category.children, selectedCategories, catWParent);
+                }
+            });
+        }
+
+        checkChildrenAndParents(categories, newFilters);
+
+        setSelectedFilters(Array.from(newFilters));
+    }, [location.search, categories])
 
     const tags = [
         "CDR File",

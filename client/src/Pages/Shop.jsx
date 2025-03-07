@@ -48,10 +48,12 @@ export const Shop = () => {
   const queryParams = new URLSearchParams(location.search)
   const searchQueryPreset = queryParams.get("q")
 
+
   const getProducts = ({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
     if (searchQueryPreset !== null && searchQueryPreset !== undefined) { params.append("q", searchQueryPreset) }
+    else { if (params.has("q") && !params.get("q").length) { params.delete("q") } }
     if (orderBy !== null && orderBy !== undefined) { params.append("orderBy", orderBy) }
     if ((minPrice !== null && minPrice !== undefined)) { params.append("minPrice", minPrice !== null ? minPrice : sortValue[0]) }
     if ((maxPrice !== null && maxPrice !== undefined)) { params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1]) }
@@ -136,7 +138,7 @@ export const Shop = () => {
 
   useEffect(() => {
     getProducts({ orderBy: sortValue, minPrice: priceRange[0], maxPrice: priceRange[1] })
-  }, [pageNo, selectedFilters, location])
+  }, [pageNo, selectedFilters, searchQueryPreset])
 
   useEffect(() => {
     calculatePages(pageNo)
