@@ -10,7 +10,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useShop } from "@/Context/ShopContext";
 
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import {
   SignedIn,
@@ -60,10 +60,18 @@ export const Navbar = () => {
       });
   };
 
-  const handleProductClick = (productId) => {
+  const handleItemClick = (product, isCategory = false) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    navigate(`/product/${productId}`);
-    setShowWishlist(false); // Close the wishlist dropdown after navigation
+
+    if (isCategory) {
+      navigate(`/shop/?cat=${product.name}`);
+    } else {
+      navigate(`/product/${product.product_id}`);
+    }
+
+    setShowWishlist(false)
+    setShowCart(false)
+    setShowSearch(false)
   };
 
   const handleClick = (event) => {
@@ -140,7 +148,7 @@ export const Navbar = () => {
                 placeholder="Search"
                 aria-label="Search"
                 onFocus={() => { setShowSearch(true); }}
-                onBlur={() => { setShowSearch(false); }}
+                onBlur={() => { setTimeout(() => setShowSearch(false), 500); }}
                 onChange={(e) => { handleSearchChange(e.target.value); }}
                 onKeyDown={(e) => {
                   // e.preventDefault()
@@ -160,42 +168,48 @@ export const Navbar = () => {
                   const isCategory = product.product_id === "category";
 
                   return (
-                    <div
+                    <Link
+                      className="bg-red-600"
                       key={idx}
-                      className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md 
-                                    ${isCategory ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3" : ""}`}
-                      onClick={() => handleProductClick(product.product_id)}
+                      to={isCategory ? `/shop/?cat=${product.name}` : `/product/${product.product_id}`}
                     >
-                      {isCategory ? (
-                        <div>
-                          <h3 className="text-md font-semibold">
-                            {product.name}
-                          </h3>
-                          <p className="text-sm text-gray-500">
-                            Browse all related products
-                          </p>
-                        </div>
-                      ) : (
-                        <>
-                          <img
-                            src={`/Products/${product.product_id}.jpeg`}
-                            className="w-20 h-20 object-cover rounded"
-                            alt={product.name}
-                          />
-                          <div className="ml-3">
+                      <div
+                        className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md
+                                    ${isCategory ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3" : ""}`}
+                        onClick={() => { handleItemClick(product, isCategory) }}
+                      >
+
+                        {isCategory ? (
+                          <div>
                             <h3 className="text-md font-semibold">
-                              {product["product_id"] +
-                                (product["name"]
-                                  ? " | " + product["name"]
-                                  : "")}
+                              {product.name}
                             </h3>
-                            <p className="text-md text-gray-500">
-                              ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                            <p className="text-sm text-gray-500">
+                              Browse all related products
                             </p>
                           </div>
-                        </>
-                      )}
-                    </div>
+                        ) : (
+                          <>
+                            <img
+                              src={`/Products/${product.product_id}.jpeg`}
+                              className="w-20 h-20 object-cover rounded"
+                              alt={product.name}
+                            />
+                            <div className="ml-3">
+                              <h3 className="text-md font-semibold">
+                                {product["product_id"] +
+                                  (product["name"]
+                                    ? " | " + product["name"]
+                                    : "")}
+                              </h3>
+                              <p className="text-md text-gray-500">
+                                ₹{(parseFloat(product.price) - 1.0).toFixed(2)}
+                              </p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </Link>
                   )
                 })}
               </div>
@@ -236,7 +250,7 @@ export const Navbar = () => {
                       <div
                         key={idx}
                         className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                        onClick={() => handleProductClick(product.product_id)}
+                        onClick={() => handleItemClick(product)}
                       >
                         <img
                           src={`/Products/${product.product_id}.jpeg`}
@@ -297,7 +311,7 @@ export const Navbar = () => {
                       <div
                         key={idx}
                         className="flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                        onClick={() => handleProductClick(product.product_id)}
+                        onClick={() => handleItemClick(product)}
                       >
                         <img
                           src={`/Products/${product.product_id}.jpeg`}
@@ -351,10 +365,10 @@ export const Navbar = () => {
               </>
             </div>
           </div>
-        </div>
+        </div >
 
         {/* search and sidebar for mobile view */}
-        <div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2">
+        < div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2" >
           <form className="d-flex flex-grow-1">
             <div className="input-group w-100">
               <input
@@ -458,10 +472,10 @@ export const Navbar = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div >
 
         {/* Navitems for big screen */}
-        <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
+        < div className="container-fluid w-100 d-none d-md-block bg-gray-100" >
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <NavLink
@@ -509,8 +523,8 @@ export const Navbar = () => {
               </NavLink>
             </li>
           </ul>
-        </div>
-      </div>
-    </nav>
+        </div >
+      </div >
+    </nav >
   );
 };

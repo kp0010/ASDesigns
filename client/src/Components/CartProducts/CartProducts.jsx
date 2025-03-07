@@ -65,6 +65,13 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
     navigate(`/product/${productId}`);
   };
 
+  const handleOrder = (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavoir: "smooth" });
+    navigate("/checkout");
+  };
+
+
   const removeFromCart = async (productId) => {
     toast.success("Removed from Cart");
     refreshCart();
@@ -129,7 +136,7 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
 
             {/* Place Order Button */}
             <div className="buy-sec flex justify-center w-full">
-              <Button className="w-full md:w-72 bg-[#e3c756] mt-4 mb-10">
+              <Button onClick={handleOrder} className="w-full md:w-72 bg-[#e3c756] mt-4 mb-10">
                 <IoCloudDownloadOutline /> Place Order
               </Button>
             </div>

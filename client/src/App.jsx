@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+
 import './App.css';
 
 
@@ -13,22 +14,21 @@ import { Shop } from "./Pages/Shop";
 import { Product } from "./Pages/Product";
 import { Cart } from "./Pages/Cart";
 import { Wishlist } from "./Pages/Wishlist";
+import { Checkout } from "./Pages/Checkout";
+
 
 import { Toaster } from "sonner";
-import { Checkout } from "./Pages/Checkout";
 
 
 function App() {
   return (
     <>
-      <div>
-        <Router>
-          <Toaster theme='dark' />
-          <Navbar />
-          <RoutesList />
-          <Footer />
-        </Router>
-      </div>
+      <Router>
+        <Toaster theme='dark' />
+        <Navbar />
+        <RoutesList />
+        <Footer />
+      </Router>
     </>
   )
 }

@@ -75,7 +75,7 @@ export const Shop_Item = ({ product }) => {
 
   return (
     <div className="shop_item">
-      <div className="shop_item-image">
+      <div className="shop_item-image relative">
         <Link onClick={handleClick} to={`/products/${product_id}`}>
           <img src={`/Products/${product_id}.jpeg`} alt="..." />
         </Link>
@@ -92,7 +92,6 @@ export const Shop_Item = ({ product }) => {
             <span>{cartCurrent ? "Remove" : "Add to Cart"}</span>
           </button>
 
-          {/* TODO: Try to add div or span tag instead of button  */}
           <ProductModal
             product={product}
             triggerButton={

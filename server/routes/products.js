@@ -11,9 +11,7 @@ const createGetProductsQuery = (req) => {
 	const params = []
 
 	const searchQuery = req.query["q"] ? req.query["q"] : ""
-
 	const pageNo = req.params["pageNo"] ? req.params["pageNo"] : 0
-
 	const orderBy = req.query["orderBy"] ? req.query["orderBy"] : "default"
 	const limit = req.query["limit"] ? req.query["limit"] : 0
 
@@ -23,6 +21,7 @@ const createGetProductsQuery = (req) => {
 	const categories = req.query["categories"] ? req.query["categories"].split(",") : []
 
 	let selectQuery = "SELECT * FROM search_products($1, $2)"
+
 	params.push(searchQuery, categories)
 
 	// Add Price Min Max Clauses and Categories
@@ -59,6 +58,31 @@ const createGetProductsQuery = (req) => {
 }
 
 
+const getProdAndCatSearch = async (req, res) => {
+	// Get Products LIMIT 8 and Categories LIMIT 2 with SEARCH
+	try {
+		const searchQuery = req.query["q"]
+
+		if (!searchQuery) {
+			res.status(400).json({ error: "No Search Query Provided" })
+		}
+
+		const selectSearchedProductsQ = "SELECT * FROM search_products_and_categories($1)"
+		const searchResults = await db.query(selectSearchedProductsQ, [searchQuery])
+
+		res.status(200).json({
+			success: true,
+			message: "Products Searched Successfully",
+			products: searchResults.rows
+		})
+
+	} catch (error) {
+		console.error("Error Searching Products", error)
+		res.status(500).json({ error: "Internal Server Error" })
+	}
+}
+
+
 export const getProducts = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
@@ -85,31 +109,6 @@ export const getProducts = async (req, res) => {
 
 	} catch (error) {
 		console.error("Error Reading Products", error)
-		res.status(500).json({ error: "Internal Server Error" })
-	}
-}
-
-
-const getProdAndCatSearch = async (req, res) => {
-	// Get Products LIMIT 8 and Categories LIMIT 2 with SEARCH
-	try {
-		const searchQuery = req.query["q"]
-
-		if (!searchQuery) {
-			res.status(400).json({ error: "No Search Query Provided" })
-		}
-
-		const selectSearchedProductsQ = "SELECT * FROM search_products_and_categories($1)"
-		const searchResults = await db.query(selectSearchedProductsQ, [searchQuery])
-
-		res.status(200).json({
-			success: true,
-			message: "Products Searched Successfully",
-			products: searchResults.rows
-		})
-
-	} catch (error) {
-		console.error("Error Searching Products", error)
 		res.status(500).json({ error: "Internal Server Error" })
 	}
 }

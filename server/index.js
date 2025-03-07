@@ -13,7 +13,6 @@ import {
 	deleteProduct,
 	postProduct,
 	getAllCategories,
-
 } from "./routes/products.js"
 
 import {
@@ -153,9 +152,9 @@ DELETE	:	/api/products/:productId
 GET	:	/api/categories
 		Get all Categories nested Levelwise
 
-// TODO:
-// PATCH:	/api/products/:productId
-//		Update Product with Specified Product Id (Protected Admin)
+ TODO:
+ PATCH :	/api/products/:productId
+		Update Product with Specified Product Id (Protected Admin)
 
 Cart Routes
 GET	:	/api/cart/
@@ -171,9 +170,6 @@ Orders Routes
 POST	:	/api/checkout/
 		Get Items from Body of request (Protected)
 		The Items list is either Cart Items if Cart is checked directly or is a singular Product when Buy Now is clicked
-
-
-
 
 Wishlist Routes
 GET	:	/api/wishlist/

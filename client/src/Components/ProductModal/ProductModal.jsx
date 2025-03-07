@@ -43,16 +43,17 @@ const ProductModal = ({ product, triggerButton }) => {
   useEffect(() => {
     getProduct();
   }, [product.product_id]);
+
   const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
 
   return (
     <Dialog>
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent className="max-w-2xl md:max-w-4xl lg:max-w-5xl w-full mt-10">
+      <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  max-w-2xl md:max-w-4xl lg:max-w-5xl w-full mt-10">
         <DialogHeader>
           <DialogTitle className="text-xl">Product Details</DialogTitle>
         </DialogHeader>
-        <div className="prod-details flex">
+        <div className="prod-details flex gap-6 items-center">
           <img
             src={`/Products/${product.product_id}.jpeg`}
             alt={product.name}

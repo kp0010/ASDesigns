@@ -5,7 +5,7 @@ import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
 import { useState } from 'react';
 import { LuListFilter } from "react-icons/lu";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Filters = ({ priceRange,
     setPriceRange,
@@ -20,6 +20,9 @@ export const Filters = ({ priceRange,
 }) => {
 
     const [categories, setCategories] = useState([])
+    const [catWParents, setCatWParents] = useState([])
+
+    const location = useLocation()
 
     useEffect(() => {
         fetch('/api/categories', {
@@ -29,10 +32,28 @@ export const Filters = ({ priceRange,
             }
         })
             .then(resp => resp.json())
-            .then(data => {
+            .then(async data => {
                 if (data.success) { setCategories(data.categoryTree) }
+
+                const result = []
+                function pushCategoriesRecursive(categories, parent = null) {
+                    categories.map((category) => {
+                        let categoryWithParent = { ...category, parent };
+                        result.push(categoryWithParent)
+                        pushCategoriesRecursive(category.children, categoryWithParent)
+                    })
+                }
+
+                pushCategoriesRecursive(data.categoryTree)
+                setCatWParents(result)
             })
     }, [])
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search)
+        const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : []
+        setSelectedFilters(categoriesPreset)
+    }, [location])
 
 
     const tags = [
@@ -51,29 +72,36 @@ export const Filters = ({ priceRange,
     const navigate = useNavigate()
 
     const handleCheckboxClick = (category) => {
-        navigate("/shop/page/1")
-
         setSelectedFilters((prevFilters) => {
             let newFilters = new Set(prevFilters);
 
-            if (newFilters.has(category.name)) {
-                newFilters.delete(category.name);
+            if (newFilters.has(category.name.toLowerCase())) {
+                newFilters.delete(category.name.toLowerCase());
                 uncheckChildren(category, newFilters);
             } else {
-                newFilters.add(category.name);
+                newFilters.add(category.name.toLowerCase());
                 checkChildren(category, newFilters);
             }
 
             updateParentSelection(category, newFilters);
 
-            return Array.from(newFilters);
+            const newFiltersArray = Array.from(newFilters)
+
+            const urlParams = new URLSearchParams(location.search)
+
+            if (newFiltersArray.length) { urlParams.set("cat", newFiltersArray) }
+            else { urlParams.delete("cat") }
+
+            navigate("/shop" + (urlParams.size ? `/?${urlParams.toString()}` : ""))
+
+            return newFiltersArray
         });
     };
 
     const checkChildren = (category, filters) => {
         if (category.children) {
             category.children.forEach(child => {
-                filters.add(child.name);
+                filters.add(child.name.toLowerCase());
                 checkChildren(child, filters);
             });
         }
@@ -82,7 +110,7 @@ export const Filters = ({ priceRange,
     const uncheckChildren = (category, filters) => {
         if (category.children) {
             category.children.forEach(child => {
-                filters.delete(child.name);
+                filters.delete(child.name.toLowerCase());
                 uncheckChildren(child, filters);
             });
         }
@@ -91,12 +119,12 @@ export const Filters = ({ priceRange,
     const updateParentSelection = (category, filters) => {
         if (!category.parent) return;
 
-        let allSiblingsChecked = category.parent.children.every(child => filters.has(child.name));
+        let allSiblingsChecked = category.parent.children.every(child => filters.has(child.name.toLowerCase()));
 
         if (allSiblingsChecked) {
-            filters.add(category.parent.name);
+            filters.add(category.parent.name.toLowerCase());
         } else {
-            filters.delete(category.parent.name);
+            filters.delete(category.parent.name.toLowerCase());
         }
 
         updateParentSelection(category.parent, filters);
@@ -112,7 +140,7 @@ export const Filters = ({ priceRange,
                 return (
                     < li key={index} >
                         <label className="shop-filters-label">
-                            <input type="checkbox" checked={selectedFilters.includes(category.name)} onChange={() => handleCheckboxClick(categoryWithParent)} />
+                            <input type="checkbox" checked={selectedFilters.includes(category.name.toLowerCase())} onChange={() => handleCheckboxClick(categoryWithParent)} />
                             <span className="checkmark"></span>
                             <span className="shop-filters-label-name" onClick={() => handleCheckboxClick(categoryWithParent)}>{category.name}</span>
                         </label>
@@ -136,44 +164,6 @@ export const Filters = ({ priceRange,
 
                 <div className="shop-filters-category">
                     <h2>Category</h2>
-                    {/* <ul className="shop-flters-ul">
-                    <li>
-                        <label className="shop-filters-label">
-                            <input type="checkbox" />
-                            <span className="checkmark" onClick={handleCheckboxClick}></span>
-                            <span className="shop-filters-label-name">Sports</span>
-                        </label>
-                    </li>
-                    <ul className="shop-filters-ul-inner">
-                        {sports.map((sport, index) => (
-                            <li key={index}>
-                                <label className="shop-filters-label">
-                                    <input type="checkbox" />
-                                    <span className="checkmark" onClick={handleCheckboxClick}></span>
-                                    <span className="shop-filters-label-name">{sport}</span>
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                    <li>
-                        <label className="shop-filters-label">
-                            <input type="checkbox" />
-                            <span className="checkmark" onClick={handleCheckboxClick}></span>
-                            <span className="shop-filters-label-name">Festivals</span>
-                        </label>
-                    </li>
-                    <ul className="shop-filters-ul-inner">
-                        {festivals.map((festival, index) => (
-                            <li key={index}>
-                                <label className="shop-filters-label">
-                                    <input type="checkbox" />
-                                    <span className="checkmark" onClick={handleCheckboxClick}></span>
-                                    <span className="shop-filters-label-name">{festival}</span>
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                </ul> */}
                     <ul className="shop-filters-ul">
                         {categories.length > 0 && renderCategories(categories)}
                     </ul>
