@@ -40,9 +40,7 @@ const RoutesList = () => {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/shop/page?/:pageNo?" element={<Shop />} />
-      <Route path="/product" element={<Product />} >
-        <Route path=":productId" element={<Product />} />
-      </Route>
+      <Route path="/product/:productId" element={<Product />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/checkout" element={<Checkout />} />
