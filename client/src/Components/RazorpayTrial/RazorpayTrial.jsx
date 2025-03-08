@@ -22,18 +22,17 @@ export const RazorpayTrial = () => {
           notes: {},
         }),
       });
-
-      // ✅ Check if response is empty
+      
+      // ✅ Debug the response
       const text = await response.text();
+      console.log("Server Response:", text);
+      
       if (!text) {
         throw new Error("Empty response from server");
       }
-
+      
       const order = JSON.parse(text); // ✅ Now safely parse JSON
-
-      if (!order || !order.id) {
-        throw new Error("Order creation failed");
-      }
+      
 
       // Step 2: Open Razorpay Checkout
       const options = {

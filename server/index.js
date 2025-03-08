@@ -129,27 +129,35 @@ app.post("/api/verify-payment", (req, res) => {
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   try {
+    console.log("Verifying payment:", req.body); // ✅ Debugging log
+
     const isValidSignature = validateWebhookSignature(
       body,
       razorpay_signature,
       secret
     );
+
     if (isValidSignature) {
-      const orders = readData();
-      const order = order.find((o) => o.order_id === razorpay_order_id);
+      const orders = readData(); // ✅ Ensure orders are read correctly
+      const order = orders.find((o) => o.order_id === razorpay_order_id); // ✅ Fix variable name
+
       if (order) {
         order.status = "paid";
         order.payment_id = razorpay_payment_id;
-        writeData(orders);
+        writeData(orders); // ✅ Save updated orders
+
+        console.log("Payment verified and order updated:", order);
+        return res.status(200).json({ status: "ok" });
       }
-      res.status(200).json({ status: "ok" });
-      console.log("Payment verification successfull");
-    } else {
-      res.status(400).json({ status: "verification_failed" });
-      console.log("Payment verification failed");
+
+      console.log("Order not found for verification:", razorpay_order_id);
+      return res.status(404).json({ status: "order_not_found" });
     }
+
+    console.log("Payment verification failed");
+    res.status(400).json({ status: "verification_failed" });
   } catch (error) {
-    console.error(error);
+    console.error("Error verifying payment:", error);
     res
       .status(500)
       .json({ status: "error", message: "Error verifying payment" });
