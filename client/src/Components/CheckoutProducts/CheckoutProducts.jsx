@@ -1,8 +1,9 @@
 import { useState } from "react";
 import razor_logo from "/Logos/razorpay-logo.png";
-import './CheckoutProducts.css'
+import "./CheckoutProducts.css";
 
 export const CheckoutProducts = () => {
+  const [customEmail, setCustomEmail] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -20,12 +21,38 @@ export const CheckoutProducts = () => {
             className="border-2 border-black w-full p-2 mt-2 rounded-lg [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
 
-          <h2 className="text-lg mt-6">Email address:</h2>
-          <input
-            type="text"
-            placeholder="Enter email address"
-            className="border-2 border-black w-full p-2 mt-2 rounded-lg"
-          />
+          <div className="email">
+            {/* Default Email Checkbox */}
+            <label className="flex items-center mt-4">
+              <input type="checkbox" />
+              <span className="ml-3">
+                Use <span className="font-bold">leoadvait12@gmail.com</span> for
+                receiving updates, newsletters, and receipts?
+              </span>
+            </label>
+
+            {/* Custom Email Checkbox */}
+            <label className="flex items-center mt-4">
+              <input
+                type="checkbox"
+                checked={customEmail}
+                onChange={() => setCustomEmail(!customEmail)}
+              />
+              <span className="ml-3">Enter custom email</span>
+            </label>
+
+            {/* Email Input (Only Visible if Checkbox is Checked) */}
+            {customEmail && (
+              <>
+                <h2 className="text-lg mt-6">Email address:</h2>
+                <input
+                  type="text"
+                  placeholder="Enter email address"
+                  className="border-2 border-black w-full p-2 mt-2 rounded-lg"
+                />
+              </>
+            )}
+          </div>
 
           <h1 className="text-xl mt-6 font-bold">Additional Information</h1>
           <h2 className="text-lg mt-3">Order Notes (optional)</h2>
