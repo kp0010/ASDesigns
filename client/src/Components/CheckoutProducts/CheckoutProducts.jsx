@@ -3,6 +3,7 @@ import razor_logo from "/Logos/razorpay-logo.png";
 import "./CheckoutProducts.css";
 import { useUser } from "@clerk/clerk-react";
 import { useShop } from "@/Context/ShopContext";
+import { toast } from "sonner";
 
 export const CheckoutProducts = () => {
   const { cartData, price } = useShop()
@@ -15,7 +16,6 @@ export const CheckoutProducts = () => {
   const [error, setError] = useState("")
 
   const [isChecked, setIsChecked] = useState(false);
-
 
   const handleNumberChange = (e) => {
     if (/^\d*$/.test(e.target.value)) {
@@ -38,6 +38,85 @@ export const CheckoutProducts = () => {
       setError("");
     }
   };
+
+  async function makePayment() {
+    if (!price || price <= 0) {
+      toast("Amount is not Valid");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: price * 100,
+          currency: "INR",
+          receipt: `u_${user.emailAddresses[0]["emailAddress"].substring(0, 25)}_t_${Date.now()}`,
+          notes: {},
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data) {
+        throw new Error("Empty response from server");
+      }
+
+      const order = data.order;
+
+      const options = {
+        key: "rzp_test_w45oM0KDtXSRHh",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Asdesigns",
+        description: "Test Transaction",
+        order_id: order.order_id,
+
+        handler: async function(response) {
+          try {
+            const verifyResponse = await fetch("/api/verify-payment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyData.success) {
+              window.location.href = "/api/payment-success";
+            } else {
+              alert("Payment verification failed");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            alert("Error verifying payment. Please try again.");
+          }
+        },
+
+        prefill: {
+          name: "Advait Bothe",
+          email: "leoadvait12@gmail.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  }
 
   return (
     <div className="checkout bg-[#edeae7] min-h-screen p-4">
@@ -72,7 +151,8 @@ export const CheckoutProducts = () => {
               className={`w-full p-2 mt-2 rounded-lg border-2 transition-all duration-200
                 ${customEmail
                   ? "border-black bg-white text-black focus:ring-2 focus:ring-blue-500 outline-none"
-                  : "border-gray-400 bg-gray-200 text-gray-500 cursor-not-allowed opacity-60"}`}
+                  : "border-gray-400 bg-gray-200 text-gray-500 cursor-not-allowed opacity-60"
+                }`}
             />
           </div>
           <h2 className="mt-1 text-red-600">{error}</h2>
@@ -199,11 +279,13 @@ export const CheckoutProducts = () => {
 
             {/* Place Order Button */}
             <button
-              className={`w-full text-lg font-bold text-black bg-[#e3c756] p-3 mt-5 rounded ${isChecked
-                ? "cursor-pointer hover:bg-yellow-500"
-                : "opacity-50 cursor-not-allowed"
+              className={`w-full text-lg font-bold text-black bg-[#e3c756] p-3 mt-5 rounded 
+                ${isChecked
+                  ? "cursor-pointer hover:bg-yellow-500"
+                  : "opacity-50 cursor-not-allowed"
                 }`}
               disabled={!isChecked}
+              onClick={() => { makePayment() }}
             >
               Place order
             </button>

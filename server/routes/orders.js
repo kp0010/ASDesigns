@@ -28,7 +28,7 @@ export const verifyUserPayment = async (req, res) => {
 			UPDATE orders	
 				SET status = 'paid'
 				WHERE order_id = $1
-				RETURNING * `
+				RETURNING *`
 
 			const orderSelectResp = await db.query(orderSelectQuery, [razorpay_order_id])
 
@@ -58,7 +58,7 @@ export const postUsersOrders = async (req, res) => {
 		}
 
 		const options = {
-			amount: amount,
+			amount,
 			currency,
 			receipt,
 			notes,
@@ -72,7 +72,7 @@ export const postUsersOrders = async (req, res) => {
 				VALUES ($1, $2, $3, $4, 'created')
 				RETURNING *`
 
-		const orderInsertResp = await db.query(orderInsertQuery, [order.id, order.amount, order.currency, order.receipt])
+		const orderInsertResp = await db.query(orderInsertQuery, [order.id, order.amount / 100, order.currency, order.receipt])
 
 		res.json({
 			success: true,
