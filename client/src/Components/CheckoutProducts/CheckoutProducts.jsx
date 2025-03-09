@@ -1,14 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import razor_logo from "/Logos/razorpay-logo.png";
 import "./CheckoutProducts.css";
+import { useUser } from "@clerk/clerk-react";
+import { useShop } from "@/Context/ShopContext";
 
 export const CheckoutProducts = () => {
-  const [customEmail, setCustomEmail] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const { cartData, price } = useShop()
+
+  const { isLoaded, isSignedIn, user } = useUser()
 
   const [phoneNo, setPhoneNo] = useState("")
   const [email, setEmail] = useState("")
+  const [customEmail, setCustomEmail] = useState(false);
   const [error, setError] = useState("")
+
+  const [isChecked, setIsChecked] = useState(false);
+
 
   const handleNumberChange = (e) => {
     if (/^\d*$/.test(e.target.value)) {
@@ -26,7 +33,7 @@ export const CheckoutProducts = () => {
     setEmail(value);
 
     if (!validateEmail(value)) {
-      setError("Invalid Email");
+      setError("Email Invalid ");
     } else {
       setError("");
     }
@@ -53,37 +60,41 @@ export const CheckoutProducts = () => {
           />
 
           <div className="email">
-            {/* Default Email Checkbox */}
-            <label className="flex items-center mt-4">
-              <input type="checkbox" />
-              <span className="ml-3">
-                Use <span className="font-bold">leoadvait12@gmail.com</span> for
-                receiving updates, newsletters, and receipts?
-              </span>
-            </label>
-
-            {/* Custom Email Checkbox */}
-            <label className="flex items-center mt-4">
-              <input
-                type="checkbox"
-                checked={customEmail}
-                onChange={() => setCustomEmail(!customEmail)}
-              />
-              <span className="ml-3">Enter custom email</span>
-            </label>
 
             {/* Email Input (Only Visible if Checkbox is Checked) */}
-            {customEmail && (
-              <>
-                <h2 className="text-lg mt-6">Email address:</h2>
-                <input
-                  type="text"
-                  placeholder="Enter email address"
-                  className="border-2 border-black w-full p-2 mt-2 rounded-lg"
-                />
-              </>
-            )}
+            <h2 className="text-lg mt-6">Email address:</h2>
+            <input
+              type="text"
+              disabled={!customEmail}
+              placeholder={(!customEmail && isLoaded && isSignedIn) ? user.emailAddresses[0]["emailAddress"] : "Enter email address"}
+              value={email}
+              onChange={handleEmailChange}
+              className={`w-full p-2 mt-2 rounded-lg border-2 transition-all duration-200
+                ${customEmail
+                  ? "border-black bg-white text-black focus:ring-2 focus:ring-blue-500 outline-none"
+                  : "border-gray-400 bg-gray-200 text-gray-500 cursor-not-allowed opacity-60"}`}
+            />
           </div>
+          <h2 className="mt-1 text-red-600">{error}</h2>
+
+          {/* Custom Email Checkbox */}
+          <label className="flex items-center mt-3">
+            <input
+              type="checkbox"
+              checked={customEmail}
+              onChange={() => setCustomEmail(!customEmail)}
+            />
+            <span className="ml-3">Change Email Address</span>
+          </label>
+
+          {/* Default Email Checkbox */}
+          <label className="flex items-center mt-2">
+            <input type="checkbox" />
+            <span className="ml-3">
+              Use <span className="font-bold">{email.length ? email : (isLoaded && isSignedIn) ? user.emailAddresses[0]["emailAddress"] : "Email"}</span> for
+              receiving updates, newsletters, and receipts?
+            </span>
+          </label>
 
           <h1 className="text-xl mt-6 font-bold">Additional Information</h1>
           <h2 className="text-lg mt-3">Order Notes (optional)</h2>
@@ -105,22 +116,27 @@ export const CheckoutProducts = () => {
               <span className="mr-2">Price</span>
             </div>
 
-            <div className="mt-3 text-gray-700 border-b pb-3 flex  justify-between">
-              <p className="text-sm break-words w-full sm:w-52 mb-3 mr-4">
-                NEX 3093-3 GRAY WITH WHITE GRADIENT
-              </p>
-              <p className="text-right font-medium mt-1">₹299.00</p>
-            </div>
+            {cartData && cartData.map((product, idx) => (
+              <React.Fragment key={idx}>
+                <div className="mt-2 text-gray-700 border-b pb-2 flex  justify-between">
+                  <p className="text-sm break-words w-full sm:w-52 mr-4">
+                    {product.product_id} | {product.name}
+                  </p>
+                  <p className="text-right font-medium">₹ {(parseFloat(product.price) - 1.0).toFixed(2)}</p>
+                </div>
+              </React.Fragment>
+            ))}
 
             <div className="flex justify-between font-bold text-md mt-3 border-b pb-3">
               <span>Subtotal</span>
-              <span>₹299.00</span>
+              <span>₹ {price}</span>
             </div>
 
             <div className="flex justify-between font-bold text-xl mt-3 text-red-600">
               <span>Total</span>
-              <span>₹299.00</span>
+              <span>₹ {price}</span>
             </div>
+
           </div>
 
           {/* Payment Options */}
@@ -132,7 +148,7 @@ export const CheckoutProducts = () => {
                   name="payment"
                   className="w-5 h-5 accent-black"
                 />
-                <span>Credit Card/Debit Card/NetBanking</span>
+                <span>Credit Card / Debit Card / Net Banking / UPI</span>
               </label>
 
               <div className="flex items-start space-x-3 mt-3">

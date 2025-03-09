@@ -6,6 +6,7 @@ import {
 
 import './App.css';
 
+import { Toaster } from "sonner";
 
 import { Footer } from './Components/Footer/Footer'
 import { Navbar } from './Components/Navbar/Navbar'
@@ -15,9 +16,6 @@ import { Product } from "./Pages/Product";
 import { Cart } from "./Pages/Cart";
 import { Wishlist } from "./Pages/Wishlist";
 import { Checkout } from "./Pages/Checkout";
-
-
-import { Toaster } from "sonner";
 import { SuccessPayment } from "./Components/SuccessPayment/SuccessPayment";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 

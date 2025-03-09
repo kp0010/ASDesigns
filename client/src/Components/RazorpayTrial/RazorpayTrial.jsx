@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { handler } from "tailwindcss-animate";
 
 export const RazorpayTrial = () => {
   const [amount, setAmount] = useState("");
@@ -11,7 +10,6 @@ export const RazorpayTrial = () => {
     }
 
     try {
-      // Step 1: Create Order on Backend
       const response = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -22,29 +20,24 @@ export const RazorpayTrial = () => {
           notes: {},
         }),
       });
-      
-      // ✅ Debug the response
-      const text = await response.text();
-      console.log("Server Response:", text);
-      
-      if (!text) {
+
+      const data = await response.json();
+
+      if (!data) {
         throw new Error("Empty response from server");
       }
-      
-      const order = JSON.parse(text); // ✅ Now safely parse JSON
-      
 
-      // Step 2: Open Razorpay Checkout
+      const order = data.order;
+
       const options = {
-        key: "rzp_test_w45oM0KDtXSRHh", // Replace with actual key
+        key: "rzp_test_w45oM0KDtXSRHh",
         amount: order.amount,
         currency: order.currency,
         name: "Asdesigns",
         description: "Test Transaction",
-        order_id: order.id,
+        order_id: order.order_id,
 
-        // ✅ Step 3: Payment Success & Verification
-        handler: async function (response) {
+        handler: async function(response) {
           try {
             const verifyResponse = await fetch("/api/verify-payment", {
               method: "POST",
@@ -59,8 +52,9 @@ export const RazorpayTrial = () => {
             });
 
             const verifyData = await verifyResponse.json();
-            if (verifyData.status === "ok") {
-              window.location.href = "/api/payment-success"; // Redirect on success
+
+            if (verifyData.success) {
+              window.location.href = "/api/payment-success";
             } else {
               alert("Payment verification failed");
             }
