@@ -1,6 +1,6 @@
 import { db } from "../index.js"
 
-const getUserIdFromClerkId = async (clerkId) => {
+export const getUserIdFromClerkId = async (clerkId) => {
 	const userSelectQuery = "SELECT * FROM users WHERE clerk_id = $1"
 	const userResult = await db.query(userSelectQuery, [clerkId])
 

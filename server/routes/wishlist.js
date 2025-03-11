@@ -1,13 +1,6 @@
 import { db } from "../index.js"
+import { getUserIdFromClerkId } from "./cart.js"
 
-const getUserIdFromClerkId = async (clerkId) => {
-	const userSelectQuery = "SELECT * FROM users WHERE clerk_id = $1"
-	const userResult = await db.query(userSelectQuery, [clerkId])
-
-	const userId = userResult.rows[0]["id"]
-
-	return userId
-}
 
 export const getWishlistItems = async (req, res) => {
 	try {

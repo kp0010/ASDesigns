@@ -35,7 +35,13 @@ import {
   verifyUserPayment
 } from "./routes/orders.js";
 
-const app = express();
+
+/*
++------------------------------+
+|*/  const app = express();  /*|
++------------------------------+
+*/
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -208,10 +214,10 @@ Order Rotues
 POST    :   /api/create-order/
             Create a new Order (Protected)
 
-POST    :   /api/verify-payment/ 
+POST    :   /api/verify-payment/
             Verify the Payment from an order (Protected)
 
-POST    :   /api/payment-success/ 
+POST    :   /api/payment-success/
             Redirect if Payment is success (Protected)
 
 */
@@ -254,6 +260,7 @@ app.post("/api/auth/register", requireAuth(), async (req, res) => {
 });
 
 
+
 // PRODUCT
 // Get All Products with Pagination and Sorting
 app.get("/api/products/(page)?/:pageNo?", getProducts);
@@ -277,6 +284,7 @@ app.get("/api/cart", requireAuth(), getCartItems);
 
 // Post Items to Cart
 app.post("/api/cart", requireAuth(), postCartItem);
+
 
 // Delete Items from Cart
 app.delete("/api/cart", requireAuth(), deleteCartItem);
@@ -305,6 +313,7 @@ app.get("/api/payment-success", (_, res) => { res.redirect("/success"); });
 
 
 // Routes End
+
 
 // -----------------------------------------------------------
 

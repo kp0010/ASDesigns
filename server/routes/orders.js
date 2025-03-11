@@ -1,5 +1,6 @@
 import { db, razorpay } from "../index.js"
 import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils.js"
+import { getUserIdFromClerkId } from "./cart.js"
 
 
 export const getUserOrders = (req, res) => {
@@ -57,6 +58,14 @@ export const postUsersOrders = async (req, res) => {
 			return res.status(400).json({ error: "Missing required fields" });
 		}
 
+		const { userId: clerkId } = req.auth
+
+		if (!clerkId) {
+			return res.status(400).json({ error: "User Login Required" })
+		}
+
+		const userId = await getUserIdFromClerkId(clerkId)
+
 		const options = {
 			amount,
 			currency,
@@ -68,11 +77,11 @@ export const postUsersOrders = async (req, res) => {
 
 		const orderInsertQuery = `
 			INSERT INTO orders
-				(order_id, amount, currency, receipt, status)
-				VALUES ($1, $2, $3, $4, 'created')
+				(order_id, user_id, amount, currency, receipt, status)
+				VALUES ($1, $2, $3, $4, $5, 'created')
 				RETURNING *`
 
-		const orderInsertResp = await db.query(orderInsertQuery, [order.id, order.amount / 100, order.currency, order.receipt])
+		const orderInsertResp = await db.query(orderInsertQuery, [order.id, userId, order.amount / 100, order.currency, order.receipt])
 
 		res.json({
 			success: true,
