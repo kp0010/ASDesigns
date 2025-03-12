@@ -9,6 +9,18 @@
     margin-bottom: 48px;
 }
 
+.shop_item_skeleton {
+    width: 16.875rem;
+    height: 270px !important;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    padding-top: 0.9375rem;
+    padding-left: 0.9375rem;
+    padding-right: 0.9375rem;
+    transition: all 0.5s ease-in-out;
+}
+
 .shop-header {
     font-size: 50px;
     text-align: center;

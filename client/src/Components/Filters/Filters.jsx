@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import "./Filters.css"
 import "../../App.css"
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
 import { Badge } from "@/Components/ui/badge";
 import { useState } from 'react';
 import { LuListFilter } from "react-icons/lu";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export const Filters = ({ priceRange,
     setPriceRange,
@@ -16,12 +16,14 @@ export const Filters = ({ priceRange,
     totalProducts,
     selectedFilters,
     setSelectedFilters,
+    setLoaded,
     filterSidebarRender
 }) => {
 
     const [categories, setCategories] = useState([])
 
     const location = useLocation()
+    const prevSearchRef = useRef(location.search);
 
     useEffect(() => {
         fetch('/api/categories', {
@@ -59,7 +61,15 @@ export const Filters = ({ priceRange,
         checkChildrenAndParents(categories, newFilters);
 
         setSelectedFilters(Array.from(newFilters));
-    }, [location.search, categories])
+    }, [location.search])
+
+
+    useEffect(() => {
+        if (prevSearchRef.current !== location.search) {
+            prevSearchRef.current = location.search;
+            getProducts()
+        }
+    }, [location.search])
 
     const tags = [
         "CDR File",
@@ -77,6 +87,8 @@ export const Filters = ({ priceRange,
     const navigate = useNavigate()
 
     const handleCheckboxClick = (category) => {
+        setLoaded(false)
+
         setSelectedFilters((prevFilters) => {
             let newFilters = new Set(prevFilters);
 
@@ -183,13 +195,14 @@ export const Filters = ({ priceRange,
                     <Slider
                         value={priceRange}
                         onValueChange={setPriceRange}
-                        onValueCommit={(...args) =>
+                        onValueCommit={(...args) => {
+                            setLoaded(false);
                             getProducts({
                                 orderBy: sortValue,
                                 minPrice: args[0][0],
                                 maxPrice: args[0][1],
                             })
-                        }
+                        }}
                         min={priceExtremes[0] - 50}
                         max={priceExtremes[1] + 50}
                         step={50}

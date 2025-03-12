@@ -13,8 +13,9 @@ const sortOptions = [
     { value: "recent", label: "New Arrivals" },
 ];
 
-export const Sort = ({ sortValue, setSortValue, getProducts, priceRange }) => {
+export const Sort = ({ sortValue, setSortValue, getProducts, priceRange, setLoaded }) => {
     const [open, setOpen] = useState(false);
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -36,8 +37,11 @@ export const Sort = ({ sortValue, setSortValue, getProducts, priceRange }) => {
                                     key={sortOption.value}
                                     value={sortOption.value}
                                     onSelect={(currentValue) => {
-                                        setSortValue(currentValue === sortValue ? "" : currentValue);
+                                        setSortValue(currentValue === sortValue ? currentValue : currentValue);
+
                                         if (currentValue !== sortValue) {
+                                            setLoaded(false)
+                                            console.log("SORT")
                                             getProducts({
                                                 orderBy: currentValue,
                                                 minPrice: priceRange[0],

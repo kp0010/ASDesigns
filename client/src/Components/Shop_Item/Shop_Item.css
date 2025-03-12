@@ -1,7 +1,7 @@
 .shop_item {
     width: 16.875rem;
     /* 270px */
-    height: fit-content;
+    height: fit-content !important;
     overflow: hidden;
     text-align: center;
     position: relative;

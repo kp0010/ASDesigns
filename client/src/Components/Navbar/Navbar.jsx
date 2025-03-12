@@ -434,7 +434,7 @@ export const Navbar = () => {
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
-                      to="/sports"
+                      to="/shop/sports"
                       onClick={handleClick}
                     >
                       Sports
@@ -443,7 +443,7 @@ export const Navbar = () => {
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
-                      to="/festival"
+                      to="/shop/festival"
                       onClick={handleClick}
                     >
                       Festival
@@ -452,7 +452,7 @@ export const Navbar = () => {
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
-                      to="/others"
+                      to="/shop/others"
                       onClick={handleClick}
                     >
                       Others

@@ -37,7 +37,9 @@ const RoutesList = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/shop/page?/:pageNo?" element={<Shop />} />
+      <Route path="/shop/:category?" element={<Shop />} >
+        <Route path="page?/:pageNo?" element={<Shop />} />
+      </Route>
       <Route path="/product/:productId" element={<Product />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<Wishlist />} />

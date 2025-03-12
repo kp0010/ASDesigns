@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import "./CSS/Shop.css"
 import "../App.css"
+
+import { motion } from "framer-motion";
 
 import {
   Breadcrumb,
@@ -49,14 +51,21 @@ export const Shop = () => {
   const searchQueryPreset = queryParams.get("q")
 
 
-  const getProducts = ({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
+  const getProducts = useCallback(({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
-    if (searchQueryPreset !== null && searchQueryPreset !== undefined) { params.append("q", searchQueryPreset) }
-    else { if (params.has("q") && !params.get("q").length) { params.delete("q") } }
-    if (orderBy !== null && orderBy !== undefined) { params.append("orderBy", orderBy) }
-    if ((minPrice !== null && minPrice !== undefined)) { params.append("minPrice", minPrice !== null ? minPrice : sortValue[0]) }
-    if ((maxPrice !== null && maxPrice !== undefined)) { params.append("maxPrice", maxPrice !== null ? maxPrice : sortValue[1]) }
+    if (searchQueryPreset) {
+      params.append("q", searchQueryPreset)
+    } else {
+      if (params.has("q") && !params.get("q").length) {
+        params.delete("q")
+      }
+    }
+
+    if (orderBy) { params.append("orderBy", orderBy) }
+    if (minPrice) { params.append("minPrice", minPrice ? minPrice : sortValue[0]) }
+    if (maxPrice) { params.append("maxPrice", maxPrice ? maxPrice : sortValue[1]) }
+
     if (selectedFilters.length) { params.append("categories", selectedFilters.join(",")) }
 
     const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`
@@ -81,9 +90,11 @@ export const Shop = () => {
         setProductData(data["products"])
         setTotalProducts(data["totalProducts"])
 
-        setLoaded(true)
+        setTimeout(() => {
+          setLoaded(true)
+        }, 200)
       })
-  }
+  }, [searchQueryPreset, selectedFilters, sortValue, pageNo, priceRange])
 
   const calculatePages = (pageNoStr) => {
     const pageIndexes = []
@@ -137,12 +148,17 @@ export const Shop = () => {
   }
 
   useEffect(() => {
-    getProducts({ orderBy: sortValue, minPrice: priceRange[0], maxPrice: priceRange[1] })
-  }, [pageNo, selectedFilters, searchQueryPreset])
+    getProducts()
+  }, [])
 
   useEffect(() => {
     calculatePages(pageNo)
   }, [pageNo, totalProducts])
+
+  const handlePaginationClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    getProducts()
+  }
 
   return (
     <div>
@@ -168,7 +184,13 @@ export const Shop = () => {
       {/* For large screens  */}
       <div className="shop-main hidden md:block">
         <div className="shop-sort">
-          <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
+          <Sort
+            sortValue={sortValue}
+            setSortValue={setSortValue}
+            getProducts={getProducts}
+            priceRange={priceRange}
+            setLoaded={setLoaded}
+          />
         </div>
 
         <div className="shop-content">
@@ -183,13 +205,32 @@ export const Shop = () => {
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
             filterSidebarRender={false}
+            setLoaded={setLoaded}
             className="shop-filter"
           />
 
           <div className="products-grid-container" style={{ "textAlign": "center" }}>
-            {loaded && productData.map((product, idx) => (
-              <Shop_Item key={idx} product={product} />
-            ))}
+            {loaded ? (
+              productData.map((product, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.1, delay: idx * 0.05 }}
+                >
+                  <Shop_Item product={product} />
+                </motion.div>
+              ))
+            ) : (
+              Array(12)
+                .fill()
+                .map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="shop_item_skeleton bg-gray-300 animate-pulse rounded-lg"
+                  ></div>
+                ))
+            )}
           </div>
         </div>
       </div>
@@ -208,18 +249,43 @@ export const Shop = () => {
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
             filterSidebarRender={true}
+            setLoaded={setLoaded}
             className="shop-filter"
           />
           <div className="shop-sort">
-            <Sort sortValue={sortValue} setSortValue={setSortValue} getProducts={getProducts} priceRange={priceRange} />
+            <Sort
+              sortValue={sortValue}
+              setSortValue={setSortValue}
+              getProducts={getProducts}
+              priceRange={priceRange}
+              setLoaded={setLoaded}
+            />
           </div>
         </div>
 
         <div className="shop-content">
           <div className="products-grid-container" style={{ "textAlign": "center" }}>
-            {loaded && productData.map((product, idx) => (
-              <Shop_Item key={idx} product={product} />
-            ))}
+            {loaded ? (
+              productData.map((product, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: idx * 0.1 }}
+                >
+                  <Shop_Item product={product} />
+                </motion.div>
+              ))
+            ) : (
+              Array(12)
+                .fill()
+                .map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="shop_item bg-gray-300 animate-pulse rounded-lg"
+                  ></div>
+                ))
+            )}
           </div>
         </div>
       </div>
@@ -231,14 +297,14 @@ export const Shop = () => {
               {
                 ["next", "prev", "ellipsis"].includes(page.index) ? (
                   page.index === "next" ? (
-                    <PaginationNext onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+                    <PaginationNext onClick={handlePaginationClick} to={page.link} />
                   ) : (
                     page.index === "prev" ? (
-                      <PaginationPrevious onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link} />
+                      <PaginationPrevious onClick={handlePaginationClick} to={page.link} />
                     ) : (
                       <PaginationEllipsis />
                     ))) : (
-                  <PaginationLink onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} to={page.link}>{page.index}</PaginationLink>
+                  <PaginationLink onClick={handlePaginationClick} to={page.link}>{page.index}</PaginationLink>
                 )
               }
             </PaginationItem>
