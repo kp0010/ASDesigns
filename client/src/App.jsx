@@ -18,6 +18,7 @@ import { Wishlist } from "./Pages/Wishlist";
 import { Checkout } from "./Pages/Checkout";
 import { SuccessPayment } from "./Components/SuccessPayment/SuccessPayment";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
+import { AdminRoutes } from "./Routes/AdminRoutes";
 
 
 function App() {
@@ -46,6 +47,7 @@ const RoutesList = () => {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/razorpayTrial" element={<RazorpayIntegration />} />
       <Route path="/success" element={<SuccessPayment />} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
     </Routes>
   )
 }

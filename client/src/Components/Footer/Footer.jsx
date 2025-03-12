@@ -11,7 +11,7 @@ export const Footer = () => {
   return (
     <>
       <footer
-        className="text-white text-center text-lg-start"
+        className="text-white text-center text-lg-start xl:pl-16  md:px-10"
         style={{ backgroundColor: "#23242a" }}
       >
         <div className="container p-4">
