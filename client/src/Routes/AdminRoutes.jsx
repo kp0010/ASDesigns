@@ -1,13 +1,13 @@
-import { Dashboard } from '@/Components/Admin/Dashboard/Dashboard'
-import { AdminPage } from '@/Pages/AdminPage'
+import { AddProducts } from '@/Pages/Admin/AddProducts'
+import { AdminDashboard } from '@/Pages/Admin/AdminDashboard'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 export const AdminRoutes = () => {
   return (
     <Routes>
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<AdminDashboard />} />
+        <Route path="products/add" element={<AddProducts />} />
         {/* need to add more */}
     </Routes>
   )

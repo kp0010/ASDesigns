@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const AdminPage = () => {
+export const AdminDashboard = () => {
   return (
     <div>
       <div className="sidebar">sidebar</div>
