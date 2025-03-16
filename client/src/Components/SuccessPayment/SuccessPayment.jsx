@@ -81,7 +81,7 @@ export const SuccessPayment = ({}) => {
         </div>
 
         {/* Right Side: Responsive Receipt Design */}
-        <div className="w-full md:w-1/2 bg-[#dedddf] p-4 md:p-6 rounded-lg shadow-lg relative border border-gray-300">
+        <div className="w-full md:w-1/2 bg-zinc-200 p-4 md:p-6 rounded-lg shadow-lg relative border border-gray-300">
           <h3 className="text-xl md:text-2xl text-center font-semibold mb-4">
             Order Summary
           </h3>
