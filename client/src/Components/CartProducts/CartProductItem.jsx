@@ -44,7 +44,7 @@ const CartProductItem = ({ product, handleClick, removeFromCart, buyNowProductId
           to={`/product/${product.product_id}`}
           onClick={handleClick}
         >
-          <h2 className="text-2xl mt-4 break-words">
+          <h2 className="text-2xl mt-4 break-words md:text-left">
             {product.product_id +
               (product["name"] ? " | " + product["name"] : "")}
           </h2>

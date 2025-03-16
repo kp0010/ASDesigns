@@ -1,5 +1,4 @@
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
@@ -18,17 +17,17 @@ import { Wishlist } from "./Pages/Wishlist";
 import { Checkout } from "./Pages/Checkout";
 import { SuccessPayment } from "./Components/SuccessPayment/SuccessPayment";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
+import { AdminRoutes } from "./Routes/AdminRoutes";
+import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
 
 
 function App() {
   return (
     <>
-      <Router>
-        <Toaster theme='dark' />
-        <Navbar />
-        <RoutesList />
-        <Footer />
-      </Router>
+      <Toaster theme='dark' />
+      <Navbar />
+      <RoutesList />
+      <Footer />
     </>
   )
 }
@@ -46,6 +45,16 @@ const RoutesList = () => {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/razorpayTrial" element={<RazorpayIntegration />} />
       <Route path="/success" element={<SuccessPayment />} />
+
+      {/* Admin Routes wrapped in AdminLayout  */}
+      <Route
+        path="/admin/*"
+        element={
+          <AdminLayout>
+            <AdminRoutes />
+          </AdminLayout>
+        }
+      />
     </Routes>
   )
 }
