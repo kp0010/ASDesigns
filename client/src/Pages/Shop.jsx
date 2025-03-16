@@ -32,7 +32,8 @@ import { Filters } from '@/Components/Filters/Filters'
 const PRODUCT_LIMIT = 4 * 3
 
 export const Shop = () => {
-  const { pageNo } = useParams()
+  const { pageNo, category } = useParams()
+  const categoryTC = category ? category.charAt(0).toUpperCase() + category.substring(1).toLowerCase() : "Shop"
 
   const [sortValue, setSortValue] = useState("")
   const [priceRange, setPriceRange] = useState([null, null]);
@@ -52,6 +53,7 @@ export const Shop = () => {
 
 
   const getProducts = useCallback(({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
+    setLoaded(false)
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
     if (searchQueryPreset) {
@@ -66,7 +68,7 @@ export const Shop = () => {
     if (minPrice || priceRange[0]) { params.append("minPrice", minPrice ? minPrice : priceRange[0]) }
     if (maxPrice || priceRange[1]) { params.append("maxPrice", maxPrice ? maxPrice : priceRange[1]) }
 
-    if (selectedFilters.length) { params.append("categories", selectedFilters.join(",")) }
+    if (selectedFilters.length) { params.append("categories", [...selectedFilters, category].join(",")) }
 
     const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`
 
@@ -101,9 +103,10 @@ export const Shop = () => {
     const bufferLen = 2
     const pageNo = parseInt(pageNoStr ? pageNoStr : "1")
     const totalPages = Math.ceil(totalProducts / PRODUCT_LIMIT)
+    const base = `/shop${category ? `/${category}` : ""}`
 
     if (pageNo > 1) {
-      pageIndexes.push({ index: "prev", link: pageNo - 1 !== 1 ? `/shop/page/${pageNo - 1}` : `/shop` })
+      pageIndexes.push({ index: "prev", link: pageNo - 1 !== 1 ? base + `/page/${pageNo - 1}` : base + `` })
     }
 
     let i = 1
@@ -113,7 +116,7 @@ export const Shop = () => {
       if (i <= totalPages) {
         pageIndexes.push({
           index: i,
-          link: i !== 1 ? `/shop/page/${i}` : `/shop`
+          link: i !== 1 ? base + `/page/${i}` : base + ``
         })
       }
     }
@@ -125,7 +128,7 @@ export const Shop = () => {
         if (!pageIndexes.find((pageIdx) => pageIdx.index === i) && (i <= totalPages))
           pageIndexes.push({
             index: i,
-            link: `/shop/page/${i}`
+            link: base + `/page/${i}`
           })
       }
     }
@@ -137,17 +140,18 @@ export const Shop = () => {
         if (!pageIndexes.find((pageIdx) => pageIdx.index === i))
           pageIndexes.push({
             index: i,
-            link: `/shop/page/${i}`
+            link: base + `/page/${i}`
           })
       }
     }
 
-    if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: `/shop/page/${pageNo + 1}` }) }
+    if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: base + `/page/${pageNo + 1}` }) }
 
     setPageIndexes(pageIndexes.length > 1 ? pageIndexes : [])
   }
 
   useEffect(() => {
+    setSelectedFilters([])
     getProducts()
   }, [pageNo])
 
@@ -163,7 +167,7 @@ export const Shop = () => {
   return (
     <div>
       <div className="shop-header">
-        <>Shop</>
+        <>{categoryTC}</>
       </div>
 
       {/* breadcrumb */}
@@ -174,9 +178,17 @@ export const Shop = () => {
               <Link to="/">Home</Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
+            <BreadcrumbLink asChild>
               <Link to="/shop">Shop</Link>
-            </BreadcrumbItem>
+            </BreadcrumbLink>
+            {category && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbLink asChild>
+                  <Link to={`/shop/${category}`}>{categoryTC}</Link>
+                </BreadcrumbLink>
+              </>
+            )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
@@ -205,6 +217,7 @@ export const Shop = () => {
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
             filterSidebarRender={false}
+            category={category ? categoryTC : null}
             setLoaded={setLoaded}
             className="shop-filter"
           />
@@ -248,8 +261,8 @@ export const Shop = () => {
             totalProducts={totalProducts}
             setSelectedFilters={setSelectedFilters}
             selectedFilters={selectedFilters}
+            category={category ? categoryTC : null}
             filterSidebarRender={true}
-            setLoaded={setLoaded}
             className="shop-filter"
           />
           <div className="shop-sort">
@@ -258,7 +271,6 @@ export const Shop = () => {
               setSortValue={setSortValue}
               getProducts={getProducts}
               priceRange={priceRange}
-              setLoaded={setLoaded}
             />
           </div>
         </div>
@@ -282,7 +294,7 @@ export const Shop = () => {
                 .map((_, idx) => (
                   <div
                     key={idx}
-                    className="shop_item bg-gray-300 animate-pulse rounded-lg"
+                    className="bg-gray-300 animate-pulse rounded-lg"
                   ></div>
                 ))
             )}

@@ -6,7 +6,7 @@ import { BrowserRouter, useLocation } from "react-router-dom";
 
 import { ClerkProvider } from "@clerk/clerk-react";
 import ShopContextProvider from "./Context/ShopContext.jsx"
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/Components/ui/sidebar";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 

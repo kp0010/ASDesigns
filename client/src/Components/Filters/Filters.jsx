@@ -16,11 +16,14 @@ export const Filters = ({ priceRange,
     totalProducts,
     selectedFilters,
     setSelectedFilters,
-    setLoaded,
+    category,
     filterSidebarRender
 }) => {
 
+    const [allCategories, setAllCategories] = useState([])
     const [categories, setCategories] = useState([])
+
+    const [categoriesLoaded, setCategoriesLoaded] = useState(false)
 
     const location = useLocation()
     const prevSearchRef = useRef(location.search);
@@ -34,16 +37,36 @@ export const Filters = ({ priceRange,
         })
             .then(resp => resp.json())
             .then(async data => {
-                if (data.success) { setCategories(data.categoryTree) }
+                if (data.success) {
+                    setAllCategories(data.categoryTree)
+                    setCategories(data.categoryTree)
+                    setSelectedFilters([category.toLowerCase(), ...selectedFilters])
+                }
             })
     }, [])
+
+    useEffect(() => {
+        if (!allCategories.length) { return }
+        if (!category) { setCategories(allCategories); return }
+
+        // Removes the Top level Category
+        const categoryTreeByTopCategory = allCategories.find(cat => cat.name === category)
+        setCategories(categoryTreeByTopCategory ? categoryTreeByTopCategory.children : allCategories)
+
+        // Keeps the Top level Category
+        // const categoryTreeByTopCategory = allCategories.filter(cat => cat.name === category)
+        // setCategories(categoryTreeByTopCategory.length ? categoryTreeByTopCategory : allCategories)
+
+        setCategoriesLoaded(true)
+    }, [category, allCategories])
 
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : [];
 
-        const newFilters = new Set(categoriesPreset);
+        const newFilters = new Set([...categoriesPreset, category.toLowerCase()]);
+        console.log(newFilters)
 
         function checkChildrenAndParents(categories, selectedCategories, parent = null) {
             categories.forEach((category) => {
@@ -60,8 +83,9 @@ export const Filters = ({ priceRange,
 
         checkChildrenAndParents(categories, newFilters);
 
+        console.log((Array.from(newFilters)))
         setSelectedFilters(Array.from(newFilters));
-    }, [location.search])
+    }, [location.search, category])
 
 
     useEffect(() => {
@@ -86,30 +110,31 @@ export const Filters = ({ priceRange,
 
     const navigate = useNavigate()
 
-    const handleCheckboxClick = (category) => {
-        setLoaded(false)
-
+    const handleCheckboxClick = (clicketCat) => {
         setSelectedFilters((prevFilters) => {
             let newFilters = new Set(prevFilters);
 
-            if (newFilters.has(category.name.toLowerCase())) {
-                newFilters.delete(category.name.toLowerCase());
-                uncheckChildren(category, newFilters);
+            if (newFilters.has(clicketCat.name.toLowerCase())) {
+                newFilters.delete(clicketCat.name.toLowerCase());
+                uncheckChildren(clicketCat, newFilters);
             } else {
-                newFilters.add(category.name.toLowerCase());
-                checkChildren(category, newFilters);
+                newFilters.add(clicketCat.name.toLowerCase());
+                checkChildren(clicketCat, newFilters);
             }
 
-            updateParentSelection(category, newFilters);
+            updateParentSelection(clicketCat, newFilters);
 
             const newFiltersArray = Array.from(newFilters)
 
             const urlParams = new URLSearchParams(location.search)
 
-            if (newFiltersArray.length) { urlParams.set("cat", newFiltersArray) }
+            if (newFiltersArray.length > (category ? 1 : 0)) {
+                urlParams.set("cat",
+                    category ? newFiltersArray.filter(cat => cat.toLowerCase() !== category.toLowerCase()) : newFiltersArray)
+            }
             else { urlParams.delete("cat") }
 
-            navigate("/shop" + (urlParams.size ? `/?${urlParams.toString()}` : ""))
+            navigate(`/shop${category ? `/${category}` : ""}` + (urlParams.size ? `/?${urlParams.toString()}` : ""))
 
             return newFiltersArray
         });
@@ -182,7 +207,7 @@ export const Filters = ({ priceRange,
                 <div className="shop-filters-category">
                     <h2>Category</h2>
                     <ul className="shop-filters-ul">
-                        {categories.length > 0 && renderCategories(categories)}
+                        {categoriesLoaded && categories.length && renderCategories(categories)}
                     </ul>
                 </div>
 
@@ -196,7 +221,6 @@ export const Filters = ({ priceRange,
                         value={priceRange}
                         onValueChange={setPriceRange}
                         onValueCommit={(...args) => {
-                            setLoaded(false);
                             getProducts({
                                 orderBy: sortValue,
                                 minPrice: args[0][0],
@@ -254,7 +278,7 @@ export const Filters = ({ priceRange,
                             <span className='mt-1'>Showing {productLength} Results out of {totalProducts}</span>
                             <h2 className="shop-filters-category text-2xl font-medium">Category</h2>
                             <ul className="filter-list">
-                                {categories.length > 0 && renderCategories(categories)}
+                                {categoriesLoaded && categories.length && renderCategories(categories)}
                             </ul>
                             <div className="shop-filters-price">
                                 <h2>Price</h2>

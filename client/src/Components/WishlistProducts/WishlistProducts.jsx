@@ -55,7 +55,7 @@ export const WishlistProducts = () => {
             <WishlistProductItem key={idx} product={product} handleClick={handleClick} removeFromWishlist={removeFromWishlist} />
           </div>
         ))
-      ) : (<h1 className="mt-2 text-2xl">Find what you love and save it for later!</h1>)}
+      ) : (<h1 className="mt-2 ml-6 mr-6 text-2xl">Find what you love and save it for later!</h1>)}
     </div>
   );
 };

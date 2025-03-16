@@ -143,7 +143,7 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
           </StyledDiv>
         </div>
       ) : (
-        <h1 className="mt-2 text-2xl">
+        <h1 className="mt-2 ml-6 mr-6 text-2xl">
           Pick your favorite items and come back here to check out
         </h1>
       )}

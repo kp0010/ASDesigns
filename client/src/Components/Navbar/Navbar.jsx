@@ -75,9 +75,16 @@ export const Navbar = () => {
 
   const handleClick = (event) => {
     event.preventDefault();
-    window.scrollTo(0, 0);
-    const splitLink = event.currentTarget.href.split("/");
-    navigate(splitLink[splitLink.length - 1]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const linkName = event.currentTarget.innerText.toLowerCase()
+
+    if (linkName === "home") {
+      navigate("/")
+    } else if (linkName === "shop") {
+      navigate("/shop/")
+    } else {
+      navigate(`/shop/${linkName}`)
+    }
   };
 
   const handleSearchChange = (search) => {
@@ -488,7 +495,7 @@ export const Navbar = () => {
             <li className="nav-item ps-3">
               <NavLink
                 className="nav-link text-dark"
-                to="/shop"
+                to="/shop" end
                 onClick={handleClick}
               >
                 Shop
@@ -497,7 +504,7 @@ export const Navbar = () => {
             <li className="nav-item ps-3">
               <NavLink
                 className="nav-link text-dark"
-                to="/sports"
+                to="/shop/sports"
                 onClick={handleClick}
               >
                 Sports
@@ -506,7 +513,7 @@ export const Navbar = () => {
             <li className="nav-item ps-3">
               <NavLink
                 className="nav-link text-dark"
-                to="/festival"
+                to="/shop/festival"
                 onClick={handleClick}
               >
                 Festival
@@ -515,7 +522,7 @@ export const Navbar = () => {
             <li className="nav-item ps-3">
               <NavLink
                 className="nav-link text-dark"
-                to="/others"
+                to="/shop/others"
                 onClick={handleClick}
               >
                 Others

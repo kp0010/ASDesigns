@@ -40,7 +40,6 @@ export const Sort = ({ sortValue, setSortValue, getProducts, priceRange, setLoad
                                         setSortValue(currentValue === sortValue ? currentValue : currentValue);
 
                                         if (currentValue !== sortValue) {
-                                            setLoaded(false)
                                             console.log("SORT")
                                             getProducts({
                                                 orderBy: currentValue,
