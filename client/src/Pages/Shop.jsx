@@ -63,8 +63,8 @@ export const Shop = () => {
     }
 
     if (orderBy) { params.append("orderBy", orderBy) }
-    if (minPrice) { params.append("minPrice", minPrice ? minPrice : sortValue[0]) }
-    if (maxPrice) { params.append("maxPrice", maxPrice ? maxPrice : sortValue[1]) }
+    if (minPrice || priceRange[0]) { params.append("minPrice", minPrice ? minPrice : priceRange[0]) }
+    if (maxPrice || priceRange[1]) { params.append("maxPrice", maxPrice ? maxPrice : priceRange[1]) }
 
     if (selectedFilters.length) { params.append("categories", selectedFilters.join(",")) }
 
@@ -149,7 +149,7 @@ export const Shop = () => {
 
   useEffect(() => {
     getProducts()
-  }, [])
+  }, [pageNo])
 
   useEffect(() => {
     calculatePages(pageNo)
@@ -157,7 +157,7 @@ export const Shop = () => {
 
   const handlePaginationClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
-    getProducts()
+    setLoaded(false)
   }
 
   return (
