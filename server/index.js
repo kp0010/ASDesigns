@@ -16,6 +16,7 @@ import {
   deleteProduct,
   postProduct,
   getAllCategories,
+  getAllTags,
 } from "./routes/products.js";
 
 import {
@@ -181,6 +182,9 @@ DELETE	:   /api/products/:productId
 GET	:   /api/categories
             Get all Categories nested Levelwise
 
+GET	:   /api/tags
+            Get all Tags
+
  TODO:
  PATCH :    /api/products/:productId
             Update Product with Specified Product Id (Protected Admin)
@@ -276,6 +280,9 @@ app.delete("/api/products", requireAdmin(), deleteProduct);
 
 // Get All Categories Levelwise
 app.get("/api/categories", getAllCategories);
+
+// Get All Tags
+app.get("/api/tags", getAllTags);
 
 
 // CART

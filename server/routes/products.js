@@ -310,3 +310,19 @@ const buildCategoryTree = (categories) => {
 
 	return rootCategories;
 };
+
+export const getAllTags = async (_, res) => {
+	try {
+		const query = "SELECT * FROM tags";
+		const result = await db.query(query);
+
+		res.json({
+			success: true,
+			tags: result.rows,
+		});
+
+	} catch (err) {
+		console.error("Error fetching tags:", err);
+		res.status(500).json({ error: "Internal Server error" });
+	}
+}

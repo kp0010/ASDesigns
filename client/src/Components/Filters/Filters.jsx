@@ -19,6 +19,7 @@ export const Filters = ({ priceRange,
     category,
     filterSidebarRender
 }) => {
+    const [tags, setTags] = useState([])
 
     const [allCategories, setAllCategories] = useState([])
     const [categories, setCategories] = useState([])
@@ -42,6 +43,22 @@ export const Filters = ({ priceRange,
                     setAllCategories(data.categoryTree)
                     setCategories(data.categoryTree)
                     setSelectedFilters(selectedFilters)
+                }
+            })
+    }, [])
+
+    useEffect(() => {
+        fetch('/api/tags', {
+            method: "GET",
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+            .then(resp => resp.json())
+            .then(async data => {
+                console.log(data)
+                if (data.success) {
+                    setTags(data.tags)
                 }
             })
     }, [])
@@ -95,19 +112,6 @@ export const Filters = ({ priceRange,
         setCategoriesLoaded(true)
     }, [location.search, allCategories])
 
-
-    const tags = [
-        "CDR File",
-        "PSD File",
-        "Vector Design",
-        "Jersey Type",
-        "Limited Edition",
-        "Premium Quality",
-        "Customizable",
-        "High Resolution",
-        "Eco-friendly",
-        "Lightweight Fabric",
-    ];
 
     const navigate = useNavigate()
 
@@ -242,7 +246,7 @@ export const Filters = ({ priceRange,
                     <div className="shop-filters-tags-content">
                         {tags.map((tag, index) => (
                             <Badge key={index} className="shop-filters-tags-badge">
-                                {tag}
+                                {tag.name}
                             </Badge>
                         ))}
                     </div>
@@ -311,7 +315,7 @@ export const Filters = ({ priceRange,
                                 <div className="shop-filters-tags-content">
                                     {tags.map((tag, index) => (
                                         <Badge key={index} className="shop-filters-tags-badge">
-                                            {tag}
+                                            {tag.name}
                                         </Badge>
                                     ))}
                                 </div>

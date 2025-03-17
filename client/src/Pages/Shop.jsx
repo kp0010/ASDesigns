@@ -22,7 +22,7 @@ import {
   PaginationPrevious,
 } from "@/Components/ui/pagination"
 
-import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 
 import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
 import { Sort } from '@/Components/Sort/Sort'
@@ -30,6 +30,7 @@ import { Filters } from '@/Components/Filters/Filters'
 
 // WARN: Test Limit
 const PRODUCT_LIMIT = 4 * 3
+
 
 export const Shop = () => {
   const { pageNo, category } = useParams()
