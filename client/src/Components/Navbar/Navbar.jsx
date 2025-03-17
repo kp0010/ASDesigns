@@ -76,12 +76,13 @@ export const Navbar = () => {
   const handleClick = (event) => {
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
-    const linkName = event.currentTarget.innerText.toLowerCase()
+    const linkName = event.currentTarget.id
+    console.log(linkName)
 
     if (linkName === "home") {
       navigate("/")
-    } else if (linkName === "shop") {
-      navigate("/shop/")
+    } else if (["shop", "wishlist", "cart"].includes(linkName.toLowerCase())) {
+      navigate(`/${linkName}`)
     } else {
       navigate(`/shop/${linkName}`)
     }
@@ -133,7 +134,7 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <NavLink to="/" onClick={handleClick} className="navbar-brand">
+          <NavLink id="/" to="/" onClick={handleClick} className="navbar-brand">
             <img
               className="m-3"
               src={logo}
@@ -235,7 +236,7 @@ export const Navbar = () => {
                 }
               }}
             >
-              <NavLink to="/cart" onClick={handleClick}>
+              <NavLink id="cart" to="/cart" onClick={handleClick}>
                 <div className="nav-icons d-flex align-items-center">
                   <LuShoppingCart className="icon me-2" />
                   <span>Cart</span>
@@ -295,7 +296,7 @@ export const Navbar = () => {
                 }
               }}
             >
-              <NavLink to="/wishlist" onClick={handleClick}>
+              <NavLink id="wishlist" to="/wishlist" onClick={handleClick}>
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
                   <span>Wishlist</span>
@@ -421,6 +422,7 @@ export const Navbar = () => {
                 <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                   <li className="nav-item">
                     <NavLink
+                      id="/"
                       className="nav-link active"
                       aria-current="page"
                       to="/"
@@ -431,6 +433,7 @@ export const Navbar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
+                      id="shop"
                       className="nav-link"
                       to="/shop"
                       onClick={handleClick}
@@ -440,6 +443,7 @@ export const Navbar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
+                      id="sports"
                       className="nav-link"
                       to="/shop/sports"
                       onClick={handleClick}
@@ -449,6 +453,7 @@ export const Navbar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
+                      id="festival"
                       className="nav-link"
                       to="/shop/festival"
                       onClick={handleClick}
@@ -458,6 +463,7 @@ export const Navbar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
+                      id="others"
                       className="nav-link"
                       to="/shop/others"
                       onClick={handleClick}
@@ -467,6 +473,7 @@ export const Navbar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
+                      id="about"
                       className="nav-link"
                       to="/about"
                       onClick={handleClick}
@@ -485,6 +492,7 @@ export const Navbar = () => {
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <NavLink
+                id="/"
                 className="nav-link text-dark"
                 to="/"
                 onClick={handleClick}
@@ -494,8 +502,9 @@ export const Navbar = () => {
             </li>
             <li className="nav-item ps-3">
               <NavLink
+                id="shop"
                 className="nav-link text-dark"
-                to="/shop" end
+                to="/shop/page?/:pageNo?" end
                 onClick={handleClick}
               >
                 Shop
@@ -503,6 +512,7 @@ export const Navbar = () => {
             </li>
             <li className="nav-item ps-3">
               <NavLink
+                id="sports"
                 className="nav-link text-dark"
                 to="/shop/sports"
                 onClick={handleClick}
@@ -512,6 +522,7 @@ export const Navbar = () => {
             </li>
             <li className="nav-item ps-3">
               <NavLink
+                id="festival"
                 className="nav-link text-dark"
                 to="/shop/festival"
                 onClick={handleClick}
@@ -521,6 +532,7 @@ export const Navbar = () => {
             </li>
             <li className="nav-item ps-3">
               <NavLink
+                id="others"
                 className="nav-link text-dark"
                 to="/shop/others"
                 onClick={handleClick}

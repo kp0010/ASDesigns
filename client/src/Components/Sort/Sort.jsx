@@ -37,10 +37,9 @@ export const Sort = ({ sortValue, setSortValue, getProducts, priceRange, setLoad
                                     key={sortOption.value}
                                     value={sortOption.value}
                                     onSelect={(currentValue) => {
-                                        setSortValue(currentValue === sortValue ? currentValue : currentValue);
+                                        setSortValue(currentValue)
 
                                         if (currentValue !== sortValue) {
-                                            console.log("SORT")
                                             getProducts({
                                                 orderBy: currentValue,
                                                 minPrice: priceRange[0],
