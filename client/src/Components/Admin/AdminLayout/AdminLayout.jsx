@@ -1,14 +1,18 @@
 import { AdminSidebar } from "@/Components/Admin/AdminSidebar/AdminSidebar"
 import { SidebarTrigger, SidebarProvider } from "@/Components/ui/sidebar"
+import { Outlet } from "react-router-dom"
 
-export const AdminLayout = ({ children }) => {
+export const AdminLayout = () => {
   return (
-    <div className="admin-layout">
+    <SidebarProvider>
+      <div className="admin-layout flex">
         <AdminSidebar />
-        <main>
-            <SidebarTrigger />
-            {children}
+        <main className="w-100 bg-gray-200">
+          <SidebarTrigger />
+          <Outlet />
         </main>
-    </div>
+      </div>
+    </SidebarProvider>
+
   )
 }
