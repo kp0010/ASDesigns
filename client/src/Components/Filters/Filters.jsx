@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import "./Filters.css"
 import "../../App.css"
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
@@ -26,7 +26,6 @@ export const Filters = ({ priceRange,
     const [categoriesLoaded, setCategoriesLoaded] = useState(false)
 
     const location = useLocation()
-    const prevSearchRef = useRef(location.search);
 
     useEffect(() => {
         fetch('/api/categories', {
@@ -40,14 +39,19 @@ export const Filters = ({ priceRange,
                 if (data.success) {
                     setAllCategories(data.categoryTree)
                     setCategories(data.categoryTree)
-                    setSelectedFilters([category.toLowerCase(), ...selectedFilters])
+                    setSelectedFilters(selectedFilters)
                 }
             })
     }, [])
 
     useEffect(() => {
         if (!allCategories.length) { return }
-        if (!category) { setCategories(allCategories); return }
+
+        if (!category) {
+            setCategories(allCategories)
+            setCategoriesLoaded(true)
+            return
+        }
 
         // Removes the Top level Category
         const categoryTreeByTopCategory = allCategories.find(cat => cat.name === category)
@@ -65,8 +69,7 @@ export const Filters = ({ priceRange,
         const urlParams = new URLSearchParams(location.search);
         const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : [];
 
-        const newFilters = new Set([...categoriesPreset, category.toLowerCase()]);
-        console.log(newFilters)
+        const newFilters = new Set(categoriesPreset);
 
         function checkChildrenAndParents(categories, selectedCategories, parent = null) {
             categories.forEach((category) => {
@@ -81,19 +84,13 @@ export const Filters = ({ priceRange,
             });
         }
 
-        checkChildrenAndParents(categories, newFilters);
+        checkChildrenAndParents(allCategories, newFilters);
 
-        console.log((Array.from(newFilters)))
-        setSelectedFilters(Array.from(newFilters));
-    }, [location.search, category])
+        const newFiltersArray = Array.from(newFilters)
+        getProducts({ selectedFilters: newFiltersArray })
+        setSelectedFilters(newFiltersArray);
+    }, [location.search, allCategories])
 
-
-    useEffect(() => {
-        if (prevSearchRef.current !== location.search) {
-            prevSearchRef.current = location.search;
-            getProducts()
-        }
-    }, [location.search])
 
     const tags = [
         "CDR File",
@@ -128,14 +125,15 @@ export const Filters = ({ priceRange,
 
             const urlParams = new URLSearchParams(location.search)
 
-            if (newFiltersArray.length > (category ? 1 : 0)) {
+            if (newFiltersArray.length) {
                 urlParams.set("cat",
                     category ? newFiltersArray.filter(cat => cat.toLowerCase() !== category.toLowerCase()) : newFiltersArray)
             }
             else { urlParams.delete("cat") }
 
-            navigate(`/shop${category ? `/${category}` : ""}` + (urlParams.size ? `/?${urlParams.toString()}` : ""))
+            navigate(`/shop${category ? `/${category.toLowerCase()}` : ""}` + (urlParams.size ? `/?${urlParams.toString()}` : ""))
 
+            getProducts({ selectedFilters: newFiltersArray })
             return newFiltersArray
         });
     };

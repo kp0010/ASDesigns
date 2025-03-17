@@ -16,11 +16,10 @@ import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 import { AdminRoutes } from "./Routes/AdminRoutes";
 import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
 
-// ✅ Layout for User Pages (Includes Navbar & Footer)
 const UserLayout = () => (
   <>
     <Navbar />
-    <Outlet /> {/* This ensures that the child route (actual page) is displayed */}
+    <Outlet />
     <Footer />
   </>
 );
@@ -37,7 +36,6 @@ function App() {
 const RoutesList = () => {
   return (
     <Routes>
-      {/* ✅ Wrap User Pages inside UserLayout */}
       <Route path="/" element={<UserLayout />}>
         <Route index element={<HomePage />} />
         <Route path="shop/:category?" element={<Shop />} />
@@ -50,7 +48,7 @@ const RoutesList = () => {
         <Route path="success" element={<SuccessPayment />} />
       </Route>
 
-      {/* ✅ Admin Routes (No Navbar & Footer) */}
+      {/*  Admin Routes (No Navbar & Footer) */}
       <Route path="/admin/*" element={<AdminLayout />}>
         <Route path="*" element={<AdminRoutes />} />
         {/* <Route index element={<AdminDashboard />} />

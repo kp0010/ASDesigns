@@ -17,7 +17,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/Components/ui/sidebar"
 
 // const items = [
 //   { title: "Home", url: "/", icon: <Home /> },

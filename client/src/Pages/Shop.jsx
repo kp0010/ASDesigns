@@ -52,7 +52,7 @@ export const Shop = () => {
   const searchQueryPreset = queryParams.get("q")
 
 
-  const getProducts = useCallback(({ orderBy = null, minPrice = null, maxPrice = null } = {}) => {
+  const getProducts = useCallback(({ orderBy = null, minPrice = null, maxPrice = null, selectedFilters = [] } = {}) => {
     setLoaded(false)
     const params = new URLSearchParams({ "limit": PRODUCT_LIMIT })
 
@@ -64,11 +64,12 @@ export const Shop = () => {
       }
     }
 
-    if (orderBy) { params.append("orderBy", orderBy) }
-    if (minPrice || priceRange[0]) { params.append("minPrice", minPrice ? minPrice : priceRange[0]) }
-    if (maxPrice || priceRange[1]) { params.append("maxPrice", maxPrice ? maxPrice : priceRange[1]) }
+    if (orderBy || sortValue) { params.set("orderBy", orderBy ? orderBy : sortValue) }
+    if (minPrice || priceRange[0]) { params.set("minPrice", minPrice ? minPrice : priceRange[0]) }
+    if (maxPrice || priceRange[1]) { params.set("maxPrice", maxPrice ? maxPrice : priceRange[1]) }
 
-    if (selectedFilters.length) { params.append("categories", [...selectedFilters, category].join(",")) }
+    if (category) { params.set("categories", category.toLowerCase()) }
+    if (selectedFilters.length) { params.set("categories", selectedFilters.join(",")) }
 
     const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""}?${params.toString()}`
 
@@ -96,7 +97,8 @@ export const Shop = () => {
           setLoaded(true)
         }, 200)
       })
-  }, [searchQueryPreset, selectedFilters, sortValue, pageNo, priceRange])
+  }, [searchQueryPreset, selectedFilters, sortValue, pageNo, priceRange, category])
+
 
   const calculatePages = (pageNoStr) => {
     const pageIndexes = []
@@ -153,7 +155,7 @@ export const Shop = () => {
   useEffect(() => {
     setSelectedFilters([])
     getProducts()
-  }, [pageNo])
+  }, [pageNo, category])
 
   useEffect(() => {
     calculatePages(pageNo)

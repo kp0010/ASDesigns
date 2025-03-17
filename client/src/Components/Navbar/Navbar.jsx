@@ -495,7 +495,7 @@ export const Navbar = () => {
             <li className="nav-item ps-3">
               <NavLink
                 className="nav-link text-dark"
-                to="/shop" end
+                to="/shop/page?/:pageNo?" end
                 onClick={handleClick}
               >
                 Shop

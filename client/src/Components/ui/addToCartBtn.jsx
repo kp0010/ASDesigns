@@ -34,14 +34,12 @@ const AddToCart = ({ className, product, ...props }) => {
 
   const toggleCart = async () => {
     if (cartCurrent) {
-      console.log(cartCurrent, "DELETE")
       await deleteFromCart(product.product_id);
       setCartCurrent(false);
       setCartText("Add to Cart")
 
       toast.info("Removed from Cart")
     } else {
-      console.log(cartCurrent, "ADD")
       await addToCart(product.product_id, product.price);
       setCartCurrent(true);
       setCartText("Remove from Cart")
