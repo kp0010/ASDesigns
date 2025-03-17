@@ -42,7 +42,7 @@ const createGetProductsQuery = (req) => {
 	// Add Order By method
 	// TODO: Add Popular Sort
 	const sortToSql = {
-		"default": "random()",
+		"default": "product_id",
 		"popular": "random()",
 		"recent": "updated_at DESC",
 		"price_desc": "price DESC",

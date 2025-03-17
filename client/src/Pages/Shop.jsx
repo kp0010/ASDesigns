@@ -22,7 +22,7 @@ import {
   PaginationPrevious,
 } from "@/Components/ui/pagination"
 
-import { Link, useLocation, useParams } from "react-router-dom"
+import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom"
 
 import { Shop_Item } from '@/Components/Shop_Item/Shop_Item'
 import { Sort } from '@/Components/Sort/Sort'
@@ -46,6 +46,8 @@ export const Shop = () => {
   const [selectedFilters, setSelectedFilters] = useState([])
 
   const [loaded, setLoaded] = useState(false)
+
+  const navigate = useNavigate()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -155,15 +157,25 @@ export const Shop = () => {
   useEffect(() => {
     setSelectedFilters([])
     getProducts()
-  }, [pageNo, category])
+  }, [category])
+
+  useEffect(() => {
+    getProducts({ selectedFilters: selectedFilters })
+  }, [pageNo])
 
   useEffect(() => {
     calculatePages(pageNo)
   }, [pageNo, totalProducts])
 
-  const handlePaginationClick = () => {
+  const handlePaginationClick = (e) => {
+    e.preventDefault()
+    const nextPageLink = e.currentTarget.getAttribute("link")
     window.scrollTo({ top: 0, behavior: "smooth" })
+
+    const params = new URLSearchParams(location.search)
+
     setLoaded(false)
+    navigate(nextPageLink + (params.size ? `/?${params.toString()}` : ""))
   }
 
   return (
@@ -187,7 +199,7 @@ export const Shop = () => {
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbLink asChild>
-                  <Link to={`/shop/${category}`}>{categoryTC}</Link>
+                  <Link to={`/ shop / ${category}`}>{categoryTC}</Link>
                 </BreadcrumbLink>
               </>
             )}
@@ -311,14 +323,14 @@ export const Shop = () => {
               {
                 ["next", "prev", "ellipsis"].includes(page.index) ? (
                   page.index === "next" ? (
-                    <PaginationNext onClick={handlePaginationClick} to={page.link} />
+                    <PaginationNext onClick={handlePaginationClick} link={page.link} />
                   ) : (
                     page.index === "prev" ? (
-                      <PaginationPrevious onClick={handlePaginationClick} to={page.link} />
+                      <PaginationPrevious onClick={handlePaginationClick} link={page.link} />
                     ) : (
                       <PaginationEllipsis />
                     ))) : (
-                  <PaginationLink onClick={handlePaginationClick} to={page.link}>{page.index}</PaginationLink>
+                  <PaginationLink onClick={handlePaginationClick} link={page.link}>{page.index}</PaginationLink>
                 )
               }
             </PaginationItem>

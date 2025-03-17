@@ -27,6 +27,8 @@ export const Filters = ({ priceRange,
 
     const location = useLocation()
 
+    const { pageNo } = useParams()
+
     useEffect(() => {
         fetch('/api/categories', {
             method: "GET",
@@ -66,6 +68,7 @@ export const Filters = ({ priceRange,
 
 
     useEffect(() => {
+        setCategoriesLoaded(false)
         const urlParams = new URLSearchParams(location.search);
         const categoriesPreset = urlParams.has("cat") ? urlParams.get("cat").toLowerCase().split(",") : [];
 
@@ -89,6 +92,7 @@ export const Filters = ({ priceRange,
         const newFiltersArray = Array.from(newFilters)
         getProducts({ selectedFilters: newFiltersArray })
         setSelectedFilters(newFiltersArray);
+        setCategoriesLoaded(true)
     }, [location.search, allCategories])
 
 
