@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Home, LucideLayoutDashboard } from "lucide-react";
-import { LuChevronDown, LuChevronRight, LuUsers, LuList } from "react-icons/lu";
+import { LuChevronDown, LuChevronRight, LuList, LuUsers } from "react-icons/lu";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import { BsTags } from "react-icons/bs";
 import { BiCategoryAlt } from "react-icons/bi";
@@ -39,17 +39,10 @@ export const AdminSidebar = () => {
         <SidebarMenu className="my-3">
           <SidebarMenuItem>
             <SidebarMenuButton>
-              <Link to="/" className="flex">
-                <img
-                  className="m-3"
-                  src={logo}
-                  alt="..."
-                  width={50}
-                  height={50}
-                />{" "}
-                {/*add border bottom*/}
-                <span className="text-xl font-bold">ASDesigns</span>
+              <Link to="/">
+                <img className="m-3" src={logo} alt="..." width={50} height={50} />                
               </Link>
+              <span className="text-xl font-bold">ASDesigns</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -127,7 +120,7 @@ export const AdminSidebar = () => {
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
+                          <Link to="products/list" className="flex m-2">
                             <LuList className="w-6 h-6" />
                             <span className="ml-3 text-base">Product List</span>
                           </Link>
@@ -244,7 +237,7 @@ export const AdminSidebar = () => {
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <Link to="" className="flex m-3">
+                  <Link to="previousOrders" className="flex m-3">
                     <Home />
                     <span className="ml-3 text-base">Previous Orders</span>
                   </Link>
@@ -255,7 +248,7 @@ export const AdminSidebar = () => {
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <Link to="" className="flex m-3">
+                  <Link to="users" className="flex m-3">
                     <LuUsers className="w-6 h-6" />
                     <span className="ml-3 text-base">Users</span>
                   </Link>
