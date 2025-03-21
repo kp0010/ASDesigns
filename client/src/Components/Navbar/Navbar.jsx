@@ -134,7 +134,7 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <NavLink id="/" to="/" onClick={handleClick} className="navbar-brand">
+          <NavLink id="home" to="/" onClick={handleClick} className="navbar-brand">
             <img
               className="m-3"
               src={logo}
@@ -422,7 +422,7 @@ export const Navbar = () => {
                 <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                   <li className="nav-item">
                     <NavLink
-                      id="/"
+                      id="home"
                       className="nav-link active"
                       aria-current="page"
                       to="/"
@@ -492,7 +492,7 @@ export const Navbar = () => {
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <NavLink
-                id="/"
+                id="home"
                 className="nav-link text-dark"
                 to="/"
                 onClick={handleClick}
