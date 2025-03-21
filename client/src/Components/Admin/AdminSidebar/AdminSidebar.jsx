@@ -38,27 +38,30 @@ export const AdminSidebar = () => {
       <SidebarHeader>
         <SidebarMenu className="my-3">
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Link to="/">
+            <Link to="/">
+              <SidebarMenuButton>
                 <img className="m-3" src={logo} alt="..." width={50} height={50} />
-              </Link>
-              <span className="text-xl font-bold">ASDesigns</span>
-            </SidebarMenuButton>
+                <span className="text-xl font-bold">ASDesigns</span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
+            
             {/* ✅Dashboard */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Link to="" className="flex m-3">
-                    <LucideLayoutDashboard />
-                    <span className="ml-3 text-base">Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
+                <Link to="/admin">
+                  <SidebarMenuButton>
+                    <div className="flex m-3">
+                      <LucideLayoutDashboard />
+                      <span className="ml-3 text-base">Dashboard</span>
+                    </div>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             </SidebarMenu>
 
@@ -87,44 +90,50 @@ export const AdminSidebar = () => {
                   <CollapsibleContent>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="/admin/products/add" className="flex m-2">
-                            <IoAddOutline className="w-6 h-6" />
-                            <span className="ml-3 text-base">Add Product</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="/admin/products/add">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2" >
+                              <IoAddOutline className="w-6 h-6" />
+                              <span className="ml-3 text-base">Add Product</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <Home />
-                            <span className="ml-3 text-base">
-                              Delete Product
-                            </span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <Home />
+                              <span className="ml-3 text-base">Delete Product</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <Home />
-                            <span className="ml-3 text-base">Edit Product</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <Home />
+                              <span className="ml-3 text-base">Edit Product</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="/admin/products/list" className="flex m-2">
-                            <LuList className="w-6 h-6" />
-                            <span className="ml-3 text-base">Product List</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="/admin/products/list">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <LuList className="w-6 h-6" />
+                              <span className="ml-3 text-base">Product List</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                   </CollapsibleContent>
@@ -157,24 +166,26 @@ export const AdminSidebar = () => {
                   <CollapsibleContent>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <IoAddOutline className="w-6 h-6" />
-                            <span className="ml-3 text-base">Add Category</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <IoAddOutline className="w-6 h-6" />
+                              <span className="ml-3 text-base">Add Category</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <LuList className="w-6 h-6" />
-                            <span className="ml-3 text-base">
-                              Category List
-                            </span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <LuList className="w-6 h-6" />
+                              <span className="ml-3 text-base">Category List</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                   </CollapsibleContent>
@@ -182,7 +193,7 @@ export const AdminSidebar = () => {
                 </SidebarMenuItem>
               </Collapsible>
             </SidebarMenu>
-            {/* add collapsible  */}
+
             {/* ✅Tags  */}
             <SidebarMenu className="mb-2">
               <Collapsible
@@ -197,7 +208,6 @@ export const AdminSidebar = () => {
                       <div className="flex items-center ml-5">
                         <div className="flex items-center">
                           <BsTags className="w-6 h-6 " />
-                          {/*Advait*/}
                           <span className="ml-3 text-base ">Tags</span>
                           {isTagsOpen ? (
                             <LuChevronDown className="ml-[6.9rem]" />
@@ -211,48 +221,58 @@ export const AdminSidebar = () => {
                   <CollapsibleContent>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <IoAddOutline className="w-6 h-6" />
-                            <span className="ml-3 text-base">Add Tags</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <IoAddOutline className="w-6 h-6" />
+                              <span className="ml-3 text-base">Add Tags</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>
-                          <Link to="" className="flex m-2">
-                            <LuList className="w-6 h-6" />
-                            <span className="ml-3 text-base">Tags List</span>
-                          </Link>
-                        </SidebarMenuSubButton>
+                        <Link to="">
+                          <SidebarMenuSubButton>
+                            <div className="flex m-2">
+                              <LuList className="w-6 h-6" />
+                              <span className="ml-3 text-base">Tags List</span>
+                            </div>
+                          </SidebarMenuSubButton>
+                        </Link>
                       </SidebarMenuSubItem>
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
             </SidebarMenu>
+
             {/* ✅Previous Orders  */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Link to="/admin/previousOrders" className="flex m-3">
-                    <Home />
-                    <span className="ml-3 text-base">Previous Orders</span>
-                  </Link>
-                </SidebarMenuButton>
+                <Link to="/admin/previousOrders">
+                  <SidebarMenuButton>
+                    <div className="flex m-3">
+                      <Home />
+                      <span className="ml-3 text-base">Previous Orders</span>
+                    </div>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             </SidebarMenu>
+
             {/* ✅users */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Link to="users" className="flex m-3">
-                    <LuUsers className="w-6 h-6" />
-                    <span className="ml-3 text-base">Users</span>
-                  </Link>
-                </SidebarMenuButton>
+                <Link to="users">
+                  <SidebarMenuButton>
+                    <div className="flex m-3">
+                      <LuUsers className="w-6 h-6" />
+                      <span className="ml-3 text-base">Users</span>
+                    </div>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

@@ -102,9 +102,9 @@ const ProductModal = ({ product, triggerButton }) => {
                 </Badge>
               ))}
             </div>
-            <div className="buy-section">
+            <div className="buy-section flex">
               <AddToCart className="w-60 md:mb-3 ml-10 mt-5" product={product} />
-              <Download className="w-60 md:mb-3 bg-[#e3c756] ml-10 mt-5" productId={product.product_id} />
+              <Download className="w-60 md:mb-3 bg-[#e3c756] ml-6 mt-5" productId={product.product_id} />
             </div>
           </div>
         </div>
