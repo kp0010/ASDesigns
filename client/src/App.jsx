@@ -50,8 +50,6 @@ const RoutesList = () => {
       {/*  Admin Routes (No Navbar & Footer) */}
       <Route path="/admin/*" element={<AdminLayout />}>
         <Route path="*" element={<AdminRoutes />} />
-        {/* <Route index element={<AdminDashboard />} />
-        <Route path="products/add" element={<AddProducts />} /> */}
       </Route>
     </Routes>
   );

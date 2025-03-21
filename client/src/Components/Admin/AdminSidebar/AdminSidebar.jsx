@@ -50,8 +50,7 @@ export const AdminSidebar = () => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            
-            {/* ✅Dashboard */}
+            {/* Dashboard */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
                 <Link to="/admin">
@@ -65,7 +64,7 @@ export const AdminSidebar = () => {
               </SidebarMenuItem>
             </SidebarMenu>
 
-            {/* ✅Products */}
+            {/* Products */}
             <SidebarMenu className="mb-2">
               <Collapsible
                 defaultOpen
@@ -141,7 +140,7 @@ export const AdminSidebar = () => {
               </Collapsible>
             </SidebarMenu>
 
-            {/* ✅Category  */}
+            {/* Category  */}
             <SidebarMenu className="mb-2">
               <Collapsible
                 defaultOpen
@@ -193,8 +192,8 @@ export const AdminSidebar = () => {
                 </SidebarMenuItem>
               </Collapsible>
             </SidebarMenu>
-
-            {/* ✅Tags  */}
+            {/* add collapsible  */}
+            {/* Tags  */}
             <SidebarMenu className="mb-2">
               <Collapsible
                 defaultOpen
@@ -247,8 +246,7 @@ export const AdminSidebar = () => {
                 </SidebarMenuItem>
               </Collapsible>
             </SidebarMenu>
-
-            {/* ✅Previous Orders  */}
+            {/* Previous Orders */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
                 <Link to="/admin/previousOrders">
@@ -261,18 +259,15 @@ export const AdminSidebar = () => {
                 </Link>
               </SidebarMenuItem>
             </SidebarMenu>
-
-            {/* ✅users */}
+            {/* Users */}
             <SidebarMenu className="mb-2">
               <SidebarMenuItem>
-                <Link to="users">
-                  <SidebarMenuButton>
-                    <div className="flex m-3">
-                      <LuUsers className="w-6 h-6" />
-                      <span className="ml-3 text-base">Users</span>
-                    </div>
-                  </SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton>
+                  <Link to="/admin/users" className="flex m-3">
+                    <LuUsers className="w-6 h-6" />
+                    <span className="ml-3 text-base">Users</span>
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

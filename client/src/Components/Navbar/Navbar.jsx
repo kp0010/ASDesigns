@@ -26,6 +26,7 @@ import { Skeleton } from "./Skeleton";
 export const Navbar = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn, getToken } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const navigate = useNavigate();
 
@@ -56,9 +57,18 @@ export const Navbar = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // TODO: Error Handling
+        if (data.success) {
+          setIsAdmin(data.user["admin"])
+        }
       });
   };
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      writeUserToDB();
+    }
+  }, [isLoaded, isSignedIn, getToken]);
+
 
   const handleItemClick = (product, isCategory = false) => {
     if (isCategory) {
@@ -81,7 +91,7 @@ export const Navbar = () => {
 
     if (linkName === "home") {
       navigate("/")
-    } else if (["shop", "wishlist", "cart"].includes(linkName.toLowerCase())) {
+    } else if (["shop", "wishlist", "cart", "admin/dashboard"].includes(linkName.toLowerCase())) {
       navigate(`/${linkName}`)
     } else {
       navigate(`/shop/${linkName}`)
@@ -119,12 +129,6 @@ export const Navbar = () => {
     setShowSearch(false)
     navigate(`/shop/?q=${searchQuery}`)
   }
-
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      writeUserToDB();
-    }
-  }, [isLoaded, getToken]);
 
 
   return (
@@ -240,9 +244,11 @@ export const Navbar = () => {
                 <div className="nav-icons d-flex align-items-center">
                   <LuShoppingCart className="icon me-2" />
                   <span>Cart</span>
-                  <span className="cart-count nav-indicator">
-                    {cartData.length}
-                  </span>
+                  {isLoaded && isSignedIn && (
+                    <span className="cart-count nav-indicator">
+                      {cartData.length}
+                    </span>
+                  )}
                 </div>
               </NavLink>
               {showCart && (
@@ -300,9 +306,11 @@ export const Navbar = () => {
                 <div className="nav-icons wishlist d-flex align-items-center">
                   <FaRegHeart className="icon me-2" />
                   <span>Wishlist</span>
-                  <span className=" wishlist-count nav-indicator">
-                    {wishlistData.length}
-                  </span>
+                  {isLoaded && isSignedIn && (
+                    <span className=" wishlist-count nav-indicator">
+                      {wishlistData.length}
+                    </span>
+                  )}
                 </div>
                 <div className="hidden wishlist-preview"></div>
               </NavLink>
@@ -540,6 +548,18 @@ export const Navbar = () => {
                 Others
               </NavLink>
             </li>
+            {isLoaded && isSignedIn && isAdmin && (
+              <li className="nav-item ps-3">
+                <NavLink
+                  id="admin/dashboard"
+                  className="nav-link text-dark"
+                  to="/admin/dashboard"
+                  onClick={handleClick}
+                >
+                  Dashboard
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div >
       </div >

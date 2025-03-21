@@ -8,7 +8,7 @@ import Razorpay from "razorpay";
 import bodyParser from "body-parser";
 
 import { google } from "googleapis";
-import { requireAuth, clerkClient } from "@clerk/express";
+import { requireAuth } from "@clerk/express";
 
 import {
   getProducts,
@@ -35,6 +35,7 @@ import {
   postUsersOrders,
   verifyUserPayment
 } from "./routes/orders.js";
+import { getUser, postNewUser } from "./routes/auth.js";
 
 
 /*
@@ -226,43 +227,11 @@ POST    :   /api/payment-success/
 
 */
 
-app.post("/api/auth/register", requireAuth(), async (req, res) => {
-  // Add New User To DB
-  try {
-    const { userId } = req.auth;
+// Register New User to the DB if not available
+app.post("/api/auth/register", requireAuth(), postNewUser);
 
-    if (!userId) {
-      return res.status(400).json({ error: "Missing User" });
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-    const { emailAddresses, firstName, lastName } = user;
-
-    const selectQuery = "SELECT * FROM users WHERE clerk_id = $1";
-    const existingUser = await db.query(selectQuery, [userId]);
-
-    const insertQuery =
-      "INSERT INTO users (clerk_id, email, name) VALUES ($1, $2, $3)";
-
-    if (existingUser.rowCount === 0) {
-      await db.query(insertQuery, [
-        userId,
-        emailAddresses[0].emailAddress,
-        `${firstName} ${lastName}`,
-      ]);
-    }
-
-    res.json({
-      success: true,
-      userAdded: existingUser.rowCount === 0,
-      message: "User registered successfully",
-    });
-  } catch (error) {
-    console.error("Error saving user:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
+// Get User from DB
+app.get("/api/auth", requireAuth(), getUser);
 
 
 // PRODUCT

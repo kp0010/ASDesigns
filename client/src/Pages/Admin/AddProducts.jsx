@@ -15,7 +15,7 @@ export const AddProducts = () => {
           <input type="text" id="product_name" placeholder="Enter Product Name" className="py-2 px-3 border-2 rounded mb-4 " />
           <label htmlFor="product_img" className="font-medium">Upload Image</label>
           {/* <input type="file" id="product_img" /> */}
-          <Input id="product_img" type="file" className="py-2 mb-4" />
+          <Input id="product_img" type="file" className="py-2 mb-4" accept=".jpeg, .png, .jpg" />
           <label htmlFor="product_category" className="font-medium">Enter Product Categories</label>
           <input type="text" id="product_category" placeholder="Enter Product Categories" className="py-2 px-3 border-2 rounded mb-4" />
           <label htmlFor="product_tags" className="font-medium">Enter Product Tags</label>
