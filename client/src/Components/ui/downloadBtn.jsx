@@ -8,7 +8,7 @@ const Download = ({ className, productId, ...props }) => {
 
   const navigate = useNavigate()
   const buyNow = () => {
-    navigate(`/cart/?buyNow=${productId}`)
+    navigate(`/checkout/?buyNow=${productId}`)
   }
 
   return (

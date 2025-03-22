@@ -12,12 +12,19 @@ import { toast } from "sonner";
 
 import CartProductItem from "./CartProductItem";
 
-export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
+const StyledDiv = styled.div`
+    margin-top: 1.25rem; /* Default for small screens */
+
+    @media (min-width: 1024px) {
+      margin-top: 0;
+    }
+`;
+
+export const CartProducts = () => {
   const { isLoaded, isSignedIn } = useAuth();
 
   const { redirectToSignIn } = useClerk();
 
-  const [buyNowProduct, setBuyNowProduct] = useState(null);
   const { cartData, cartLoaded, deleteFromCart, refreshCart, price } =
     useShop();
 
@@ -30,32 +37,10 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
       }
     }
 
-    if (buyNowProductId) {
-      fetch(`/api/products/${buyNowProductId}`, {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-        .then((resp) => resp.json())
-        .then((data) => {
-          if (data.success) {
-            setBuyNowProduct(data.product);
-          }
-        });
-    } else {
-      refreshCart();
-    }
+    refreshCart();
   }, [isLoaded, isSignedIn, price]);
 
   const navigate = useNavigate();
-  const StyledDiv = styled.div`
-    margin-top: 1.25rem; /* Default for small screens */
-
-    @media (min-width: 1024px) {
-      margin-top: 0;
-    }
-  `;
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -90,16 +75,14 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
           {/* Wrap All Products Inside One Cards Div */}
           <div className="cards bg-white rounded-lg p-4 flex flex-col w-full lg:w-3/5">
             {cartLoaded &&
-              (!buyNowProductId || buyNowProduct) &&
-              { true: [buyNowProduct], false: cartData }[!!buyNowProductId].map(
+              cartData.map(
                 (product, idx) => (
-                  <div className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none">
+                  <div key={idx} className="w-full flex flex-col md:flex-row items-center border-b pb-4 last:border-none">
                     <CartProductItem
                       key={idx}
                       product={product}
                       handleClick={handleClick}
                       removeFromCart={removeFromCart}
-                      buyNowProductId={buyNowProductId}
                     />
                   </div>
                 )
@@ -113,23 +96,15 @@ export const CartProducts = ({ buyNowProduct: buyNowProductId }) => {
             {/* Price Section with Left-Right Alignment */}
             <div className="price w-full pt-4 md:pt-0">
               <div className="flex justify-between w-full text-lg">
-                <h2>Price ({buyNowProductId ? 1 : cartData.length} items)</h2>
+                <h2>Price {cartData.length} items</h2>
                 <span className="font-bold">
-                  ₹{" "}
-                  {(
-                    (buyNowProduct !== null ? buyNowProduct.price : price) -
-                    1.0 * (buyNowProduct !== null ? 1 : cartData.length)
-                  ).toFixed(2)}
+                  ₹ {(price - 1.0 * cartData.length).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between w-full text-lg mt-2">
                 <h2>Total Price</h2>
                 <span className="font-bold">
-                  ₹{" "}
-                  {(
-                    (buyNowProduct !== null ? buyNowProduct.price : price) -
-                    1.0 * (buyNowProduct !== null ? 1 : cartData.length)
-                  ).toFixed(2)}
+                  ₹ {(price - 1.0 * cartData.length).toFixed(2)}
                 </span>
               </div>
             </div>

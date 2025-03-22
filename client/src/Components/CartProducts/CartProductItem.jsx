@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { motion } from 'framer-motion';
 
-const CartProductItem = ({ product, handleClick, removeFromCart, buyNowProductId }) => {
+const CartProductItem = ({ product, handleClick, removeFromCart }) => {
   const [isRemoving, setIsRemoving] = useState(false)
 
   const handleRemove = (productId) => {
@@ -61,14 +61,12 @@ const CartProductItem = ({ product, handleClick, removeFromCart, buyNowProductId
         </div>
 
         <div className="remove-sec mt-3">
-          {!buyNowProductId && (
-            <Button
-              onClick={() => handleRemove(product.product_id)}
-              className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
-            >
-              <FaRegTrashAlt /> Remove
-            </Button>
-          )}
+          <Button
+            onClick={() => handleRemove(product.product_id)}
+            className="w-full md:w-40 text-sm bg-white text-black border-2 border-black flex items-center justify-center"
+          >
+            <FaRegTrashAlt /> Remove
+          </Button>
         </div>
       </div>
     </motion.div >
