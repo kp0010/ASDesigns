@@ -23,6 +23,18 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 
 import { Skeleton } from "./Skeleton";
 
+const DotIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      fill="currentColor"
+    >
+      <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+    </svg>
+  );
+};
+
 export const Navbar = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn, getToken } = useAuth();
@@ -37,14 +49,15 @@ export const Navbar = () => {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") ? searchParams.get("q") : "")
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("q") ? searchParams.get("q") : ""
+  );
   const [searchProducts, setSearchProducts] = useState([]);
 
-  const inputRef = useRef(null)
-
+  const inputRef = useRef(null);
 
   const writeUserToDB = async () => {
     const token = await getToken();
@@ -78,9 +91,9 @@ export const Navbar = () => {
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setShowWishlist(false)
-    setShowCart(false)
-    setShowSearch(false)
+    setShowWishlist(false);
+    setShowCart(false);
+    setShowSearch(false);
   };
 
   const handleClick = (event) => {
@@ -93,12 +106,12 @@ export const Navbar = () => {
     } else if (["shop", "wishlist", "cart", "admin/dashboard"].includes(linkName.toLowerCase())) {
       navigate(`/${linkName}`)
     } else {
-      navigate(`/shop/${linkName}`)
+      navigate(`/shop/${linkName}`);
     }
   };
 
   const handleSearchChange = (search) => {
-    setSearchQuery(search)
+    setSearchQuery(search);
 
     if (!search.length) {
       setSearchProducts([]);
@@ -122,13 +135,18 @@ export const Navbar = () => {
   };
 
   const handleSearchEnter = (e) => {
-    e.preventDefault()
-    window.scrollTo({ top: 0, behavior: "smooth" })
-    inputRef.current?.blur()
-    setShowSearch(false)
-    navigate(`/shop/?q=${searchQuery}`)
-  }
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    inputRef.current?.blur();
+    setShowSearch(false);
+    navigate(`/shop/?q=${searchQuery}`);
+  };
 
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      writeUserToDB();
+    }
+  }, [isLoaded, getToken]);
 
   return (
     <nav
@@ -137,7 +155,12 @@ export const Navbar = () => {
     >
       <div className="d-flex flex-column w-100">
         <div className="container-fluid d-flex align-items-center justify-content-between w-100">
-          <NavLink id="home" to="/" onClick={handleClick} className="navbar-brand">
+          <NavLink
+            id="home"
+            to="/"
+            onClick={handleClick}
+            className="navbar-brand"
+          >
             <img
               className="m-3"
               src={logo}
@@ -157,12 +180,20 @@ export const Navbar = () => {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                onFocus={() => { setShowSearch(true); }}
-                onBlur={() => { setTimeout(() => setShowSearch(false), 500); }}
-                onChange={(e) => { handleSearchChange(e.target.value); }}
+                onFocus={() => {
+                  setShowSearch(true);
+                }}
+                onBlur={() => {
+                  setTimeout(() => setShowSearch(false), 500);
+                }}
+                onChange={(e) => {
+                  handleSearchChange(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   // e.preventDefault()
-                  if (e.key === "Enter") { handleSearchEnter(e) }
+                  if (e.key === "Enter") {
+                    handleSearchEnter(e);
+                  }
                 }}
               />
               <button
@@ -181,14 +212,23 @@ export const Navbar = () => {
                     <Link
                       className="bg-red-600"
                       key={idx}
-                      to={isCategory ? `/shop/?cat=${product.name}` : `/product/${product.product_id}`}
+                      to={
+                        isCategory
+                          ? `/shop/?cat=${product.name}`
+                          : `/product/${product.product_id}`
+                      }
                     >
                       <div
                         className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md
-                                    ${isCategory ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3" : ""}`}
-                        onClick={() => { handleItemClick(product, isCategory) }}
+                                    ${
+                                      isCategory
+                                        ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3"
+                                        : ""
+                                    }`}
+                        onClick={() => {
+                          handleItemClick(product, isCategory);
+                        }}
                       >
-
                         {isCategory ? (
                           <div>
                             <h3 className="text-md font-semibold">
@@ -220,7 +260,7 @@ export const Navbar = () => {
                         )}
                       </div>
                     </Link>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -373,16 +413,24 @@ export const Navbar = () => {
                           userButtonPopoverActionButton: "hover:bg-red-500",
                         },
                       }}
-                    />
+                    >
+                      <UserButton.MenuItems>
+                        <UserButton.Link
+                          label="Create organization"
+                          labelIcon={<DotIcon />}
+                          href="/create-organization"
+                        />
+                      </UserButton.MenuItems>
+                    </UserButton>
                   </SignedIn>
                 </div>
               </>
             </div>
           </div>
-        </div >
+        </div>
 
         {/* search and sidebar for mobile view */}
-        < div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2" >
+        <div className="container-fluid d-flex d-md-none align-items-center mt-2 mb-2">
           <form className="d-flex flex-grow-1">
             <div className="input-group w-100">
               <input
@@ -492,10 +540,10 @@ export const Navbar = () => {
               </div>
             </div>
           </div>
-        </div >
+        </div>
 
         {/* Navitems for big screen */}
-        < div className="container-fluid w-100 d-none d-md-block bg-gray-100" >
+        <div className="container-fluid w-100 d-none d-md-block bg-gray-100">
           <ul className="nav nav-underline">
             <li className="nav-item ps-3">
               <NavLink
@@ -511,7 +559,8 @@ export const Navbar = () => {
               <NavLink
                 id="shop"
                 className="nav-link text-dark"
-                to="/shop/page?/:pageNo?" end
+                to="/shop/page?/:pageNo?"
+                end
                 onClick={handleClick}
               >
                 Shop
@@ -560,8 +609,8 @@ export const Navbar = () => {
               </li>
             )}
           </ul>
-        </div >
-      </div >
-    </nav >
+        </div>
+      </div>
+    </nav>
   );
 };

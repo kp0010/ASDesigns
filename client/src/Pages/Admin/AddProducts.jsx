@@ -1,27 +1,80 @@
-import React from 'react'
-import { Input } from "@/Components/ui/input"
+import React from "react";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const AddProducts = () => {
   return (
-    <div className="add-products flex flex-col px-24 pt-8 gap-16">
-      <div className="add-products-title">
-        <h2 className="text-4xl font-bold text-center">Add Products</h2>
-      </div>
-      <div className="add-products-data bg-white rounded-lg p-4 flex flex-col w-full justify-center items-center shadow-md">
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <label htmlFor="product_id" className="font-medium" >Enter Product ID</label>
-          <input type="text" id="product_id" placeholder="Enter Product ID" className="py-2 px-3 border-2 rounded mb-4 " />
-          <label htmlFor="product_name" className="font-medium">Enter Product Name</label>
-          <input type="text" id="product_name" placeholder="Enter Product Name" className="py-2 px-3 border-2 rounded mb-4 " />
-          <label htmlFor="product_img" className="font-medium">Upload Image</label>
-          {/* <input type="file" id="product_img" /> */}
-          <Input id="product_img" type="file" className="py-2 mb-4" accept=".jpeg, .png, .jpg" />
-          <label htmlFor="product_category" className="font-medium">Enter Product Categories</label>
-          <input type="text" id="product_category" placeholder="Enter Product Categories" className="py-2 px-3 border-2 rounded mb-4" />
-          <label htmlFor="product_tags" className="font-medium">Enter Product Tags</label>
-          <input type="text" id="product_tags" placeholder="Enter Product Tags" className="py-2 px-3 border-2 rounded mb-4" />
-        </div>
-      </div>
+    <div className="add-products flex flex-col px-12 pt-8 gap-10 items-center">
+      <h2 className="text-4xl font-bold text-center text-gray-800">
+        Add Products
+      </h2>
+
+      <Card className="w-full max-w-lg p-6 shadow-lg rounded-2xl bg-white">
+        <CardContent className="flex flex-col gap-4">
+          <div className="grid w-full gap-3">
+            <label htmlFor="product_id" className="font-medium text-gray-700">
+              Product ID
+            </label>
+            <Input
+              type="text"
+              id="product_id"
+              placeholder="Enter Product ID"
+              className="border-gray-300"
+            />
+          </div>
+
+          <div className="grid w-full gap-3">
+            <label htmlFor="product_name" className="font-medium text-gray-700">
+              Product Name
+            </label>
+            <Input
+              type="text"
+              id="product_name"
+              placeholder="Enter Product Name"
+              className="border-gray-300"
+            />
+          </div>
+
+          <div className="grid w-full gap-3">
+            <label htmlFor="product_img" className="font-medium text-gray-700">
+              Upload Image
+            </label>
+            <Input id="product_img" type="file" className="border-gray-300" />
+          </div>
+
+          <div className="grid w-full gap-3">
+            <label
+              htmlFor="product_category"
+              className="font-medium text-gray-700"
+            >
+              Product Categories
+            </label>
+            <Input
+              type="text"
+              id="product_category"
+              placeholder="Enter Product Categories"
+              className="border-gray-300"
+            />
+          </div>
+
+          <div className="grid w-full gap-3">
+            <label htmlFor="product_tags" className="font-medium text-gray-700">
+              Product Tags
+            </label>
+            <Input
+              type="text"
+              id="product_tags"
+              placeholder="Enter Product Tags"
+              className="border-gray-300"
+            />
+          </div>
+
+          <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+            Add Product
+          </Button>
+        </CardContent>
+      </Card>
     </div>
-  )
-}
+  );
+};

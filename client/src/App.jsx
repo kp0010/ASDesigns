@@ -15,6 +15,8 @@ import { OrderInfo } from "./Components/OrderInfo/OrderInfo";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 import { AdminRoutes } from "./Routes/AdminRoutes";
 import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
+import { Protect } from "@clerk/clerk-react";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
 const UserLayout = () => (
   <>
@@ -48,7 +50,16 @@ const RoutesList = () => {
       </Route>
 
       {/*  Admin Routes (No Navbar & Footer) */}
-      <Route path="/admin/*" element={<AdminLayout />}>
+      <Route
+        path="/admin/*"
+        element={
+          <Protect>
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          </Protect>
+        }
+      >
         <Route path="*" element={<AdminRoutes />} />
       </Route>
     </Routes>
@@ -56,4 +67,3 @@ const RoutesList = () => {
 };
 
 export default App;
-
