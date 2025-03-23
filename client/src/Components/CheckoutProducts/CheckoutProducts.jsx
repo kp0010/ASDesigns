@@ -6,10 +6,10 @@ import { useClerk, useUser } from "@clerk/clerk-react";
 import { useShop } from "@/Context/ShopContext";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const CheckoutProducts = ({ buyNowProductId }) => {
-  const { cartData, price, refreshCart } = useShop()
+  const { cartData, cartLoaded, price, refreshCart } = useShop()
 
   const { redirectToSignIn } = useClerk()
 
@@ -28,6 +28,8 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
   const [buyNowProduct, setBuyNowProduct] = useState(null)
 
   const [loaded, setLoaded] = useState(false);
+
+  const navigate = useNavigate()
 
   const skeletonVariants = {
     hidden: { opacity: 0 },
@@ -53,10 +55,15 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
         .then((data) => {
           if (data.success) {
             setBuyNowProduct(data.product);
+          } else {
+            navigate("/")
           }
         });
     } else {
       refreshCart();
+      if (!cartData.length) {
+        navigate("/")
+      }
     }
 
     setLoaded(true)
@@ -65,6 +72,12 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
   useEffect(() => {
     getBuyNowProduct()
   }, [buyNowProductId])
+
+  useEffect(() => {
+    if (cartLoaded && !cartData.length && !buyNowProductId) {
+      navigate("/")
+    }
+  })
 
   const validatePhone = (value) => {
     const phoneRegex = /^[789]\d{9}$/
@@ -116,8 +129,8 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
   }
 
   async function makePayment() {
-    if (isSignedIn && ((!price || price <= 0) || (buyNowProductId && buyNowProduct.price <= 0))) {
-      toast("Amount is not Valid");
+    if ((!price || price <= 0) && (buyNowProductId && parseFloat(buyNowProduct["price"]) <= 0)) {
+      toast.warning("Amount is Not Valid");
       return;
     }
 
@@ -127,6 +140,8 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: (buyNowProductId ? buyNowProduct.price : price) * 100,
+          user_mail: validateEmail(email) ? email : user.emailAddresses[0]["emailAddress"],
+          user_phone: phoneNo,
           currency: "INR",
           receipt: `u_${user.emailAddresses[0]["emailAddress"].substring(0, 25)}_t_${Date.now()}`,
           notes: {},
@@ -148,6 +163,24 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
         name: "Asdesigns",
         description: "Test Transaction",
         order_id: order.order_id,
+        modal: {
+          ondismiss: function() {
+            try {
+              fetch("/api/cancel-order", {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: order.order_id,
+                }),
+              })
+            } catch (e) {
+              console.error("Error deleting payment:", error);
+            }
+
+          },
+        },
 
         handler: async function(response) {
           try {
@@ -160,13 +193,15 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
+                buyNowProductId: buyNowProductId
               }),
             });
 
             const verifyData = await verifyResponse.json();
 
             if (verifyData.success) {
-              window.location.href = "/api/payment-success";
+              refreshCart()
+              navigate(`/order/${order.order_id}`)
             } else {
               alert("Payment verification failed");
             }
@@ -207,7 +242,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="Enter phone number"
+            placeholder="Enter Phone number"
             value={phoneNo}
             onChange={handleNumberChange}
             maxLength={10}
@@ -318,9 +353,11 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <p className="text-sm break-words w-full sm:w-52 mr-4">
-                    {buyNowProduct.product_id} | {buyNowProduct.name}
-                  </p>
+                  <Link to={`/product/${buyNowProduct.product_id}`}>
+                    <p className="text-sm break-words w-full sm:w-52 mr-4">
+                      {buyNowProduct.product_id} | {buyNowProduct.name}
+                    </p>
+                  </Link>
                   <p className="text-right font-medium">₹ {(parseFloat(buyNowProduct.price) - 1.0).toFixed(2)}</p>
                 </motion.div>
               )}

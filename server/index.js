@@ -32,6 +32,9 @@ import {
 } from "./routes/wishlist.js";
 
 import {
+  deleteUserOrder,
+  getUsersOrder,
+  getUsersOrders,
   postUsersOrders,
   verifyUserPayment
 } from "./routes/orders.js";
@@ -219,6 +222,15 @@ Order Rotues
 POST    :   /api/create-order/
             Create a new Order (Protected)
 
+POST    :   /api/order
+            Get Users Order (Protected)
+
+POST    :   /api/orders
+            Get Users All Orders (Protected)
+
+DELETE  :   /api/cancel-order/
+            Delete a Cancelled Order (Protected)
+
 POST    :   /api/verify-payment/
             Verify the Payment from an order (Protected)
 
@@ -280,6 +292,15 @@ app.delete("/api/wishlist", requireAuth(), deleteWishlistItem);
 // ORDER
 // Create a new Order
 app.post("/api/create-order", requireAuth(), postUsersOrders);
+
+// Get Users Order
+app.post("/api/order", requireAuth(), getUsersOrder);
+
+// Get Users All Orders
+app.post("/api/orders", requireAuth(), getUsersOrders);
+
+// Delete a Cancelled Order
+app.delete("/api/cancel-order", requireAuth(), deleteUserOrder);
 
 // Verify the Payment from an order
 app.post("/api/verify-payment", requireAuth(), verifyUserPayment);

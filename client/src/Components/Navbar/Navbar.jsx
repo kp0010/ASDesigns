@@ -87,7 +87,6 @@ export const Navbar = () => {
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
     const linkName = event.currentTarget.id
-    console.log(linkName)
 
     if (linkName === "home") {
       navigate("/")

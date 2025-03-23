@@ -59,7 +59,6 @@ export const Filters = ({
     })
       .then((resp) => resp.json())
       .then(async (data) => {
-        console.log(data);
         if (data.success) {
           setTags(data.tags);
         }
@@ -157,8 +156,8 @@ export const Filters = ({
           "cat",
           category
             ? newFiltersArray.filter(
-                (cat) => cat.toLowerCase() !== category.toLowerCase()
-              )
+              (cat) => cat.toLowerCase() !== category.toLowerCase()
+            )
             : newFiltersArray
         );
       } else {
@@ -167,7 +166,7 @@ export const Filters = ({
 
       navigate(
         `/shop${category ? `/${category.toLowerCase()}` : ""}` +
-          (urlParams.size ? `/?${urlParams.toString()}` : "")
+        (urlParams.size ? `/?${urlParams.toString()}` : "")
       );
 
       getProducts({ selectedFilters: newFiltersArray });
@@ -410,7 +409,7 @@ export const Filters = ({
                         className="remove-icon"
                         onClick={() => handleRemoveTag(tag)}
                       >
-                        <FaXmark/>
+                        <FaXmark />
                       </span>
                     </Badge>
                   ))}

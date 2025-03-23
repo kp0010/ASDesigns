@@ -11,7 +11,7 @@ import { Product } from "./Pages/Product";
 import { Cart } from "./Pages/Cart";
 import { Wishlist } from "./Pages/Wishlist";
 import { Checkout } from "./Pages/Checkout";
-import { SuccessPayment } from "./Components/SuccessPayment/SuccessPayment";
+import { OrderInfo } from "./Components/OrderInfo/OrderInfo";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 import { AdminRoutes } from "./Routes/AdminRoutes";
 import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
@@ -44,7 +44,7 @@ const RoutesList = () => {
         <Route path="wishlist" element={<Wishlist />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="razorpayTrial" element={<RazorpayIntegration />} />
-        <Route path="success" element={<SuccessPayment />} />
+        <Route path="order/:orderId" element={<OrderInfo />} />
       </Route>
 
       {/*  Admin Routes (No Navbar & Footer) */}
