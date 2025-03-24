@@ -1,6 +1,12 @@
 import { db, razorpay } from "../index.js"
 import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils.js"
-import { getUserIdFromClerkId } from "./cart.js"
+
+export const getUserIdFromClerkId = async (clerkId) => {
+	const userSelectQuery = "SELECT * FROM users WHERE clerk_id = $1"
+	const userResult = await db.query(userSelectQuery, [clerkId])
+
+	return { userId: userResult.rows[0]["id"], admin: userResult.rows[0]["admin"] }
+}
 
 
 export const getUsersOrder = async (req, res) => {
@@ -17,7 +23,7 @@ export const getUsersOrder = async (req, res) => {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = await getUserIdFromClerkId(clerkId)
+		const { userId } = await getUserIdFromClerkId(clerkId)
 
 		const orderSelectQuery = "SELECT * FROM orders " +
 			"WHERE order_id = $1 " +
@@ -58,28 +64,34 @@ export const getUsersOrder = async (req, res) => {
 
 export const getUsersOrders = async (req, res) => {
 	try {
+		const { getAll } = req.body
+
 		const { userId: clerkId } = req.auth
 
 		if (!clerkId) {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = await getUserIdFromClerkId(clerkId)
+		const { userId, admin } = await getUserIdFromClerkId(clerkId)
 
 		const orderSelectQuery = "SELECT * FROM orders " +
-			"WHERE user_id = $1"
+			(!(getAll && admin) ? "WHERE user_id = $1" : "")
 
-		const orderSelectResp = await db.query(orderSelectQuery,
-			[userId])
+		const queryParams = []
+		if (!(getAll && admin)) {
+			queryParams.push(userId)
+		}
 
-		if (orderSelectQuery.rowCount) {
+		const orderSelectResp = await db.query(orderSelectQuery, queryParams)
+
+		if (orderSelectResp.rowCount) {
 			res.status(200).json({
 				success: true,
 				message: "Orders Retrieved Successfully",
 				orders: orderSelectResp.rows
 			})
 		} else {
-			res.status(200).json({
+			res.status(404).json({
 				success: false,
 				message: "Orders Retrieval Unsuccesfull",
 			})

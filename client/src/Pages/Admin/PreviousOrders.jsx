@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,44 +11,34 @@ import {
 } from "@/Components/ui/table";
 import { Badge } from "@/Components/ui/badge";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    userEmail: "user1@example.com",
-    userPhone: "123-456-7890",
-    totalAmount: "$250.00",
-    receipt: "View",
-    paymentStatus: "Paid",
-    date: "2025-03-22",
-  },
-  {
-    invoice: "INV002",
-    userEmail: "user2@example.com",
-    userPhone: "987-654-3210",
-    totalAmount: "$150.00",
-    receipt: "View",
-    paymentStatus: "Pending",
-    date: "2025-03-20",
-  },
-  {
-    invoice: "INV003",
-    userEmail: "user3@example.com",
-    userPhone: "555-666-7777",
-    totalAmount: "$350.00",
-    receipt: "View",
-    paymentStatus: "Unpaid",
-    date: "2025-03-18",
-  },
-];
-
 export const PreviousOrders = () => {
+  const [orders, setOrders] = useState([])
+  const [orderLoaded, setOrderLoaded] = useState(false)
+
+  fetch("/api/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      "getAll": true
+    })
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      if (data.success) {
+        setOrders(data.orders)
+        setOrderLoaded(true)
+      }
+    });
+
   return (
     <div className="w-full max-w-7xl mx-auto p-6 bg-white shadow-lg rounded-xl">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
         Previous Orders
       </h2>
       <Table className="border rounded-lg overflow-hidden">
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>A List of your Recent Orders.</TableCaption>
         <TableHeader>
           <TableRow className="bg-gray-100">
             <TableHead className="w-[120px]">Order ID</TableHead>
@@ -61,31 +51,29 @@ export const PreviousOrders = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice} className="hover:bg-gray-50">
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.userEmail}</TableCell>
-              <TableCell>{invoice.userPhone}</TableCell>
-              <TableCell>{invoice.totalAmount}</TableCell>
+          {orderLoaded && orders.map((order) => (
+            <TableRow key={order["order_id"]} className="hover:bg-gray-50">
+              <TableCell className="font-medium">{order["order_id"]}</TableCell>
+              <TableCell>{order["user_mail"]}</TableCell>
+              <TableCell>+91 {order["user_phone"]}</TableCell>
+              <TableCell>{parseFloat(order["total_amount"]).toFixed(2)}</TableCell>
               <TableCell>
-                <a href="#" className="text-blue-600 hover:underline">
-                  {invoice.receipt}
-                </a>
+                {order["receipt"].substring(0, 15) + (order["receipt"].length > 15 && "...")}
               </TableCell>
               <TableCell>
                 <Badge
                   className={
-                    invoice.paymentStatus === "Paid"
+                    order["status"] === "paid"
                       ? "bg-green-500 text-white"
-                      : invoice.paymentStatus === "Pending"
+                      : order["status"] === "pending"
                         ? "bg-yellow-500 text-white"
                         : "bg-red-500 text-white"
                   }
                 >
-                  {invoice.paymentStatus}
+                  {order["status"].charAt(0).toUpperCase() + order["status"].substring(1).toLowerCase()}
                 </Badge>
               </TableCell>
-              <TableCell className="text-right">{invoice.date}</TableCell>
+              <TableCell className="text-right">{new Date(order["created_at"]).toLocaleDateString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>

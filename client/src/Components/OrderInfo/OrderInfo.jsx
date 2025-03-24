@@ -10,14 +10,11 @@ export const OrderInfo = ({ }) => {
   const [orderLoaded, setOrderLoaded] = useState(false)
 
   const getOrder = () => {
-    fetch("/api/order", {
+    fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        orderId: orderId
-      })
     })
       .then((resp) => resp.json())
       .then((data) => {
