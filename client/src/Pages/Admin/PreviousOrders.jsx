@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+} from "@/Components/ui/table";
+import { Badge } from "@/Components/ui/badge";
 
 const invoices = [
   {
@@ -78,8 +78,8 @@ export const PreviousOrders = () => {
                     invoice.paymentStatus === "Paid"
                       ? "bg-green-500 text-white"
                       : invoice.paymentStatus === "Pending"
-                      ? "bg-yellow-500 text-white"
-                      : "bg-red-500 text-white"
+                        ? "bg-yellow-500 text-white"
+                        : "bg-red-500 text-white"
                   }
                 >
                   {invoice.paymentStatus}
