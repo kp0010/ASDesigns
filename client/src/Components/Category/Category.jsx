@@ -1,5 +1,4 @@
 import React from "react";
-
 import "./Category.css";
 import "../../App.css";
 
@@ -7,92 +6,66 @@ import sports from "../../Assets/Categories/sport.jpg";
 import fest from "../../Assets/Categories/fest.png";
 import other from "../../Assets/Categories/other.jpg";
 
-import { Button } from "@/Components/ui/button";
-import { ChevronRight } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 export const Category = () => {
+  const categories = [
+    {
+      title: "Sports",
+      subtitle: "Explore Your Favorite Games",
+      img: sports,
+      link: "/shop/sports",
+    },
+    {
+      title: "Festivals",
+      subtitle: "Celebrate With Joy",
+      img: fest,
+      link: "/shop/festival",
+    },
+    {
+      title: "Others",
+      subtitle: "Find Something Unique",
+      img: other,
+      link: "/shop/others",
+    },
+  ];
 
-  const navigate = useNavigate();
-
-  const handleClick = (event) => {
-    event.preventDefault();
-    window.scrollTo(0, 0);
-    const splitLink = event.currentTarget.href.split("/")
-    navigate("/shop/" + splitLink[splitLink.length - 1])
-  };
 
   return (
-    <div className="category">
-      <div className="text-center">
-        <h1 className="text-5xl pt-5 mb-10" style={{ fontFamily: "DM Sans" }}>
-          Explore Popular Categories
-        </h1>
-      </div>
+    <div className="bg-[#edeae7] py-12">
+      {/* Heading */}
+      <h2 className="text-4xl text-center text-gray-800 mb-12">
+        Shop by Categories
+      </h2>
 
-      <div className="flex flex-wrap justify-center gap-10 md:gap-5 lg:gap-20  mb-8">
-        <div className="w-80 flex flex-col items-center text-center xl:mb-20 mt-2">
-          <div className="relative w-full rounded-xl overflow-hidden">
+      {/* Categories Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-5 max-w-7xl mx-auto">
+        {categories.map((category, index) => (
+          <div
+            key={index}
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+          >
             <img
-              src={sports}
-              className="w-full h-48 object-cover filter blur-[2px]"
-              alt="Sports"
+              src={category.img}
+              className="w-full h-[350px] md:h-[450px] object-cover transition-transform duration-300 group-hover:scale-110"
+              alt={category.title}
             />
-            <div className="absolute inset-0 bg-black/40"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
-                Sports
-              </h5>
-              <NavLink to="/sports" onClick={handleClick}>
-                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] hover:bg-black text-black">
-                  Explore More <ChevronRight />
-                </Button>
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition duration-300"></div>
+            {/* Text & Button */}
+            <div className="absolute bottom-8 left-8 text-white">
+              <p className="text-lg font-semibold">{category.subtitle}</p>
+              <h2 className="text-3xl font-bold">{category.title}</h2>
+              <NavLink to={category.link} className="inline-block mt-4">
+                <button className="px-5 py-2 bg-white text-black rounded-full text-sm font-medium transition hover:bg-gray-200" onClick={() => {
+                  window.scrollTo(0, 0);
+                }}>
+                  Shop now
+                </button>
               </NavLink>
             </div>
           </div>
-        </div>
-
-        <div className="w-80 flex flex-col items-center text-center mt-2">
-          <div className="relative w-full rounded-xl overflow-hidden">
-            <img
-              src={fest}
-              className="w-full h-48 object-cover filter blur-[2px]"
-              alt="Festivals"
-            />
-            <div className="absolute inset-0 bg-black/40"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
-                Festivals
-              </h5>
-              <NavLink to="/festival" onClick={handleClick}>
-                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
-                  Explore More <ChevronRight />
-                </Button>
-              </NavLink>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-80 flex flex-col items-center text-center mt-2 mb-14">
-          <div className="relative w-full rounded-xl overflow-hidden">
-            <img
-              src={other}
-              className="w-full h-48 object-cover filter blur-[2px]"
-              alt="Others"
-            />
-            <div className="absolute inset-0 bg-black/40"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <h5 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[50px] flex items-center">
-                Others
-              </h5>
-              <NavLink to="/others" onClick={handleClick}>
-                <Button className="explore-btn rounded-full mt-3 px-6 py-2 flex items-center gap-2 bg-[#f2f0ea] text-black hover:bg-black hover:text-white">
-                  Explore More <ChevronRight />
-                </Button>
-              </NavLink>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
