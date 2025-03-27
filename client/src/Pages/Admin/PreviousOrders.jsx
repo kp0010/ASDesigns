@@ -34,7 +34,7 @@ export const PreviousOrders = () => {
     });
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+    <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
         Previous Orders
       </h2>
