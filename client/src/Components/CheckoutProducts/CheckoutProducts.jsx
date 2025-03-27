@@ -158,7 +158,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
 
       const options = {
         key: "rzp_test_w45oM0KDtXSRHh",
-        amount: order.amount,
+        amount: order.total_amount,
         currency: order.currency,
         name: "Asdesigns",
         description: "Test Transaction",

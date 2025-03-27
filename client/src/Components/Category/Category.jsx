@@ -7,11 +7,9 @@ import sports from "../../Assets/Categories/sport.jpg";
 import fest from "../../Assets/Categories/fest.png";
 import other from "../../Assets/Categories/other.jpg";
 
-import { NeonGradientCard } from "../magicui/neon-gradient-card";
-// import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 import { Button } from "@/Components/ui/button";
 import { ChevronRight } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const Category = () => {
 
@@ -21,7 +19,7 @@ export const Category = () => {
     event.preventDefault();
     window.scrollTo(0, 0);
     const splitLink = event.currentTarget.href.split("/")
-    navigate(splitLink[splitLink.length - 1])
+    navigate("/shop/" + splitLink[splitLink.length - 1])
   };
 
   return (

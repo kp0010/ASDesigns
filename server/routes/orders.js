@@ -167,7 +167,7 @@ export const verifyUserPayment = async (req, res) => {
 				return res.status(400).json({ error: "User Login Required" })
 			}
 
-			const userId = await getUserIdFromClerkId(clerkId)
+			const { userId } = await getUserIdFromClerkId(clerkId)
 
 			addOrderItemsDB(razorpay_order_id, buyNowProductId, userId)
 
@@ -201,7 +201,7 @@ export const deleteUserOrder = async (req, res) => {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = await getUserIdFromClerkId(clerkId)
+		const { userId } = await getUserIdFromClerkId(clerkId)
 
 		const orderDeleteQuery = `
 			DELETE FROM orders
@@ -246,7 +246,7 @@ export const postUsersOrders = async (req, res) => {
 			return res.status(400).json({ error: "User Login Required" })
 		}
 
-		const userId = await getUserIdFromClerkId(clerkId)
+		const { userId } = await getUserIdFromClerkId(clerkId)
 
 		const options = {
 			amount: parseInt(amount),

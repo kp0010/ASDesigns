@@ -220,11 +220,10 @@ export const Navbar = () => {
                     >
                       <div
                         className={`flex border-b pb-2 mb-2 last:border-b-0 cursor-pointer hover:bg-gray-100 p-2 rounded-md
-                                    ${
-                                      isCategory
-                                        ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3"
-                                        : ""
-                                    }`}
+                                    ${isCategory
+                            ? "bg-gray-200 text-blue-700 font-semibold text-lg flex-col p-3"
+                            : ""
+                          }`}
                         onClick={() => {
                           handleItemClick(product, isCategory);
                         }}
@@ -416,9 +415,9 @@ export const Navbar = () => {
                     >
                       <UserButton.MenuItems>
                         <UserButton.Link
-                          label="Create organization"
+                          label="Previous Orders"
                           labelIcon={<DotIcon />}
-                          href="/create-organization"
+                          href="/orders/"
                         />
                       </UserButton.MenuItems>
                     </UserButton>
