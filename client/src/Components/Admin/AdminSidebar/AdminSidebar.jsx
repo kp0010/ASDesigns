@@ -113,7 +113,7 @@ export const AdminSidebar = () => {
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/edit">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <Home />

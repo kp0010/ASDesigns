@@ -143,7 +143,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
           user_mail: validateEmail(email) ? email : user.emailAddresses[0]["emailAddress"],
           user_phone: phoneNo,
           currency: "INR",
-          receipt: `u_${user.emailAddresses[0]["emailAddress"].substring(0, 25)}_t_${Date.now()}`,
+          receipt: `u_${user.emailAddresses[0]["emailAddress"].substring(0, 20)}_t_${Date.now()}`,
           notes: {},
         }),
       });

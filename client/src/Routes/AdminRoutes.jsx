@@ -7,6 +7,7 @@ import { ProductList } from '@/Pages/Admin/ProductList'
 import { Users } from '@/Pages/Admin/Users'
 
 import { Route, Routes } from 'react-router-dom'
+import { EditProducts } from '@/Pages/Admin/EditProducts'
 
 export const AdminRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AdminRoutes = () => {
       <Route path="products/list" element={<ProductList />} />
       <Route path="previousOrders" element={<PreviousOrders />} />
       <Route path="users" element={<Users />} />
+      <Route path="products/edit" element={<EditProducts />} />
     </Routes>
   )
 }
