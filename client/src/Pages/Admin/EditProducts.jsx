@@ -7,6 +7,7 @@ export const EditProducts = () => {
   const [searchProductId, setSearchProductId] = useState("");
   const [product, setProduct] = useState({});
   const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(""); // State for image
   const [isEditing, setIsEditing] = useState(false); // Track edit state
@@ -25,6 +26,7 @@ export const EditProducts = () => {
       .then((data) => {
         setProduct(data["product"]);
         setCategories(data["categories"]);
+        setTags(data["tags"]);
         setImage(`/Products/${searchProductId}.jpeg`);
         setUpdatedProduct(data["product"]); // Initialize editable state
         setLoading(false);
@@ -197,8 +199,8 @@ export const EditProducts = () => {
             <div>
               <label className="block text-gray-700 mb-1">Tags</label>
               <div className="flex flex-wrap gap-2 bg-gray-200 p-3 rounded-lg">
-                {product.tags?.map((tag, index) => (
-                  <Badge key={index}>{tag}</Badge>
+                {tags.length && tags.map((tag, index) => (
+                  <Badge key={index}>{tag.name}</Badge>
                 ))}
               </div>
             </div>

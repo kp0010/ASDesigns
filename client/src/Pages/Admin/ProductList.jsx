@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -10,16 +9,34 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/Components/ui/pagination"
+
+
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { Badge } from "@/Components/ui/badge";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ProductList = () => {
+  let { pageNo } = useParams()
+  if (!pageNo) { pageNo = 1 }
+
   const [products, setProducts] = useState([])
+  const [totalProducts, setTotalProducts] = useState(0)
+
+  const [pageIndexes, setPageIndexes] = useState([])
+
   const [loaded, setLoaded] = useState(false)
 
   const fetchProducts = () => {
-    console.log("CALLING")
-    fetch(`/api/products-metadata`, {
+    fetch(`/api/products-metadata/?page=${pageNo}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -27,16 +44,83 @@ export const ProductList = () => {
     })
       .then(resp => resp.json())
       .then(data => {
-        console.log(data)
         setProducts(data.products)
-        console.log(data.products[0].tags)
+        setTotalProducts(data.totalProducts)
         setLoaded(true)
       })
   }
 
+  const navigate = useNavigate()
+  const handlePaginationClick = (e) => {
+    e.preventDefault()
+    const nextPageLink = e.currentTarget.getAttribute("link")
+    window.scrollTo({ top: 0, behavior: "smooth" })
+
+    const params = new URLSearchParams(location.search)
+
+    setLoaded(false)
+    navigate(nextPageLink + (params.size ? `/?${params.toString()}` : ""))
+  }
+
+  const PRODUCT_LIMIT = 12
+  const calculatePages = (pageNoStr) => {
+    const pageIndexes = []
+    const bufferLen = 2
+    const pageNo = parseInt(pageNoStr ? pageNoStr : "1")
+    const totalPages = Math.ceil(totalProducts / PRODUCT_LIMIT)
+    const base = `/admin/products/list`
+
+    if (pageNo > 1) {
+      pageIndexes.push({ index: "prev", link: pageNo - 1 !== 1 ? base + `/page/${pageNo - 1}` : base + `` })
+    }
+
+    let i = 1
+
+    for (i; i <= ((bufferLen < totalPages) ? bufferLen : totalPages); i++) {
+      if (i <= totalPages) {
+        pageIndexes.push({
+          index: i,
+          link: i !== 1 ? base + `/page/${i}` : base + ``
+        })
+      }
+    }
+
+    if (pageNo + parseInt(bufferLen / 2) > bufferLen) {
+      if (pageNo > bufferLen * 2) { pageIndexes.push({ index: "ellipsis" }) }
+
+      for (i = pageNo - parseInt(bufferLen / 2); i <= pageNo + parseInt(bufferLen / 2); i++) {
+        if (!pageIndexes.find((pageIdx) => pageIdx.index === i) && (i <= totalPages))
+          pageIndexes.push({
+            index: i,
+            link: base + `/page/${i}`
+          })
+      }
+    }
+
+    if (totalPages - bufferLen > 0) {
+      if (pageNo < (totalPages - (bufferLen * 2) + 1)) { pageIndexes.push({ index: "ellipsis" }) }
+
+      for (i = totalPages - bufferLen + 1; i <= totalPages; i++) {
+        if (!pageIndexes.find((pageIdx) => pageIdx.index === i))
+          pageIndexes.push({
+            index: i,
+            link: base + `/page/${i}`
+          })
+      }
+    }
+
+    if (pageNo !== totalPages) { pageIndexes.push({ index: "next", link: base + `/page/${pageNo + 1}` }) }
+
+    setPageIndexes(pageIndexes.length > 1 ? pageIndexes : [])
+  }
+
   useEffect(() => {
     fetchProducts()
-  }, [])
+  }, [pageNo])
+
+  useEffect(() => {
+    calculatePages(pageNo.toString())
+  }, [pageNo, totalProducts])
 
 
   return (
@@ -136,6 +220,32 @@ export const ProductList = () => {
           </TableRow>
         </TableFooter>
       </Table>
+
+      <Pagination className="mt-10 mb-10">
+        <PaginationContent>
+          {pageIndexes.length ? (pageIndexes.map(page => ((
+            < PaginationItem key={page.index} >
+              {
+                ["next", "prev", "ellipsis"].includes(page.index) ? (
+                  page.index === "next" ? (
+                    <PaginationNext onClick={handlePaginationClick} link={page.link} />
+                  ) : (
+                    page.index === "prev" ? (
+                      <PaginationPrevious onClick={handlePaginationClick} link={page.link} />
+                    ) : (
+                      <PaginationEllipsis />
+                    ))) : (
+                  <PaginationLink onClick={handlePaginationClick} link={page.link}>{page.index}</PaginationLink>
+                )
+              }
+            </PaginationItem>
+          )
+          ))) : (
+            <></>
+          )}
+        </PaginationContent>
+      </Pagination >
+
     </div>
   );
 };

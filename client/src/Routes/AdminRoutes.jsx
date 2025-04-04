@@ -14,7 +14,7 @@ export const AdminRoutes = () => {
     <Routes>
       <Route path="/" element={<AdminDashboard />} />
       <Route path="products/add" element={<AddProducts />} />
-      <Route path="products/list" element={<ProductList />} />
+      <Route path="products/list/page?/:pageNo?" element={<ProductList />} />
       <Route path="previousOrders" element={<PreviousOrders />} />
       <Route path="users" element={<Users />} />
       <Route path="products/edit" element={<EditProducts />} />

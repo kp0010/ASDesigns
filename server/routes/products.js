@@ -118,20 +118,19 @@ export const getProductsWithMetadata = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
 		// const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
-		let { q, limit, offset } = req.query
+		let { q, limit, page } = req.query
+		let offset = 0
 		if (!q) { q = "" }
 		if (!limit) { limit = 12 }
-		if (!offset) { offset = 0 }
 
-		console.log(q, limit, offset)
+		if (!page) { offset = 0 }
+		else {offset = limit * (page - 1)}
 
 		const productsSelectQuery = "SELECT * FROM get_all_products_with_metadata($1, $2, $3)"
-		const totalSelectQuery = "SELECT COUNT(*) as count FROM get_all_products_with_metadata($1, $2, $3)"
+		const totalSelectQuery = "SELECT COUNT(*) as count FROM get_all_products_with_metadata($1)"
 
 		const productsSelectResult = await db.query(productsSelectQuery, [q, limit, offset])
-		const totalProductsResult = await db.query(totalSelectQuery, [q, limit, offset])
-
-		console.log(productsSelectResult.rows, totalProductsResult.rows[0])
+		const totalProductsResult = await db.query(totalSelectQuery, [q])
 
 		res.status(200).json({
 			success: true,
@@ -153,11 +152,12 @@ export const getIndividualProduct = async (req, res) => {
 
 		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
 		const categoryQuery = "SELECT * FROM get_product_categories($1)"
-		const tagQuery = "SELECT * FROM tags WHERE product_id = $1"
 
 		const product = await db.query(selectQuery, [productId])
 		const categories = await db.query(categoryQuery, [productId])
-		const tags = await db.query(tagQuery, [productId])
+
+		const tagQuery = `SELECT t.* FROM product_tags pt LEFT JOIN tags t on pt.tag_id = t.id WHERE pt.product_id = '${product.rows[0].id}'`
+		const tags = await db.query(tagQuery)
 
 		res.status(200).json({
 			success: Boolean(product.rowCount),

@@ -253,7 +253,7 @@ export const AdminSidebar = () => {
                   <SidebarMenuButton>
                     <div className="flex m-3">
                       <Home />
-                      <span className="ml-3 text-base">Previous Orders</span>
+                      <span className="ml-3 text-base">Users Orders</span>
                     </div>
                   </SidebarMenuButton>
                 </Link>

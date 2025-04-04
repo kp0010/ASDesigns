@@ -249,7 +249,7 @@ app.get("/api/auth", requireAuth(), getUser);
 
 // PRODUCT
 // Get All Products with Pagination and Sorting
-app.get("/api/products/?(page)?/:pageNo?", getProducts);
+app.get("/api/products/(page)?/:pageNo?", getProducts);
 
 // Get All Products with Pagination and Sorting
 app.get("/api/products-metadata", requireAdmin(), getProductsWithMetadata);
