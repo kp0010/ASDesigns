@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,42 +9,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
+
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { Badge } from "@/Components/ui/badge";
 
-const product_exps = [
-  {
-    product_id: "ASD001",
-    product_img: "/Products/ASD001.jpeg",
-    product_name: " Cricket Half-Sleeves Jersey - Blue",
-    price: "899.99",
-    category: "Cricket",
-    tags: "light-weight",
-    sales: "20",
-  },
-];
-const products = [
-  {
-    product_id: "#7712309",
-    product_name: "Sample Product",
-    product_img: "https://via.placeholder.com/40",
-    price: 1452.5,
-    category: "Electronics",
-    tags: "New",
-    sales: 20,
-  },
-  {
-    product_id: "#7712310",
-    product_name: "Another Product",
-    product_img: "https://via.placeholder.com/40",
-    price: 899.99,
-    category: "Accessories",
-    tags: "Best Seller",
-    sales: 15,
-  },
-];
-
 export const ProductList = () => {
+  const [products, setProducts] = useState([])
+  const [loaded, setLoaded] = useState(false)
+
+  const fetchProducts = () => {
+    console.log("CALLING")
+    fetch(`/api/products-metadata`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log(data)
+        setProducts(data.products)
+        console.log(data.products[0].tags)
+        setLoaded(true)
+      })
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+
   return (
     <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl">
       {/* Title */}
@@ -54,7 +48,6 @@ export const ProductList = () => {
 
       {/* Product Table */}
       <Table className="border rounded-lg overflow-hidden">
-        <TableCaption>A List of your Products.</TableCaption>
         <TableHeader>
           <TableRow className="bg-gray-100 text-center">
             <TableHead className="w-[250px] text-center">Product</TableHead>
@@ -68,30 +61,38 @@ export const ProductList = () => {
         </TableHeader>
 
         <TableBody>
-          {products.length > 0 ? (
+          {(loaded && products.length) ? (
             products.map((product) => (
               <TableRow
-                key={product.product_id}
+                key={product.id}
                 className="hover:bg-gray-50 text-center"
               >
                 {/* Product Image & Name */}
                 <TableCell className="flex items-center space-x-2">
                   <img
-                    src={`/Products/ASD001.jpeg`}
-                    // alt={product.product_name}
+                    src={`/Products/${product.product_id}.jpeg`}
                     className="w-20 h-20 rounded-lg"
                   />
-                  <span>ASD001 | Cricket Half-Sleeves Jersey - Blue</span>
+                  <span>{product["product_id"] +
+                    (product["name"] ? " | " + product["name"] : "")}</span>
                 </TableCell>
 
                 {/* Product Details */}
-                <TableCell>ASD001</TableCell>
-                <TableCell>₹898.99</TableCell>
-                <TableCell>{product.category}</TableCell>
+                <TableCell>{product["product_id"]}</TableCell>
+                <TableCell>₹{parseFloat(product["price"]).toFixed(2)}</TableCell>
+                <TableCell>{product["category_path"].join(", ")}</TableCell>
                 <TableCell>
-                  <Badge className="bg-blue-500 text-white px-2 py-1 rounded-md">
-                    {product.tags}
-                  </Badge>
+                  {product.tags[0] ? (product.tags.map((tag, idx) => (
+                    <Badge key={idx} className="bg-blue-500 text-white px-2 py-1 rounded-md">
+                      {tag}
+                    </Badge>
+                  ))) :
+                    (
+                      <Badge className="bg-blue-500 text-white px-2 py-1 rounded-md">
+                        None
+                      </Badge>
+                    )
+                  }
                 </TableCell>
                 <TableCell>{product.sales}</TableCell>
 

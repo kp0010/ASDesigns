@@ -17,6 +17,7 @@ import {
   postProduct,
   getAllCategories,
   getAllTags,
+  getProductsWithMetadata,
 } from "./routes/products.js";
 
 import {
@@ -248,7 +249,10 @@ app.get("/api/auth", requireAuth(), getUser);
 
 // PRODUCT
 // Get All Products with Pagination and Sorting
-app.get("/api/products/(page)?/:pageNo?", getProducts);
+app.get("/api/products/?(page)?/:pageNo?", getProducts);
+
+// Get All Products with Pagination and Sorting
+app.get("/api/products-metadata", requireAdmin(), getProductsWithMetadata);
 
 // Get individual Products by IDS
 app.get("/api/products/:productId", getIndividualProduct);

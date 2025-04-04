@@ -114,6 +114,38 @@ export const getProducts = async (req, res) => {
 }
 
 
+export const getProductsWithMetadata = async (req, res) => {
+	// Get All Products with Pagination and Sorting
+	try {
+		// const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
+		let { q, limit, offset } = req.query
+		if (!q) { q = "" }
+		if (!limit) { limit = 12 }
+		if (!offset) { offset = 0 }
+
+		console.log(q, limit, offset)
+
+		const productsSelectQuery = "SELECT * FROM get_all_products_with_metadata($1, $2, $3)"
+		const totalSelectQuery = "SELECT COUNT(*) as count FROM get_all_products_with_metadata($1, $2, $3)"
+
+		const productsSelectResult = await db.query(productsSelectQuery, [q, limit, offset])
+		const totalProductsResult = await db.query(totalSelectQuery, [q, limit, offset])
+
+		console.log(productsSelectResult.rows, totalProductsResult.rows[0])
+
+		res.status(200).json({
+			success: true,
+			products: productsSelectResult.rows,
+			totalProducts: totalProductsResult.rows[0]["count"]
+		})
+
+	} catch (error) {
+		console.error("Error Reading Products with Metadata", error)
+		res.status(500).json({ error: "Internal Server Error" })
+	}
+}
+
+
 export const getIndividualProduct = async (req, res) => {
 	// Get individual Products by IDS
 	try {
@@ -121,15 +153,18 @@ export const getIndividualProduct = async (req, res) => {
 
 		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
 		const categoryQuery = "SELECT * FROM get_product_categories($1)"
+		const tagQuery = "SELECT * FROM tags WHERE product_id = $1"
 
 		const product = await db.query(selectQuery, [productId])
 		const categories = await db.query(categoryQuery, [productId])
+		const tags = await db.query(tagQuery, [productId])
 
 		res.status(200).json({
 			success: Boolean(product.rowCount),
 			message: product.rowCount ? "Product Retrieved Succesfully" : "Product Not Found",
 			product: product.rows[0],
-			categories: categories.rows
+			categories: categories.rows,
+			tags: tags.rows
 		})
 
 	} catch (error) {
