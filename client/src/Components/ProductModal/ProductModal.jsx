@@ -25,7 +25,7 @@ import AddToCart from "../ui/addToCartBtn";
 import Download from "../ui/downloadBtn";
 import { Link } from "react-router-dom";
 
-const ProductModal = ({ product, triggerButton }) => {
+const ProductModal = ({ product, open, onOpenChange }) => {
   const [loaded, setLoaded] = useState(false)
   const [categories, setCategories] = useState([]);
 
@@ -49,12 +49,11 @@ const ProductModal = ({ product, triggerButton }) => {
     getProduct();
   }, [product.product_id]);
 
-  const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
+  const tags = ["CDR File", "Sport", "Cricket", "Half Sleeves"];
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  max-w-2xl md:max-w-4xl lg:max-w-5xl w-full mt-10">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-2xl md:max-w-4xl lg:max-w-5xl w-full mt-10">
         <DialogHeader>
           <DialogTitle className="text-xl">Product Details</DialogTitle>
         </DialogHeader>
@@ -86,13 +85,11 @@ const ProductModal = ({ product, triggerButton }) => {
                           <Link to={`/shop/?cat=${category['name']}`}> {category["name"]}</Link>
                         </BreadcrumbLink>
                       </BreadcrumbItem>
-                      {
-                        index < categories.length - 1 && (
-                          <BreadcrumbSeparator>
-                            <CgFormatSlash />
-                          </BreadcrumbSeparator>
-                        )
-                      }
+                      {index < categories.length - 1 && (
+                        <BreadcrumbSeparator>
+                          <CgFormatSlash />
+                        </BreadcrumbSeparator>
+                      )}
                     </React.Fragment>
                   ))}
                 </BreadcrumbList>
@@ -113,8 +110,10 @@ const ProductModal = ({ product, triggerButton }) => {
           </div>
         </div>
       </DialogContent>
-    </Dialog >
+    </Dialog>
   );
 };
 
 export default ProductModal;
+
+

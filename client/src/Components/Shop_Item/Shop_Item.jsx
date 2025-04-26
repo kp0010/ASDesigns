@@ -22,10 +22,12 @@ export const Shop_Item = ({ product }) => {
     refreshWishlist,
   } = useShop();
 
-  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } = useShop();
+  const { cartData, cartLoaded, deleteFromCart, addToCart, refreshCart } =
+    useShop();
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // NEW
 
   const toggleWishlist = () => {
     if (wishlistCurrent) {
@@ -67,7 +69,7 @@ export const Shop_Item = ({ product }) => {
 
   const handleClick = (event) => {
     event.preventDefault();
-    window.scrollTo({ top: 0, behavoir: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     const splitLink = event.currentTarget.href.split("/");
     const productId = splitLink[splitLink.length - 1];
     navigate(`/product/${productId}`);
@@ -92,18 +94,14 @@ export const Shop_Item = ({ product }) => {
             <span>{cartCurrent ? "Remove" : "Add to Cart"}</span>
           </button>
 
-          <ProductModal
-            product={product}
-            triggerButton={
-              <button>
-                <i>
-                  <PiEyeDuotone className="item-icon" />
-                </i>
-                <span>Quick View</span>
-              </button>
-            }
-          />
+          <button onClick={() => setIsModalOpen(true)}>
+            <i>
+              <PiEyeDuotone className="item-icon" />
+            </i>
+            <span>Quick View</span>
+          </button>
         </div>
+
         <div className="shop_item-wishlist">
           <span className="wishlist-text">
             {wishlistCurrent ? "Remove from Wishlist" : "Add to Wishlist"}
@@ -131,6 +129,15 @@ export const Shop_Item = ({ product }) => {
           <h2>₹ {(parseFloat(price) - 1.0).toFixed(2)}</h2>
         </div>
       </Link>
+
+      {/* Render ProductModal ONLY when needed */}
+      {isModalOpen && (
+        <ProductModal
+          product={product}
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };
