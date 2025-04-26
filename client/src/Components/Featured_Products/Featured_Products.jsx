@@ -43,7 +43,7 @@ export const Featured_Products = () => {
 				</h1>
 			</div>
 			<div className="product-grid-container">
-				{loaded ? (
+				{loaded && featuredProd.length ? (
 					featuredProd.map((el, i) => (
 						<Item product={el} key={i} />
 					))

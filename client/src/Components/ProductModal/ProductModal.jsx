@@ -26,6 +26,7 @@ import Download from "../ui/downloadBtn";
 import { Link } from "react-router-dom";
 
 const ProductModal = ({ product, triggerButton }) => {
+  const [loaded, setLoaded] = useState(false)
   const [categories, setCategories] = useState([]);
 
   const getProduct = () => {
@@ -37,7 +38,10 @@ const ProductModal = ({ product, triggerButton }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setCategories(data["categories"]);
+        if (data["success"]) {
+          setCategories(data["categories"]);
+          setLoaded(true)
+        }
       });
   };
 
@@ -75,7 +79,7 @@ const ProductModal = ({ product, triggerButton }) => {
               <h2 className="text-xl">Category:</h2>
               <Breadcrumb className="ml-2">
                 <BreadcrumbList>
-                  {categories.map((category, index) => (
+                  {loaded && categories.map((category, index) => (
                     <React.Fragment key={index}>
                       <BreadcrumbItem>
                         <BreadcrumbLink asChild>

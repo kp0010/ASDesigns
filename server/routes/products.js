@@ -124,7 +124,7 @@ export const getProductsWithMetadata = async (req, res) => {
 		if (!limit) { limit = 12 }
 
 		if (!page) { offset = 0 }
-		else {offset = limit * (page - 1)}
+		else { offset = limit * (page - 1) }
 
 		const productsSelectQuery = "SELECT * FROM get_all_products_with_metadata($1, $2, $3)"
 		const totalSelectQuery = "SELECT COUNT(*) as count FROM get_all_products_with_metadata($1)"
