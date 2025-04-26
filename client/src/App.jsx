@@ -15,8 +15,7 @@ import { OrderInfo } from "./Components/OrderInfo/OrderInfo";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 import { AdminRoutes } from "./Routes/AdminRoutes";
 import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
-import { Protect } from "@clerk/clerk-react";
-import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+
 
 const UserLayout = () => (
   <>
@@ -53,11 +52,7 @@ const RoutesList = () => {
       <Route
         path="/admin/*"
         element={
-          <Protect>
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          </Protect>
+          <AdminLayout />
         }
       >
         <Route path="*" element={<AdminRoutes />} />
