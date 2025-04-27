@@ -41,9 +41,13 @@ export const Category = () => {
       {/* Categories Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-5 max-w-7xl mx-auto">
         {categories.map((category, index) => (
+          <NavLink to={category.link}>
           <div
             key={index}
             className="relative group overflow-hidden rounded-lg shadow-lg"
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
           >
             <img
               src={category.img}
@@ -55,16 +59,13 @@ export const Category = () => {
             {/* Text & Button */}
             <div className="absolute bottom-8 left-8 text-white">
               <p className="text-lg font-semibold">{category.subtitle}</p>
-              <h2 className="text-3xl font-bold">{category.title}</h2>
-              <NavLink to={category.link} className="inline-block mt-4">
-                <button className="px-5 py-2 bg-white text-black rounded-full text-sm font-medium transition hover:bg-gray-200" onClick={() => {
-                  window.scrollTo(0, 0);
-                }}>
+              <h2 className="text-3xl font-bold pb-1">{category.title}</h2>
+                <button className="px-5 py-2 bg-white text-black rounded-full text-sm font-medium transition hover:bg-gray-200">
                   Shop now
-                </button>
-              </NavLink>
+                </button>              
             </div>
           </div>
+          </NavLink>
         ))}
       </div>
     </div>

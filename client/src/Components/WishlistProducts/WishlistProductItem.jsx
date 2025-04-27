@@ -27,11 +27,11 @@ const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
       initial={{ opacity: 1, scale: 1 }}
       animate={{ opacity: isRemoving ? 0 : 1, scale: isRemoving ? 0.8 : 1 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="cards bg-white pt-2 md:mr-60 w-[80%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-3 p-4 md:pr-0"
+      className="cards bg-white pt-2 md:mr-0 w-[100%] rounded-lg flex flex-col md:flex-row items-center md:items-start mb-2 p-4 md:pr-0"
     >
       <Link to={`/product/${product.product_id}`} onClick={handleClick}>
         <div className="product-display-left mt-4">
-          <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
+          <div className="productDiplay-img h-[200px] w-[200px] lg:ml-8">
             <img
               src={`/Products/${product.product_id}.jpeg`}
               className="product-display-main-img rounded-lg"
@@ -41,7 +41,7 @@ const WishlistProductItem = ({ product, handleClick, removeFromWishlist }) => {
         </div>
       </Link>
 
-      <div className="product-display-right md:ml-20 ">
+      <div className="product-display-right md:ml-10 lg:ml-20">
         <Link to={`/product/${product.product_id}`} onClick={handleClick}>
           <h2 className="text-2xl mt-4 break-words md:ml-0 custom-text-center  md:text-left" >{product["product_id"] + (product["name"] ? " | " + product["name"] : "")}</h2>
         </Link>

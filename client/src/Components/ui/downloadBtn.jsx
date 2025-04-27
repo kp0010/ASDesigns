@@ -9,6 +9,7 @@ const Download = ({ className, productId, ...props }) => {
   const navigate = useNavigate()
   const buyNow = () => {
     navigate(`/checkout/?buyNow=${productId}`)
+    window.scrollTo(0,0)
   }
 
   return (
