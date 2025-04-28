@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./Filters.css";
 import "../../App.css";
 import { Slider } from "@/Components/ui/dualrangeslider.jsx";
-import { Badge, badgeVariants } from "@/Components/ui/badge";
+import { Badge } from "@/Components/ui/badge";
 import { useState } from "react";
 import { LuListFilter } from "react-icons/lu";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -184,6 +184,11 @@ export const Filters = ({
     setTags([...tags, tag]); // Add back to available tags
   };
 
+  const handleClearAll = () => {
+    setTags([...tags, ...selectedTags]);
+    setSelectedTags([]);
+  };
+
   const checkChildren = (category, filters) => {
     if (category.children) {
       category.children.forEach((child) => {
@@ -296,7 +301,15 @@ export const Filters = ({
         </div>
 
         <div className="shop-filters-tags">
-          <h2>Tags</h2>
+          <div className="shop-filters-tags-head flex justify-between items-center">
+            <h2>Tags</h2>
+            {selectedTags.length > 0 && (
+              <Badge className="selected bg-white text-black py-1 mb-3">
+                Clear All
+                <span className="remove-icon" onClick={() => handleClearAll()}><FaXmark /></span>
+              </Badge>
+            )}
+          </div>
 
           {/* Selected Tags */}
           <div className="shop-filters-tags-selected">
@@ -394,8 +407,16 @@ export const Filters = ({
                 />
               </div>
 
-              <div className="shop-filters-tags">
-                <h2>Tags</h2>
+              <div className="shop-filters-tags">                
+                <div className="shop-filters-tags-head flex justify-between items-center">
+                  <h2>Tags</h2>
+                  {selectedTags.length > 0 && (
+                    <Badge className="selected bg-white text-black py-1 mb-3">
+                      Clear All
+                      <span className="remove-icon" onClick={() => handleClearAll()}><FaXmark /></span>
+                    </Badge>
+                  )}
+                </div>
 
                 {/* Selected Tags */}
                 <div className="shop-filters-tags-selected">

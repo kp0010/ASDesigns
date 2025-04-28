@@ -126,6 +126,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
     }
 
     makePayment()
+    window.scrollTo(0, 0)
   }
 
   async function makePayment() {
