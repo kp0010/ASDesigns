@@ -19,10 +19,11 @@ const createGetProductsQuery = (req) => {
 	const minPrice = req.query["minPrice"] ? req.query["minPrice"] : null
 
 	const categories = req.query["categories"] ? req.query["categories"].split(",") : []
+	const tags = req.query["tags"] ? req.query["tags"].split(",") : []
 
-	let selectQuery = "SELECT * FROM search_products($1, $2)"
+	let selectQuery = "SELECT * FROM search_products($1, $2, $3)"
 
-	params.push(searchQuery, categories)
+	params.push(searchQuery, categories, tags)
 
 	// Add Price Min Max Clauses and Categories
 	const priceClauses = []
@@ -35,7 +36,7 @@ const createGetProductsQuery = (req) => {
 	}
 
 	// Get total Products before Offsets and Limits
-	const totalProductsQuery = `SELECT COUNT(*) FROM search_products($1, $2)` +
+	const totalProductsQuery = `SELECT COUNT(*) FROM search_products($1, $2, $3)` +
 		(priceClauses.length !== 0 ? " WHERE " : "") +
 		priceClauses.join(" AND ")
 
@@ -46,7 +47,8 @@ const createGetProductsQuery = (req) => {
 		"popular": "random()",
 		"recent": "updated_at DESC",
 		"price_desc": "price DESC",
-		"price_asc": "price"
+		"price_asc": "price",
+		"random": "random()"
 	}
 	selectQuery += " ORDER BY " + sortToSql[orderBy]
 

@@ -103,7 +103,7 @@ export const Navbar = () => {
 
     if (linkName === "home") {
       navigate("/")
-    } else if (["shop", "wishlist", "cart", "admin/dashboard"].includes(linkName.toLowerCase())) {
+    } else if (["shop", "wishlist", "cart", "admin"].includes(linkName.toLowerCase())) {
       navigate(`/${linkName}`)
     } else {
       navigate(`/shop/${linkName}`);
@@ -598,9 +598,9 @@ export const Navbar = () => {
             {isLoaded && isSignedIn && isAdmin && (
               <li className="nav-item ps-3">
                 <NavLink
-                  id="admin/dashboard"
+                  id="admin"
                   className="nav-link text-dark"
-                  to="/admin/dashboard"
+                  to="/admin/"
                   onClick={handleClick}
                 >
                   Dashboard

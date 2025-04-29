@@ -31,6 +31,7 @@ import { Filters } from "@/Components/Filters/Filters";
 // WARN: Test Limit
 const PRODUCT_LIMIT = 4 * 3;
 
+
 export const Shop = () => {
   const { pageNo, category } = useParams();
   const categoryTC = category
@@ -63,7 +64,9 @@ export const Shop = () => {
       minPrice = null,
       maxPrice = null,
       selectedFilters = [],
+      selectedTags = [],
     } = {}) => {
+
       setLoaded(false);
       const params = new URLSearchParams({ limit: PRODUCT_LIMIT });
 
@@ -92,9 +95,12 @@ export const Shop = () => {
         params.set("categories", selectedFilters.join(","));
       }
 
-      const apiQuery = `/api/products/${
-        pageNo !== undefined ? "page/" + (pageNo - 1) : ""
-      }?${params.toString()}`;
+      if (selectedTags.length) {
+        params.set("tags", selectedTags.map((tag) => (tag.name)).join(","));
+      }
+
+      const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""
+        }?${params.toString()}`;
 
       fetch(apiQuery, {
         method: "GET",
@@ -217,21 +223,21 @@ export const Shop = () => {
     const page = match ? parseInt(match[1]) : 1;
     setCurrentPage(page);
   }, [location.pathname]);
-  
+
 
   const handlePaginationClick = (e) => {
     e.preventDefault();
     const nextPageLink = e.currentTarget.getAttribute("link");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  
+
     const params = new URLSearchParams(location.search);
-  
+
     setLoaded(false);
-  
+
     navigate(nextPageLink + (params.size ? `/?${params.toString()}` : ""));
   };
-  
-  
+
+
 
   return (
     <div>
@@ -297,23 +303,23 @@ export const Shop = () => {
           >
             {loaded
               ? productData.map((product, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.1, delay: idx * 0.05 }}
-                  >
-                    <Shop_Item product={product} />
-                  </motion.div>
-                ))
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.1, delay: idx * 0.05 }}
+                >
+                  <Shop_Item product={product} />
+                </motion.div>
+              ))
               : Array(12)
-                  .fill()
-                  .map((_, idx) => (
-                    <div
-                      key={idx}
-                      className="shop_item_skeleton bg-gray-300 animate-pulse rounded-lg"
-                    ></div>
-                  ))}
+                .fill()
+                .map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="shop_item_skeleton bg-gray-300 animate-pulse rounded-lg"
+                  ></div>
+                ))}
           </div>
         </div>
       </div>
@@ -349,23 +355,23 @@ export const Shop = () => {
           <div className="products-grid-container ">
             {loaded
               ? productData.map((product, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: idx * 0.1 }}
-                  >
-                    <Shop_Item product={product} />
-                  </motion.div>
-                ))
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: idx * 0.1 }}
+                >
+                  <Shop_Item product={product} />
+                </motion.div>
+              ))
               : Array(12)
-                  .fill()
-                  .map((_, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-gray-300 animate-pulse rounded-lg"
-                    ></div>
-                  ))}
+                .fill()
+                .map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-gray-300 animate-pulse rounded-lg"
+                  ></div>
+                ))}
           </div>
         </div>
       </div>

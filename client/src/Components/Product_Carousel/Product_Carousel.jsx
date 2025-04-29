@@ -16,7 +16,7 @@ export const Product_Carousel = () => {
 	const [loaded, setLoaded] = useState(false)
 
 	const params = new URLSearchParams({
-		"orderBy": "default",
+		"orderBy": "random",
 		"limit": 8,
 	})
 

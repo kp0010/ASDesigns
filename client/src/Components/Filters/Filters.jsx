@@ -21,6 +21,7 @@ export const Filters = ({
   category,
   filterSidebarRender,
 }) => {
+
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -31,7 +32,6 @@ export const Filters = ({
 
   const location = useLocation();
 
-  const { pageNo } = useParams();
 
   useEffect(() => {
     fetch("/api/categories", {
@@ -60,7 +60,17 @@ export const Filters = ({
       .then((resp) => resp.json())
       .then(async (data) => {
         if (data.success) {
-          setTags(data.tags);
+          setTags(data.tags.sort((a, b) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+              return -1
+            }
+            if (nameA > nameB) {
+              return 1
+            }
+            return 0
+          }));
         }
       });
   }, []);
@@ -131,7 +141,9 @@ export const Filters = ({
     setCategoriesLoaded(true);
   }, [location.search, allCategories]);
 
+
   const navigate = useNavigate();
+
 
   const handleCheckboxClick = (clicketCat) => {
     setSelectedFilters((prevFilters) => {
@@ -173,21 +185,6 @@ export const Filters = ({
       return newFiltersArray;
     });
   };
-  const handleTagClick = (tag) => {
-    setSelectedTags([...selectedTags, tag]); // Move tag to selected
-    setTags(tags.filter((t) => t.id !== tag.id)); // Remove from available tags
-  };
-
-  // ✅ Function to remove tag from selected
-  const handleRemoveTag = (tag) => {
-    setSelectedTags(selectedTags.filter((t) => t.id !== tag.id)); // Remove from selected
-    setTags([...tags, tag]); // Add back to available tags
-  };
-
-  const handleClearAll = () => {
-    setTags([...tags, ...selectedTags]);
-    setSelectedTags([]);
-  };
 
   const checkChildren = (category, filters) => {
     if (category.children) {
@@ -222,6 +219,54 @@ export const Filters = ({
 
     updateParentSelection(category.parent, filters);
   };
+
+
+
+  const handleTagClick = (tag) => {
+    setSelectedTags([...selectedTags, tag]); // Move tag to selected
+    setTags(tags.filter((t) => t.id !== tag.id).sort((a, b) => {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1
+      }
+      if (nameA > nameB) {
+        return 1
+      }
+      return 0
+    })); // Remove from available tags
+  };
+
+  // Function to remove tag from selected
+  const handleRemoveTag = (tag) => {
+    setSelectedTags(selectedTags.filter((t) => t.id !== tag.id)); // Remove from selected
+    setTags([...tags, tag].sort((a, b) => {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1
+      }
+      if (nameA > nameB) {
+        return 1
+      }
+      return 0
+    })); // Add to Available
+  };
+
+  const handleClearAll = () => {
+    setTags([...tags, ...selectedTags]);
+    setSelectedTags([]);
+  };
+
+  useEffect(() => {
+    if (tags.length + selectedTags.length) {
+      getProducts({
+        selectedTags: selectedTags
+      });
+    }
+  }, [selectedTags])
+
+
 
   const renderCategories = (categories, parent = null) => {
     if (!categories.length) {
@@ -407,7 +452,7 @@ export const Filters = ({
                 />
               </div>
 
-              <div className="shop-filters-tags">                
+              <div className="shop-filters-tags">
                 <div className="shop-filters-tags-head flex justify-between items-center">
                   <h2>Tags</h2>
                   {selectedTags.length > 0 && (
