@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const OrderInfo = ({ }) => {
-  const { orderId } = useParams()
+export const OrderInfo = ({}) => {
+  const { orderId } = useParams();
 
   const [orderItems, setOrderItems] = useState([]);
-  const [orderInfo, setOrderInfo] = useState({})
-  const [orderLoaded, setOrderLoaded] = useState(false)
+  const [orderInfo, setOrderInfo] = useState({});
+  const [orderLoaded, setOrderLoaded] = useState(false);
 
   const getOrder = () => {
     fetch("/api/order", {
@@ -16,15 +16,15 @@ export const OrderInfo = ({ }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        orderId: orderId
-      })
+        orderId: orderId,
+      }),
     })
       .then((resp) => resp.json())
       .then((data) => {
         if (data.success) {
-          setOrderInfo(data.order)
-          setOrderItems(data.orderItems)
-          setOrderLoaded(true)
+          setOrderInfo(data.order);
+          setOrderItems(data.orderItems);
+          setOrderLoaded(true);
         }
       });
   };
@@ -57,10 +57,15 @@ export const OrderInfo = ({ }) => {
               <strong>Email:</strong> advaitdagoat12@gmail.com
             </p>
           </div>
+          <div className="track-btns flex flex-col w-[50%]">
+            <button className="mt-6 bg-black text-white py-2 px-4 md:px-6 rounded-lg shadow w-full md:w-auto">
+              Download Product
+            </button>
 
-          <button className="mt-6 bg-red-500 text-white py-2 px-4 md:px-6 rounded-lg shadow hover:bg-red-600 w-full md:w-auto">
-            Track Your Order
-          </button>
+            <button className="mt-6 bg-[#e3c756] text-white py-2 px-4 md:px-6 rounded-lg shadow hover:bg-[#c1a949] w-full md:w-auto">
+              Track Your Order
+            </button>
+          </div>
         </div>
 
         {/* Right Side: Responsive Receipt Design */}
@@ -81,7 +86,9 @@ export const OrderInfo = ({ }) => {
               <div className="flex flex-wrap border-b-2 border-t-2 p-3 border-black text-xs md:text-sm">
                 <div className="flex flex-col border-r-2 border-black pr-2 md:pr-6 w-1/2">
                   <span>Date:</span>
-                  <span className="font-semibold">{new Date(orderInfo["created_at"]).toLocaleDateString()}</span>
+                  <span className="font-semibold">
+                    {new Date(orderInfo["created_at"]).toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="flex flex-col pl-4 md:pl-14 pr-4 md:pr-8 w-1/2">
                   <span>Order Number:</span>
@@ -110,7 +117,9 @@ export const OrderInfo = ({ }) => {
                           (product["name"] ? " | " + product["name"] : "")}
                       </p>
                     </div>
-                    <p className="font-semibold text-sm md:text-lg mt-2 mb-4">₹ {parseFloat(product["amount"]).toFixed(2)}</p>
+                    <p className="font-semibold text-sm md:text-lg mt-2 mb-4">
+                      ₹ {parseFloat(product["amount"]).toFixed(2)}
+                    </p>
                   </div>
                 </motion.div>
               ))}
@@ -124,7 +133,9 @@ export const OrderInfo = ({ }) => {
               >
                 <div className="flex justify-between">
                   <span>Sub Total</span>
-                  <span>₹{parseFloat(orderInfo["total_amount"]).toFixed(2)}</span>
+                  <span>
+                    ₹{parseFloat(orderInfo["total_amount"]).toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
@@ -132,7 +143,9 @@ export const OrderInfo = ({ }) => {
                 </div>
                 <div className="border-t-2 border-black mt-2 pt-2 font-bold text-lg flex justify-between">
                   <span>Order Total</span>
-                  <span>₹{parseFloat(orderInfo["total_amount"]).toFixed(2)}</span>
+                  <span>
+                    ₹{parseFloat(orderInfo["total_amount"]).toFixed(2)}
+                  </span>
                 </div>
               </motion.div>
             </motion.div>
