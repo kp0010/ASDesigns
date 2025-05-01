@@ -417,7 +417,7 @@ export const Navbar = () => {
                         <UserButton.Link
                           label="Previous Orders"
                           labelIcon={<DotIcon />}
-                          href="/orders/"
+                          href="/previousOrders"
                         />
                       </UserButton.MenuItems>
                     </UserButton>

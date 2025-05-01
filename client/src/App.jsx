@@ -15,6 +15,7 @@ import { OrderInfo } from "./Components/OrderInfo/OrderInfo";
 import { RazorpayIntegration } from "./Pages/RazorpayIntegration";
 import { AdminRoutes } from "./Routes/AdminRoutes";
 import { AdminLayout } from "./Components/Admin/AdminLayout/AdminLayout";
+import { UserPreviousOrders } from "./Pages/UserPreviousOrders";
 
 
 const UserLayout = () => (
@@ -46,6 +47,7 @@ const RoutesList = () => {
         <Route path="checkout" element={<Checkout />} />
         <Route path="razorpayTrial" element={<RazorpayIntegration />} />
         <Route path="order/:orderId" element={<OrderInfo />} />
+        <Route path="previousOrders" element={<UserPreviousOrders />} />
       </Route>
 
       {/*  Admin Routes (No Navbar & Footer) */}
