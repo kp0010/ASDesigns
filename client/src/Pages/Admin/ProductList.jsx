@@ -10,6 +10,18 @@ import {
 } from "@/Components/ui/table";
 
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -28,7 +40,6 @@ export const ProductList = () => {
   if (!pageNo) {
     pageNo = 1;
   }
-  
 
   const [products, setProducts] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -183,7 +194,10 @@ export const ProductList = () => {
                     className="w-20 h-20 rounded-lg cursor-pointer"
                     onClick={() => navigate(`/product/${product.product_id}`)}
                   />
-                  <span className="cursor-pointer" onClick={() => navigate(`/product/${product.product_id}`)}>
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => navigate(`/product/${product.product_id}`)}
+                  >
                     {product["product_id"] +
                       (product["name"] ? " | " + product["name"] : "")}
                   </span>
@@ -216,15 +230,46 @@ export const ProductList = () => {
                 {/* Action Buttons */}
                 <TableCell>
                   <div className="flex justify-center space-x-4">
-                    <button className="text-blue-600 hover:text-blue-800" onClick={() => navigate(`/product/${product.product_id}`)}>
+                    <button
+                      className="text-blue-600 hover:text-blue-800"
+                      onClick={() => navigate(`/product/${product.product_id}`)}
+                    >
                       <FaEye className="size-5" />
                     </button>
-                    <button className="text-green-600 hover:text-green-800" onClick={() => navigate('/admin/products/edit')}>
+                    <button
+                      className="text-green-600 hover:text-green-800"
+                      onClick={() => navigate("/admin/products/edit")}
+                    >
                       <FaEdit className="size-5" />
                     </button>
-                    <button className="text-red-600 hover:text-red-800">
-                      <FaTrash className="size-5" />
-                    </button>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button className="text-red-600 hover:text-red-800">
+                          <FaTrash className="size-5" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="text-center">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle className="text-lg font-semibold text-left">
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription className="text-sm text-gray-600 text-left">
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="flex justify-center space-x-4 ">
+                          <AlertDialogCancel className="px-4 py-2 border rounded-md">
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction className="px-4 mt-2 bg-gray-700 text-white rounded-md">
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TableCell>
               </TableRow>

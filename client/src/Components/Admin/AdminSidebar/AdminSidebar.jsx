@@ -101,7 +101,7 @@ export const AdminSidebar = () => {
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/delete">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <Home />
@@ -165,7 +165,7 @@ export const AdminSidebar = () => {
                   <CollapsibleContent>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/addcategories">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <IoAddOutline className="w-6 h-6" />
@@ -177,7 +177,7 @@ export const AdminSidebar = () => {
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/categories">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <LuList className="w-6 h-6" />
@@ -220,7 +220,7 @@ export const AdminSidebar = () => {
                   <CollapsibleContent>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/addtag">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <IoAddOutline className="w-6 h-6" />
@@ -232,7 +232,7 @@ export const AdminSidebar = () => {
                     </SidebarMenuSub>
                     <SidebarMenuSub className="mt-2">
                       <SidebarMenuSubItem>
-                        <Link to="">
+                        <Link to="/admin/products/tagslist">
                           <SidebarMenuSubButton>
                             <div className="flex m-2">
                               <LuList className="w-6 h-6" />
