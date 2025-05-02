@@ -38,9 +38,12 @@ export const TagsList = () => {
   };
 
   return (
-    <div className="tags-list flex flex-col px-12 pt-8 gap-6 items-center">
-      <h2 className="text-3xl font-bold text-gray-800 text-center">All Tags</h2>
-      <Card className="w-full max-w-xl p-4 bg-white shadow-md rounded-xl">
+    <div className="tags-list flex flex-col items-center px-4 sm:px-6 md:px-12 py-6 gap-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">
+        All Tags
+      </h2>
+
+      <Card className="w-full max-w-md sm:max-w-xl p-4 bg-white shadow-md rounded-xl">
         <CardContent className="grid gap-3">
           {tags.length === 0 ? (
             <p className="text-gray-500 text-center">No tags found.</p>
@@ -48,21 +51,23 @@ export const TagsList = () => {
             tags.map((tag) => (
               <div
                 key={tag.id}
-                className="flex items-center justify-between border rounded-md px-4 py-2 text-gray-700 bg-gray-100"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between border rounded-md px-4 py-2 text-gray-700 bg-gray-100"
               >
-                <span>{tag.name}</span>
-                <div className="flex">
+                <span className="mb-2 sm:mb-0">{tag.name}</span>
+                <div className="flex flex-wrap justify-end gap-2 sm:gap-3">
                   <Button
-                    className="ml-3 mr-2 bg-[#edeae7] text-black"
+                    className="bg-[#edeae7] text-black flex items-center gap-1"
                     onClick={() => handleEdit(tag.id)}
                   >
-                    <FaEdit className="size-3" /> Edit
+                    <FaEdit className="size-3" />
+                    Edit
                   </Button>
                   <Button
-                    className="bg-black text-white"
+                    className="bg-black text-white flex items-center gap-1"
                     onClick={() => handleDelete(tag.id)}
                   >
-                    <FaTrash className="size-3" /> Delete
+                    <FaTrash className="size-3" />
+                    Delete
                   </Button>
                 </div>
               </div>
@@ -71,5 +76,6 @@ export const TagsList = () => {
         </CardContent>
       </Card>
     </div>
+
   );
 };

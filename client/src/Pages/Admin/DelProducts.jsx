@@ -160,8 +160,8 @@ export const DelProducts = () => {
     setCurrentPage(page);
   }, [location.pathname]);
   return (
-    <div className="del">
-      <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+    <div className="del px-4 sm:px-6 md:px-8 py-6">
+      <div className="w-full max-w-6xl mx-auto p-4 bg-white shadow-lg rounded-xl sm:p-6 md:p-8">
         {/* Title */}
         <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
           Product List
@@ -243,12 +243,10 @@ export const DelProducts = () => {
                         <AlertDialogContent className="text-center">
                           <AlertDialogHeader>
                             <AlertDialogTitle className="text-lg font-semibold text-left">
-                              Are you absolutely sure?
+                              Confirm Product Deletion
                             </AlertDialogTitle>
                             <AlertDialogDescription className="text-sm text-gray-600 text-left">
-                              This action cannot be undone. This will
-                              permanently delete your account and remove your
-                              data from our servers.
+                              Are you sure you want to delete this product? This action cannot be undone and will permanently remove the product from the store.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter className="flex justify-center space-x-4 ">
@@ -256,7 +254,7 @@ export const DelProducts = () => {
                               Cancel
                             </AlertDialogCancel>
                             <AlertDialogAction className="px-4 mt-2 bg-gray-700 text-white rounded-md">
-                              Continue
+                              Delete Product
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>

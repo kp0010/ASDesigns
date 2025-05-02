@@ -80,18 +80,16 @@ export const AddCategory = () => {
   };
 
   return (
-    <div className="add-category flex flex-col px-12 pt-8 gap-10 items-center">
-      <h2 className="text-4xl font-bold text-center text-gray-800">
+    <div className="add-category flex flex-col items-center px-4 sm:px-6 md:px-12 pt-8 gap-10 min-h-screen">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800">
         Add Category
       </h2>
 
-      <Card className="w-full max-w-lg p-6 shadow-lg rounded-2xl bg-white">
+      <Card className="w-full max-w-md sm:max-w-lg p-6 shadow-lg rounded-2xl bg-white">
         <CardContent className="flex flex-col gap-4">
-          <div className="grid w-full gap-3">
-            <label
-              htmlFor="category_name"
-              className="font-medium text-gray-700"
-            >
+          {/* Category Name */}
+          <div className="grid w-full gap-2">
+            <label htmlFor="category_name" className="font-medium text-gray-700">
               Category Name
             </label>
             <Input
@@ -104,11 +102,9 @@ export const AddCategory = () => {
             />
           </div>
 
-          <div className="grid w-full gap-1.5">
-            <label
-              htmlFor="parent_category"
-              className="font-medium text-gray-700"
-            >
+          {/* Parent Category */}
+          <div className="grid w-full gap-2">
+            <label htmlFor="parent_category" className="font-medium text-gray-700">
               Parent Category{" "}
               <span className="text-sm text-gray-500">(optional)</span>
             </label>
@@ -127,6 +123,7 @@ export const AddCategory = () => {
             </span>
           </div>
 
+          {/* Submit Button */}
           <Button
             onClick={handleAddCategory}
             className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
@@ -136,5 +133,6 @@ export const AddCategory = () => {
         </CardContent>
       </Card>
     </div>
+
   );
 };

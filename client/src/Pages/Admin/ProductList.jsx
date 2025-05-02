@@ -160,185 +160,188 @@ export const ProductList = () => {
   }, [location.pathname]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl">
-      {/* Title */}
-      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
-        Product List
-      </h2>
+    <div className="productList px-4 sm:px-6 md:px-8 py-6">
+      <div className="w-full max-w-6xl mx-auto p-4 bg-white shadow-lg rounded-xl sm:p-6 md:p-8">
+        {/* Title */}
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+          Product List
+        </h2>
 
-      {/* Product Table */}
-      <Table className="border rounded-lg overflow-hidden">
-        <TableHeader>
-          <TableRow className="bg-gray-100 text-center">
-            <TableHead className="w-[250px] text-center">Product</TableHead>
-            <TableHead className="w-[150px] text-center">Product ID</TableHead>
-            <TableHead className="w-[120px] text-center">Price</TableHead>
-            <TableHead className="w-[150px] text-center">Category</TableHead>
-            <TableHead className="w-[150px] text-center">Tags</TableHead>
-            <TableHead className="w-[100px] text-center">Sales</TableHead>
-            <TableHead className="w-[180px] text-center">Action</TableHead>
-          </TableRow>
-        </TableHeader>
+        {/* Product Table */}
+        <Table className="border rounded-lg overflow-hidden">
+          <TableHeader>
+            <TableRow className="bg-gray-100 text-center">
+              <TableHead className="w-[250px] text-center">Product</TableHead>
+              <TableHead className="w-[150px] text-center">Product ID</TableHead>
+              <TableHead className="w-[120px] text-center">Price</TableHead>
+              <TableHead className="w-[150px] text-center">Category</TableHead>
+              <TableHead className="w-[150px] text-center">Tags</TableHead>
+              <TableHead className="w-[100px] text-center">Sales</TableHead>
+              <TableHead className="w-[180px] text-center">Action</TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {loaded && products.length ? (
-            products.map((product) => (
-              <TableRow
-                key={product.id}
-                className="hover:bg-gray-50 text-center"
-              >
-                {/* Product Image & Name */}
-                <TableCell className="flex items-center space-x-2">
-                  <img
-                    src={`/Products/${product.product_id}.jpeg`}
-                    className="w-20 h-20 rounded-lg cursor-pointer"
-                    onClick={() => navigate(`/product/${product.product_id}`)}
-                  />
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => navigate(`/product/${product.product_id}`)}
-                  >
-                    {product["product_id"] +
-                      (product["name"] ? " | " + product["name"] : "")}
-                  </span>
-                </TableCell>
-
-                {/* Product Details */}
-                <TableCell>{product["product_id"]}</TableCell>
-                <TableCell>
-                  ₹{parseFloat(product["price"]).toFixed(2)}
-                </TableCell>
-                <TableCell>{product["category_path"].join(", ")}</TableCell>
-                <TableCell>
-                  {product.tags[0] ? (
-                    product.tags.map((tag, idx) => (
-                      <Badge
-                        key={idx}
-                        className="bg-blue-500 text-white px-2 py-1 rounded-md"
-                      >
-                        {tag}
-                      </Badge>
-                    ))
-                  ) : (
-                    <Badge className="bg-blue-500 text-white px-2 py-1 rounded-md">
-                      None
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell>{product.sales}</TableCell>
-
-                {/* Action Buttons */}
-                <TableCell>
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      className="text-blue-600 hover:text-blue-800"
+          <TableBody>
+            {loaded && products.length ? (
+              products.map((product) => (
+                <TableRow
+                  key={product.id}
+                  className="hover:bg-gray-50 text-center"
+                >
+                  {/* Product Image & Name */}
+                  <TableCell className="flex items-center space-x-2">
+                    <img
+                      src={`/Products/${product.product_id}.jpeg`}
+                      className="w-20 h-20 rounded-lg cursor-pointer"
+                      onClick={() => navigate(`/product/${product.product_id}`)}
+                    />
+                    <span
+                      className="cursor-pointer"
                       onClick={() => navigate(`/product/${product.product_id}`)}
                     >
-                      <FaEye className="size-5" />
-                    </button>
-                    <button
-                      className="text-green-600 hover:text-green-800"
-                      onClick={() => navigate("/admin/products/edit")}
-                    >
-                      <FaEdit className="size-5" />
-                    </button>
+                      {product["product_id"] +
+                        (product["name"] ? " | " + product["name"] : "")}
+                    </span>
+                  </TableCell>
 
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <button className="text-red-600 hover:text-red-800">
-                          <FaTrash className="size-5" />
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="text-center">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle className="text-lg font-semibold text-left">
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription className="text-sm text-gray-600 text-left">
-                            This action cannot be undone. This will permanently
-                            delete your account and remove your data from our
-                            servers.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className="flex justify-center space-x-4 ">
-                          <AlertDialogCancel className="px-4 py-2 border rounded-md">
-                            Cancel
-                          </AlertDialogCancel>
-                          <AlertDialogAction className="px-4 mt-2 bg-gray-700 text-white rounded-md">
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
+                  {/* Product Details */}
+                  <TableCell>{product["product_id"]}</TableCell>
+                  <TableCell>
+                    ₹{parseFloat(product["price"]).toFixed(2)}
+                  </TableCell>
+                  <TableCell>{product["category_path"].join(", ")}</TableCell>
+                  <TableCell>
+                    {product.tags[0] ? (
+                      product.tags.map((tag, idx) => (
+                        <Badge
+                          key={idx}
+                          className="bg-blue-500 text-white px-2 py-1 rounded-md"
+                        >
+                          {tag}
+                        </Badge>
+                      ))
+                    ) : (
+                      <Badge className="bg-blue-500 text-white px-2 py-1 rounded-md">
+                        None
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>{product.sales}</TableCell>
+
+                  {/* Action Buttons */}
+                  <TableCell>
+                    <div className="flex justify-center space-x-4">
+                      <button
+                        className="text-blue-600 hover:text-blue-800"
+                        onClick={() => navigate(`/product/${product.product_id}`)}
+                      >
+                        <FaEye className="size-5" />
+                      </button>
+                      <button
+                        className="text-green-600 hover:text-green-800"
+                        onClick={() => navigate("/admin/products/edit")}
+                      >
+                        <FaEdit className="size-5" />
+                      </button>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button className="text-red-600 hover:text-red-800">
+                            <FaTrash className="size-5" />
+                          </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="text-center">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="text-lg font-semibold text-left">
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription className="text-sm text-gray-600 text-left">
+                              This action cannot be undone. This will permanently
+                              delete your account and remove your data from our
+                              servers.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter className="flex justify-center space-x-4 ">
+                            <AlertDialogCancel className="px-4 py-2 border rounded-md">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction className="px-4 mt-2 bg-gray-700 text-white rounded-md">
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-gray-500">
+                  No products available.
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
+            )}
+          </TableBody>
+
+          {/* Footer */}
+          <TableFooter>
             <TableRow>
-              <TableCell colSpan={7} className="text-center text-gray-500">
-                No products available.
+              <TableCell colSpan={6} className="font-semibold">
+                Total Sales
+              </TableCell>
+              <TableCell className="text-center font-semibold">
+                ₹
+                {products
+                  .reduce((total, product) => total + product.sales, 0)
+                  .toLocaleString()}
               </TableCell>
             </TableRow>
-          )}
-        </TableBody>
+          </TableFooter>
+        </Table>
 
-        {/* Footer */}
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={6} className="font-semibold">
-              Total Sales
-            </TableCell>
-            <TableCell className="text-center font-semibold">
-              ₹
-              {products
-                .reduce((total, product) => total + product.sales, 0)
-                .toLocaleString()}
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-
-      <Pagination className="mb-10">
-        <PaginationContent>
-          {pageIndexes.length ? (
-            pageIndexes.map((page) => (
-              <PaginationItem key={page.index}>
-                {["next", "prev", "ellipsis"].includes(page.index) ? (
-                  page.index === "next" ? (
-                    <PaginationNext
-                      onClick={handlePaginationClick}
-                      link={page.link}
-                    />
-                  ) : page.index === "prev" ? (
-                    <PaginationPrevious
-                      onClick={handlePaginationClick}
-                      link={page.link}
-                    />
+        <Pagination className="mb-10">
+          <PaginationContent>
+            {pageIndexes.length ? (
+              pageIndexes.map((page) => (
+                <PaginationItem key={page.index}>
+                  {["next", "prev", "ellipsis"].includes(page.index) ? (
+                    page.index === "next" ? (
+                      <PaginationNext
+                        onClick={handlePaginationClick}
+                        link={page.link}
+                      />
+                    ) : page.index === "prev" ? (
+                      <PaginationPrevious
+                        onClick={handlePaginationClick}
+                        link={page.link}
+                      />
+                    ) : (
+                      <PaginationEllipsis />
+                    )
                   ) : (
-                    <PaginationEllipsis />
-                  )
-                ) : (
-                  <PaginationLink
-                    onClick={handlePaginationClick}
-                    link={page.link}
-                    isActive={currentPage === page.index} // <-- add this
-                    className={
-                      currentPage === page.index
-                        ? "bg-black rounded-lg text-white"
-                        : ""
-                    }
-                  >
-                    {page.index}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))
-          ) : (
-            <></>
-          )}
-        </PaginationContent>
-      </Pagination>
+                    <PaginationLink
+                      onClick={handlePaginationClick}
+                      link={page.link}
+                      isActive={currentPage === page.index} // <-- add this
+                      className={
+                        currentPage === page.index
+                          ? "bg-black rounded-lg text-white"
+                          : ""
+                      }
+                    >
+                      {page.index}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
+              ))
+            ) : (
+              <></>
+            )}
+          </PaginationContent>
+        </Pagination>
+      </div>
     </div>
+
   );
 };

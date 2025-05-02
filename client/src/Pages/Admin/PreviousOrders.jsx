@@ -34,61 +34,63 @@ export const PreviousOrders = () => {
     });
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl">
-      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
-        Previous Orders
-      </h2>
-      <Table className="border rounded-lg overflow-hidden">
-        <TableCaption>A List of your Recent Orders.</TableCaption>
-        <TableHeader>
-          <TableRow className="bg-gray-100">
-            <TableHead className="w-[120px]">Order ID</TableHead>
-            <TableHead>User Email</TableHead>
-            <TableHead>User Phone</TableHead>
-            <TableHead>Total Amount</TableHead>
-            <TableHead>Receipt</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orderLoaded && orders.map((order) => (
-            <TableRow key={order["order_id"]} className="hover:bg-gray-50">
-              <TableCell className="font-medium">
-                <Link to={`/order/${order["order_id"]}`}>{order["order_id"]}</Link>
-              </TableCell>
-              <TableCell>{order["user_mail"]}</TableCell>
-              <TableCell>+91 {order["user_phone"]}</TableCell>
-              <TableCell>{parseFloat(order["total_amount"]).toFixed(2)}</TableCell>
-              <TableCell>
-                {order["receipt"].substring(0, 15) + (order["receipt"].length > 15 && "...")}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  className={
-                    order["status"] === "paid"
-                      ? "bg-green-500 text-white"
-                      : order["status"] === "pending"
-                        ? "bg-yellow-500 text-white"
-                        : "bg-red-500 text-white"
-                  }
-                >
-                  {order["status"].charAt(0).toUpperCase() + order["status"].substring(1).toLowerCase()}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">{new Date(order["created_at"]).toLocaleDateString()}</TableCell>
+    <div className="prevOrdersList px-4 sm:px-6 md:px-8 py-6">
+      <div className="w-full max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-xl sm:p-6 md:p-8">
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+          Previous Orders
+        </h2>
+        <Table className="border rounded-lg overflow-hidden">
+          <TableCaption>A List of your Recent Orders.</TableCaption>
+          <TableHeader>
+            <TableRow className="bg-gray-100">
+              <TableHead className="w-[120px]">Order ID</TableHead>
+              <TableHead>User Email</TableHead>
+              <TableHead>User Phone</TableHead>
+              <TableHead>Total Amount</TableHead>
+              <TableHead>Receipt</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Date</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={6} className="font-semibold">
-              Total
-            </TableCell>
-            <TableCell className="text-right font-semibold">$750.00</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {orderLoaded && orders.map((order) => (
+              <TableRow key={order["order_id"]} className="hover:bg-gray-50">
+                <TableCell className="font-medium">
+                  <Link to={`/order/${order["order_id"]}`}>{order["order_id"]}</Link>
+                </TableCell>
+                <TableCell>{order["user_mail"]}</TableCell>
+                <TableCell>+91 {order["user_phone"]}</TableCell>
+                <TableCell>{parseFloat(order["total_amount"]).toFixed(2)}</TableCell>
+                <TableCell>
+                  {order["receipt"].substring(0, 15) + (order["receipt"].length > 15 && "...")}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    className={
+                      order["status"] === "paid"
+                        ? "bg-green-500 text-white"
+                        : order["status"] === "pending"
+                          ? "bg-yellow-500 text-white"
+                          : "bg-red-500 text-white"
+                    }
+                  >
+                    {order["status"].charAt(0).toUpperCase() + order["status"].substring(1).toLowerCase()}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">{new Date(order["created_at"]).toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={6} className="font-semibold">
+                Total
+              </TableCell>
+              <TableCell className="text-right font-semibold">$750.00</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
     </div>
   );
 };

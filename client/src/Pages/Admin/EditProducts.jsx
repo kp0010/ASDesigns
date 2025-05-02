@@ -72,16 +72,14 @@ export const EditProducts = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-3xl p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-center text-2xl font-bold mb-4 text-gray-800">
-          Edit Products
-        </h2>
+    <div className="flex justify-center items-center min-h-screen px-4 py-4">
+      <div className="w-full max-w-md md:max-w-2xl lg:max-w-3xl p-6 bg-white shadow-lg rounded-lg">
+        <h2 className="text-center text-2xl font-bold mb-4 text-gray-800">Edit Products</h2>
 
         {/* Product ID Input */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Product ID</label>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
               placeholder="Enter Product ID"
@@ -106,7 +104,7 @@ export const EditProducts = () => {
             {/* Product Name */}
             <div>
               <label className="block text-gray-700 mb-1">Name</label>
-              <div className="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+              <div className="flex flex-col md:flex-row gap-2 items-stretch bg-gray-200 p-3 rounded-lg">
                 {isEditing ? (
                   <input
                     type="text"
@@ -116,11 +114,11 @@ export const EditProducts = () => {
                     className="px-3 py-1 border rounded-lg w-full"
                   />
                 ) : (
-                  <span>{product.name}</span>
+                  <span className="flex-1">{product.name}</span>
                 )}
                 <button
                   onClick={handleEditToggle}
-                  className="px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800"
+                  className="px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800 w-full md:w-auto"
                 >
                   {isEditing ? "Cancel" : "Edit"}
                 </button>
@@ -130,18 +128,14 @@ export const EditProducts = () => {
             {/* Product Image */}
             <div>
               <label className="block text-gray-700 mb-1">Product Image</label>
-              <div className="flex justify-between items-center bg-gray-200 p-3 rounded-lg h-52">
-                <img src={image} className="w-40 h-40 rounded-lg" alt="" />
+              <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-3 rounded-lg gap-4">
+                <img src={image} className="w-40 h-40 rounded-lg object-cover" alt="product" />
                 {isEditing ? (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" accept="image/*" onChange={handleFileChange} />
                 ) : (
                   <button
                     onClick={handleEditToggle}
-                    className="ml-10 px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800"
+                    className="px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800"
                   >
                     Edit
                   </button>
@@ -152,7 +146,7 @@ export const EditProducts = () => {
             {/* Product Price */}
             <div>
               <label className="block text-gray-700 mb-1">Price</label>
-              <div className="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+              <div className="flex flex-col md:flex-row gap-2 items-stretch bg-gray-200 p-3 rounded-lg">
                 {isEditing ? (
                   <input
                     type="text"
@@ -162,11 +156,11 @@ export const EditProducts = () => {
                     className="px-3 py-1 border rounded-lg w-full"
                   />
                 ) : (
-                  <span>{product.price}</span>
+                  <span className="flex-1">{product.price}</span>
                 )}
                 <button
                   onClick={handleEditToggle}
-                  className="px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800"
+                  className="px-3 py-1 bg-black text-white rounded-lg hover:bg-gray-800 w-full md:w-auto"
                 >
                   {isEditing ? "Cancel" : "Edit"}
                 </button>
@@ -176,22 +170,20 @@ export const EditProducts = () => {
             {/* Category */}
             <div>
               <label className="block text-gray-700 mb-1">Category</label>
-              <div className="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
-                <span className="flex items-center space-x-2">
-                  {categories.map((category, index) => (
-                    <React.Fragment key={index}>
-                      <Link
-                        to={`/shop/?cat=${category.name}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {category.name}
-                      </Link>
-                      {index < categories.length - 1 && (
-                        <CgFormatSlash className="text-gray-500" />
-                      )}
-                    </React.Fragment>
-                  ))}
-                </span>
+              <div className="flex flex-wrap items-center gap-2 bg-gray-200 p-3 rounded-lg">
+                {categories.map((category, index) => (
+                  <React.Fragment key={index}>
+                    <Link
+                      to={`/shop/?cat=${category.name}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {category.name}
+                    </Link>
+                    {index < categories.length - 1 && (
+                      <CgFormatSlash className="text-gray-500" />
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
 
@@ -199,9 +191,13 @@ export const EditProducts = () => {
             <div>
               <label className="block text-gray-700 mb-1">Tags</label>
               <div className="flex flex-wrap gap-2 bg-gray-200 p-3 rounded-lg">
-                {tags.length && tags.map((tag, index) => (
-                  <Badge key={index}>{tag.name}</Badge>
-                ))}
+                {tags.length ? (
+                  tags.map((tag, index) => (
+                    <Badge key={index}>{tag.name}</Badge>
+                  ))
+                ) : (
+                  <span className="text-gray-500">No tags available</span>
+                )}
               </div>
             </div>
 

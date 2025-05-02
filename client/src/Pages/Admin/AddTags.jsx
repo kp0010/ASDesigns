@@ -39,10 +39,13 @@ export const AddTag = () => {
   };
 
   return (
-    <div className="add-tag flex flex-col px-12 pt-8 gap-6 items-center">
-      <h2 className="text-3xl font-bold text-center text-gray-800">Add New Tag</h2>
-      <Card className="w-full max-w-lg p-6 bg-white shadow-lg rounded-2xl">
-        <CardContent className="flex flex-col gap-4">
+    <div className="add-tag flex flex-col items-center px-4 sm:px-6 md:px-12 pt-8 gap-6 min-h-screen">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">
+        Add New Tag
+      </h2>
+
+      <Card className="w-full max-w-md sm:max-w-lg p-6 bg-white shadow-lg rounded-2xl">
+        <CardContent className="flex flex-col gap-4 w-full">
           <label htmlFor="tag_name" className="font-medium text-gray-700">
             Tag Name
           </label>
@@ -63,5 +66,6 @@ export const AddTag = () => {
         </CardContent>
       </Card>
     </div>
+
   );
 };
