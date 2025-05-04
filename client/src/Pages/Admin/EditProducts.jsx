@@ -27,7 +27,7 @@ export const EditProducts = () => {
         setProduct(data["product"]);
         setCategories(data["categories"]);
         setTags(data["tags"]);
-        setImage(`/Products/${searchProductId}.jpeg`);
+        setImage(`/api/assets/${searchProductId}.jpeg`);
         setUpdatedProduct(data["product"]); // Initialize editable state
         setLoading(false);
       })

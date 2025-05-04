@@ -31,7 +31,7 @@ const CartProductItem = ({ product, handleClick, removeFromCart }) => {
         <div className="mt-4">
           <div className="productDiplay-img h-[200px] w-[200px] md:ml-8">
             <img
-              src={`/Products/${product.product_id}.jpeg`}
+              src={`/api/assets/${product.product_id}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />

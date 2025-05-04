@@ -59,7 +59,7 @@ const ProductModal = ({ product, open, onOpenChange }) => {
         </DialogHeader>
         <div className="prod-details flex gap-6 items-center">
           <img
-            src={`/Products/${product.product_id}.jpeg`}
+            src={`/api/assets/${product.product_id}.jpeg`}
             alt={product.name}
             className="w-[400px] h-[400px] object-cover rounded-lg"
           />

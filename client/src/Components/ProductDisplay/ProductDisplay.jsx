@@ -196,7 +196,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         <div className="product-display-left mt-4 ml-8 mb-5">
           {/* <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
             <img
-              src={`/Products/${productId}.jpeg`}
+              src={`/api/assets/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />
@@ -209,13 +209,13 @@ export const ProductDisplay = ({ productId, product, categories }) => {
           >
             <Image
               ref={sourceRef}
-              source={`/Products/${productId}.jpeg`}
+              source={`/api/assets/${productId}.jpeg`}
               alt="Product"
             />
             <Target
               opacity={opacity}
               offset={offset}
-              source={`/Products/${productId}.jpeg`}
+              source={`/api/assets/${productId}.jpeg`}
               style={{ backgroundPosition: `${bgPos.x}px ${bgPos.y}px` }}
             />
           </Container>
@@ -305,7 +305,7 @@ export const ProductDisplay = ({ productId, product, categories }) => {
         <div className="w-full flex justify-center">
           <div className="productDiplay-img s:h-[350px] w-[350px]">
             <img
-              src={`/Products/${productId}.jpeg`}
+              src={`/api/assets/${productId}.jpeg`}
               className="product-display-main-img rounded-lg"
               alt=""
             />

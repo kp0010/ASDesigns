@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const OrderInfo = ({}) => {
+export const OrderInfo = ({ }) => {
   const { orderId } = useParams();
 
   const [orderItems, setOrderItems] = useState([]);
@@ -107,7 +107,7 @@ export const OrderInfo = ({}) => {
                 >
                   <div className="flex items-center border-b-2 justify-center border-black py-3">
                     <img
-                      src={`/Products/${product.product_id}.jpeg`}
+                      src={`/api/assets/${product.product_id}.jpeg`}
                       alt="Product"
                       className="w-14 md:w-20 h-14 md:h-20 rounded-lg"
                     />

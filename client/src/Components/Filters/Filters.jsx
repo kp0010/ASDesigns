@@ -22,6 +22,8 @@ export const Filters = ({
   filterSidebarRender,
 }) => {
 
+  const { pageNo } = useParams();
+
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -32,6 +34,10 @@ export const Filters = ({
 
   const location = useLocation();
 
+  useEffect(() => {
+    getProducts({ selectedFilters: selectedFilters });
+    handleClearAll()
+  }, [pageNo]);
 
   useEffect(() => {
     fetch("/api/categories", {
@@ -102,6 +108,7 @@ export const Filters = ({
 
     setCategoriesLoaded(true);
   }, [category, allCategories]);
+
 
   useEffect(() => {
     setCategoriesLoaded(false);
@@ -223,6 +230,12 @@ export const Filters = ({
 
 
   const handleTagClick = (tag) => {
+    const baseLocation = location.pathname.substring(0,
+      location.pathname.search("/page") !== -1 ?
+        location.pathname.search("/page") : location.pathname.length)
+
+    navigate(baseLocation + new URLSearchParams(location.search).toString())
+
     setSelectedTags([...selectedTags, tag]); // Move tag to selected
     setTags(tags.filter((t) => t.id !== tag.id).sort((a, b) => {
       const nameA = a.name.toUpperCase();
@@ -239,6 +252,12 @@ export const Filters = ({
 
   // Function to remove tag from selected
   const handleRemoveTag = (tag) => {
+    const baseLocation = location.pathname.substring(0,
+      location.pathname.search("/page") !== -1 ?
+        location.pathname.search("/page") : location.pathname.length)
+
+    navigate(baseLocation + new URLSearchParams(location.search).toString())
+
     setSelectedTags(selectedTags.filter((t) => t.id !== tag.id)); // Remove from selected
     setTags([...tags, tag].sort((a, b) => {
       const nameA = a.name.toUpperCase();
@@ -258,14 +277,14 @@ export const Filters = ({
     setSelectedTags([]);
   };
 
+
   useEffect(() => {
     if (tags.length + selectedTags.length) {
       getProducts({
         selectedTags: selectedTags
       });
     }
-  }, [selectedTags])
-
+  }, [selectedTags, pageNo])
 
 
   const renderCategories = (categories, parent = null) => {

@@ -30,6 +30,7 @@ const transformToGroupedOptions = (categoryTree) => {
 
 export const AddProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedTags, setSelectedTags] = useState(null);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [tags, setTags] = useState([]);
 

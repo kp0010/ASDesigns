@@ -80,7 +80,7 @@ export const UserPreviousOrders = () => {
                                                 <div className="prevOrders-left pl-0 xl:pl-8">
                                                     <div className="prevOrders-img h-[100px] w-[100px]">
                                                         <img
-                                                            src={`/Products/${item.product_id}.jpeg`}
+                                                            src={`/api/assets/${item.product_id}.jpeg`}
                                                             alt={item.name}
                                                             className="rounded-lg w-full h-full object-cover mb-2"
                                                         />

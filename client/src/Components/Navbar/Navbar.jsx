@@ -240,7 +240,7 @@ export const Navbar = () => {
                         ) : (
                           <>
                             <img
-                              src={`/Products/${product.product_id}.jpeg`}
+                              src={`/api/assets/${product.product_id}.jpeg`}
                               className="w-20 h-20 object-cover rounded"
                               alt={product.name}
                             />
@@ -304,7 +304,7 @@ export const Navbar = () => {
                         onClick={() => handleItemClick(product)}
                       >
                         <img
-                          src={`/Products/${product.product_id}.jpeg`}
+                          src={`/api/assets/${product.product_id}.jpeg`}
                           className="w-20 h-20 object-cover rounded"
                           alt={product.name}
                         />
@@ -367,7 +367,7 @@ export const Navbar = () => {
                         onClick={() => handleItemClick(product)}
                       >
                         <img
-                          src={`/Products/${product.product_id}.jpeg`}
+                          src={`/api/assets/${product.product_id}.jpeg`}
                           className="w-20 h-20 object-cover rounded"
                           alt={product.name}
                         />

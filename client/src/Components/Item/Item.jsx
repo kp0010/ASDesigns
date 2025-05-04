@@ -81,7 +81,7 @@ export const Item = ({ product }) => {
     <div className="item">
       <div className="item-image">
         <Link to={`/product/${product_id}`} onClick={handleClick}>
-          <img src={`/Products/${product_id}.jpeg`} alt="..." />
+          <img src={`/api/assets/${product_id}.jpeg`} alt="..." />
         </Link>
         <div className="item-hover-container">
           <button

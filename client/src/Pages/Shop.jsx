@@ -58,6 +58,7 @@ export const Shop = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
 
+
   const getProducts = useCallback(
     ({
       orderBy = null,
@@ -210,13 +211,11 @@ export const Shop = () => {
     getProducts();
   }, [category]);
 
-  useEffect(() => {
-    getProducts({ selectedFilters: selectedFilters });
-  }, [pageNo]);
 
   useEffect(() => {
     calculatePages(pageNo);
   }, [pageNo, totalProducts]);
+
 
   useEffect(() => {
     const match = location.pathname.match(/\/page\/(\d+)/);

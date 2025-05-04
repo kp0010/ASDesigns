@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import pg from "pg";
 import multer from "multer";
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import Razorpay from "razorpay";
 import bodyParser from "body-parser";
 
@@ -75,6 +78,8 @@ const PG_DB_CONFIG = {
 const GDRIVE_KEY_FILE = process.env.GOOGLE_DRIVE_KEY_FILE;
 export const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Constants End
 
@@ -240,6 +245,13 @@ POST    :   /api/payment-success/
 
 */
 
+
+// ASSETS
+// Get All Assets
+app.use("/api/assets", express.static(path.join(__dirname, "public/assets")))
+
+
+// USER
 // Register New User to the DB if not available
 app.post("/api/auth/register", requireAuth(), postNewUser);
 

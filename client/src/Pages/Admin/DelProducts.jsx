@@ -29,9 +29,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/Components/ui/alert-dialog";
 
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { Badge } from "@/Components/ui/badge";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/Components/ui/button";
@@ -193,7 +193,7 @@ export const DelProducts = () => {
                   {/* Product Image & Name */}
                   <TableCell className="flex items-center space-x-2">
                     <img
-                      src={`/Products/${product.product_id}.jpeg`}
+                      src={`/api/assets/${product.product_id}.jpeg`}
                       className="w-20 h-20 rounded-lg cursor-pointer"
                       onClick={() => navigate(`/product/${product.product_id}`)}
                     />
