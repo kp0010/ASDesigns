@@ -13,6 +13,7 @@ import { CarouselItem } from "../ui/carousel";
 import { Link, useNavigate } from "react-router-dom";
 import { useShop } from "@/Context/ShopContext";
 import ProductModal from "../ProductModal/ProductModal";
+import { toast } from "sonner";
 
 export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

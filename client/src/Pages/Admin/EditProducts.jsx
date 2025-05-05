@@ -2,6 +2,7 @@ import { Badge } from "@/Components/ui/badge";
 import React, { useState } from "react";
 import { CgFormatSlash } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export const EditProducts = () => {
   const [searchProductId, setSearchProductId] = useState("");
@@ -71,11 +72,11 @@ export const EditProducts = () => {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          alert("Product Updated successfully!");
+          toast.success("Product Updated successfully!");
           setIsEditing(false);
           getProduct(); // Refresh data
-        } else {
-          alert("Failed to update product.");
+        } else {          
+          toast.info("Failed to update product.");
         }
       }
       )
@@ -93,7 +94,7 @@ export const EditProducts = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <form
               onSubmit={getProduct}
-              className="flex items-center gap-2"
+              className="flex flex-col sm:flex-row sm:justify-between w-full sm:items-center gap-3 sm:gap-4"
             >
               <input
                 type="text"
