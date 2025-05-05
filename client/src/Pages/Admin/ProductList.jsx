@@ -191,7 +191,7 @@ export const ProductList = () => {
                   {/* Product Image & Name */}
                   <TableCell className="flex items-center space-x-2">
                     <img
-                      src={`/Products/${product.product_id}.jpeg`}
+                      src={`/api/assets/${product.product_id}.jpeg`}
                       className="w-20 h-20 rounded-lg cursor-pointer"
                       onClick={() => navigate(`/product/${product.product_id}`)}
                     />

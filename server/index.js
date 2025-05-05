@@ -42,7 +42,13 @@ import {
   postUsersOrders,
   verifyUserPayment
 } from "./routes/orders.js";
-import { getUser, postNewUser } from "./routes/auth.js";
+
+import {
+  getAllUsers,
+  getUser,
+  postNewUser,
+  getDashboardStats
+} from "./routes/auth.js";
 
 
 /*
@@ -148,7 +154,7 @@ const auth = new google.auth.GoogleAuth({
 
 export const drive = google.drive({ version: "v3", auth });
 
-const upload = multer({ dest: process.env.MULTER_DESTINATION });
+const imageUpload = multer({ dest: process.env.MULTER_DESTINATION });
 
 // GDrive End
 
@@ -175,6 +181,10 @@ Routes
 Auth Routes:
 POST	:   /api/auth/register
             Register New Users to the DB (Protected)
+
+GET     :   /api/auth/users
+            Retrieve All Users from DB (Protected Admin)
+
 
 Product Routes:
 GET	:   /api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
@@ -258,6 +268,12 @@ app.post("/api/auth/register", requireAuth(), postNewUser);
 // Get User from DB
 app.get("/api/auth", requireAuth(), getUser);
 
+// Get All Users from DB
+app.get("/api/auth/users", requireAdmin(), getAllUsers);
+
+// Get Admin Dashboard Stats
+app.get("/api/auth/stats", requireAdmin(), getDashboardStats);
+
 
 // PRODUCT
 // Get All Products with Pagination and Sorting
@@ -270,7 +286,7 @@ app.get("/api/products-metadata", requireAdmin(), getProductsWithMetadata);
 app.get("/api/products/:productId", getIndividualProduct);
 
 // Add Files Uploaded from Client to Products Folder in GDrive
-app.post("/api/products", requireAdmin(), upload.array("files"), postProduct);
+app.post("/api/products", requireAdmin(), imageUpload.array("files"), postProduct);
 
 // Delete Products from DB
 app.delete("/api/products", requireAdmin(), deleteProduct);

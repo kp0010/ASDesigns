@@ -1,12 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ShoppingCart, Package, Users, DollarSign } from "lucide-react";
 
 export const AdminDashboard = () => {
+  const [loaded, setLoaded] = useState(false)
+  const [stats, setStats] = useState({})
+
+  useEffect(() => {
+    fetch("/api/auth/stats", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.success) {
+          setStats(data.stats)
+          setLoaded(true)
+        }
+      })
+  }, [])
+
   const dashboardData = [
-    { title: "Total Orders", value: "34000", icon: <ShoppingCart className="w-6 h-6 text-blue-500 mb-2" /> },
-    { title: "Total Products", value: "30000", icon: <Package className="w-6 h-6 text-green-500 mb-2" /> },
-    { title: "Total Visitors", value: "20000", icon: <Users className="w-6 h-6 text-purple-500 mb-2" /> },
-    { title: "Total Revenue", value: "$20000", icon: <DollarSign className="w-6 h-6 text-yellow-500 mb-2" /> },
+    { title: "Total Orders", icon: <ShoppingCart className="w-6 h-6 text-blue-500 mb-2" />, index: "ordersCount" },
+    { title: "Total Products", icon: <Package className="w-6 h-6 text-green-500 mb-2" />, index: "productsCount" },
+    { title: "Total Visitors", icon: <Users className="w-6 h-6 text-purple-500 mb-2" />, index: "usersCount" },
+    { title: "Total Revenue", icon: <DollarSign className="w-6 h-6 text-yellow-500 mb-2" />, index: "totalRevenue" },
   ];
 
   return (
@@ -17,7 +36,7 @@ export const AdminDashboard = () => {
 
       {/* Responsive Grid */}
       <div className="section-first grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {dashboardData.map((item, idx) => (
+        {loaded && dashboardData.map((item, idx) => (
           <div
             key={idx}
             className="bg-white rounded-lg p-5 flex flex-col justify-center items-center shadow-md"
@@ -25,7 +44,13 @@ export const AdminDashboard = () => {
             {item.icon}
             <div className="text-center">
               <h2 className="text-lg font-medium">{item.title}</h2>
-              <h2 className="text-lg font-semibold text-blue-600">{item.value}</h2>
+              <h2 className="text-lg font-semibold text-blue-600">{
+                (item.index !== "totalRevenue" ? (
+                  stats[item.index]
+                ) : (
+                  "₹ " + parseFloat(stats[item.index]).toFixed(2)
+                ))
+              }</h2>
             </div>
           </div>
         ))}

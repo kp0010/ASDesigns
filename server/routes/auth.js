@@ -61,3 +61,47 @@ export const getUser = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 }
+
+export const getAllUsers = async (_, res) => {
+	try {
+		const selectUsersQuery = "SELECT * FROM users";
+		const selectUsersRes = await db.query(selectUsersQuery);
+
+		res.json({
+			success: selectUsersRes.rowCount > 0,
+			message: selectUsersRes.rowCount > 0 ? "Users Retrieved successfully" : "No Users Found",
+			users: selectUsersRes.rows
+		});
+
+	} catch (error) {
+		console.error("Error Retrieving Users", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export const getDashboardStats = async (_, res) => {
+	try {
+		const statsQuery = "SELECT \
+					(SELECT COUNT(*) FROM orders) as ordersCount, \
+					(SELECT COUNT(*) FROM products) as productsCount, \
+					(SELECT COUNT(*) FROM users) as usersCount, \
+					(SELECT SUM(total_amount) FROM orders WHERE status = 'paid') as totalRevenue; \
+				";
+
+		const statsRes = await db.query(statsQuery);
+
+		res.json({
+			success: statsRes.rowCount > 0,
+			stats: {
+				ordersCount: statsRes.rows[0].orderscount,
+				productsCount: statsRes.rows[0].productscount,
+				usersCount: statsRes.rows[0].userscount,
+				totalRevenue: statsRes.rows[0].totalrevenue,
+			}
+		});
+
+	} catch (error) {
+		console.error("Error Retrieving Users", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
