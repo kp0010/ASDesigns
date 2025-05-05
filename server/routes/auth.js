@@ -82,10 +82,10 @@ export const getAllUsers = async (_, res) => {
 export const getDashboardStats = async (_, res) => {
 	try {
 		const statsQuery = "SELECT \
-					(SELECT COUNT(*) FROM orders) as ordersCount, \
-					(SELECT COUNT(*) FROM products) as productsCount, \
-					(SELECT COUNT(*) FROM users) as usersCount, \
-					(SELECT SUM(total_amount) FROM orders WHERE status = 'paid') as totalRevenue; \
+					(SELECT COUNT(*) FROM orders) as orderscount, \
+					(SELECT COUNT(*) FROM products) as productscount, \
+					(SELECT COUNT(*) FROM users) as userscount, \
+					(SELECT SUM(total_amount) FROM orders WHERE status = 'paid') as totalrevenue; \
 				";
 
 		const statsRes = await db.query(statsQuery);

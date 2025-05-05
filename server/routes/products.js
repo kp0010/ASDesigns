@@ -7,6 +7,19 @@ import {
 
 dotenv.config({ path: "../.env.dev" })
 
+
+function isValidNumeric(value) {
+	if (typeof value !== 'string') return false;
+
+	const match = value.match(/^[-+]?\d+(\.\d{1,4})?$/);
+	if (!match) return false;
+
+	const digitsOnly = value.replace('.', '').replace('-', '').replace('+', '');
+
+	return digitsOnly.length <= 10;
+}
+
+
 const createGetProductsQuery = (req) => {
 	const params = []
 
@@ -287,7 +300,7 @@ export const deleteProduct = async (req, res) => {
 	// WARNING: Deleting from the DB or Google Drive will result in Previous Buyers of the Product from downloading it again
 	// FIX: Maybe Check whether the Item has been bought ever and then remove only if not in orders list
 	try {
-		const { productId } = req.body
+		const { productId } = req.params.productId
 
 		if (!productId) {
 			return res.status(400).json({ error: "Missing productId" })
@@ -350,16 +363,56 @@ const buildCategoryTree = (categories) => {
 
 export const getAllTags = async (_, res) => {
 	try {
-		const query = "SELECT * FROM tags";
-		const result = await db.query(query);
+		const tagsQuery = "SELECT * FROM tags";
+		const tagsResult = await db.query(tagsQuery);
 
 		res.json({
 			success: true,
-			tags: result.rows,
+			tags: tagsResult.rows,
 		});
 
 	} catch (err) {
 		console.error("Error fetching tags:", err);
+		res.status(500).json({ error: "Internal Server error" });
+	}
+}
+
+export const patchProduct = async (req, res) => {
+	try {
+		const productId = req.params.productId
+
+		const { name, price, category, tags } = req.body
+
+		if (!isValidNumeric(price)) {
+			res.status(400).json({
+				success: false,
+				error: "Enter a Valid Number"
+			});
+
+			return
+		}
+
+		// TODO: Add Category and Tags updates
+		const updateQuery = "UPDATE products \
+			SET \
+			name = $1, \
+			price = $2 \
+			WHERE product_id = $3 \
+			RETURNING * \
+		";
+
+		const updateResult = await db.query(
+			updateQuery,
+			[name, parseFloat(price), productId]
+		);
+
+		res.json({
+			success: !!updateResult.rowCount,
+			updatedProduct: updateResult.rows[0]
+		});
+
+	} catch (err) {
+		console.error("Error Updating Product:", err);
 		res.status(500).json({ error: "Internal Server error" });
 	}
 }

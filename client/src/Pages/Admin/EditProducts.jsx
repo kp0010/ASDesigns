@@ -14,7 +14,10 @@ export const EditProducts = () => {
   const [updatedProduct, setUpdatedProduct] = useState({}); // Store updates
   const [selectedFile, setSelectedFile] = useState(null); // Store selected image
 
-  const getProduct = () => {
+  const getProduct = (e = undefined) => {
+    e?.preventDefault()
+    console.log(searchProductId)
+
     if (!searchProductId) return; // Prevent empty requests
     setLoading(true);
 
@@ -34,9 +37,11 @@ export const EditProducts = () => {
       .catch(() => setLoading(false));
   };
 
+
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
   };
+
 
   const handleInputChange = (e) => {
     setUpdatedProduct({
@@ -45,9 +50,11 @@ export const EditProducts = () => {
     });
   };
 
+
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]); // Store the selected file
   };
+
 
   const handleSaveChanges = async () => {
     const formData = new FormData();
@@ -57,19 +64,23 @@ export const EditProducts = () => {
       formData.append("image", selectedFile);
     }
 
-    const response = await fetch(`/api/products/update/${searchProductId}`, {
-      method: "PUT",
+    fetch(`/api/products/${searchProductId}`, {
+      method: "PATCH",
       body: formData,
-    });
-
-    if (response.ok) {
-      alert("Product updated successfully!");
-      setIsEditing(false);
-      getProduct(); // Refresh data
-    } else {
-      alert("Failed to update product.");
-    }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Product Updated successfully!");
+          setIsEditing(false);
+          getProduct(); // Refresh data
+        } else {
+          alert("Failed to update product.");
+        }
+      }
+      )
   };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4 py-4">
@@ -80,19 +91,24 @@ export const EditProducts = () => {
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Product ID</label>
           <div className="flex flex-col sm:flex-row gap-4">
-            <input
-              type="text"
-              placeholder="Enter Product ID"
-              value={searchProductId}
-              onChange={(e) => setSearchProductId(e.target.value)}
-              className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              onClick={getProduct}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+            <form
+              onSubmit={getProduct}
+              className="flex items-center gap-2"
             >
-              Fetch Details
-            </button>
+              <input
+                type="text"
+                placeholder="Enter Product ID"
+                value={searchProductId}
+                onChange={(e) => setSearchProductId(e.target.value)}
+                className="flex-1 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+              >
+                Fetch Details
+              </button>
+            </form>
           </div>
         </div>
 

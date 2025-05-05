@@ -34,13 +34,12 @@ export const UploadFiles = () => {
 
 		const token = await getToken()
 
-		fetch("/api/products", {
+		fetch(`/api/products/${productId}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${token}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ productId: "BITCH" })
 		})
 			.then((resp) => resp.json())
 			.then((data) => console.log(data))

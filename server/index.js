@@ -21,6 +21,7 @@ import {
   getAllCategories,
   getAllTags,
   getProductsWithMetadata,
+  patchProduct,
 } from "./routes/products.js";
 
 import {
@@ -154,7 +155,18 @@ const auth = new google.auth.GoogleAuth({
 
 export const drive = google.drive({ version: "v3", auth });
 
-const imageUpload = multer({ dest: process.env.MULTER_DESTINATION });
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // cb(null, process.env.MULTER_DESTINATION)
+    cb(null, "./public/assets/")
+  },
+
+  filename: (req, file, cb) => {
+    cb(null, req.params.productId + ".jpeg")
+  }
+})
+
+const imageUpload = multer({ storage: imageStorage });
 
 // GDrive End
 
@@ -205,9 +217,8 @@ GET	:   /api/categories
 GET	:   /api/tags
             Get all Tags
 
- TODO:
- PATCH :    /api/products/:productId
-            Update Product with Specified Product Id (Protected Admin)
+PATCH :    /api/products/:productId
+           Update Product with Specified Product Id (Protected Admin)
 
 Cart Routes
 GET	:   /api/cart/
@@ -288,8 +299,11 @@ app.get("/api/products/:productId", getIndividualProduct);
 // Add Files Uploaded from Client to Products Folder in GDrive
 app.post("/api/products", requireAdmin(), imageUpload.array("files"), postProduct);
 
-// Delete Products from DB
-app.delete("/api/products", requireAdmin(), deleteProduct);
+// Delete Products from DB and Storage
+app.delete("/api/products/:productId", requireAdmin(), deleteProduct);
+
+// Update Products in DB and Storage
+app.patch("/api/products/:productId", requireAdmin(), imageUpload.single('image'), patchProduct);
 
 // Get All Categories Levelwise
 app.get("/api/categories", getAllCategories);
