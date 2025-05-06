@@ -24,7 +24,10 @@ export const Product = () => {
   }
 
   useEffect(() => {
+    console.log("CALLING GET")
     getProduct()
+
+    return () => { }
   }, [productId])
 
   return (

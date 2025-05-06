@@ -302,7 +302,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
             type="text"
             placeholder="Notes about your order E.g. Special notes for delivery"
             className="border-2 border-black w-full p-2 mt-2 rounded-lg"
-            maxlength="150"
+            maxLength="150"
           />
         </div>
 

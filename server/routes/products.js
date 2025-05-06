@@ -57,7 +57,7 @@ const createGetProductsQuery = (req) => {
 	// TODO: Add Popular Sort
 	const sortToSql = {
 		"default": "product_id",
-		"popular": "random()",
+		"popular": "popularity DESC",
 		"recent": "updated_at DESC",
 		"price_desc": "price DESC",
 		"price_asc": "price",
@@ -132,7 +132,6 @@ export const getProducts = async (req, res) => {
 export const getProductsWithMetadata = async (req, res) => {
 	// Get All Products with Pagination and Sorting
 	try {
-		// const { totalProductsQuery, selectQuery, params } = createGetProductsQuery(req)
 		let { q, limit, page } = req.query
 		let offset = 0
 		if (!q) { q = "" }
@@ -165,10 +164,14 @@ export const getIndividualProduct = async (req, res) => {
 	try {
 		const { productId } = req.params
 
-		const selectQuery = "SELECT * FROM products WHERE product_id = $1"
+		const updateSelectProdQuery = "UPDATE products \
+			SET popularity = popularity + 1 \
+			WHERE product_id = $1 \
+			RETURNING * \
+			"
 		const categoryQuery = "SELECT * FROM get_product_categories($1)"
 
-		const product = await db.query(selectQuery, [productId])
+		const product = await db.query(updateSelectProdQuery, [productId])
 		const categories = await db.query(categoryQuery, [productId])
 
 		const tagQuery = `SELECT t.* FROM product_tags pt LEFT JOIN tags t on pt.tag_id = t.id WHERE pt.product_id = '${product.rows[0].id}'`

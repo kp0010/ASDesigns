@@ -27,7 +27,7 @@ export const Shop_Item = ({ product }) => {
 
   const [wishlistCurrent, setWishlistCurrent] = useState(false);
   const [cartCurrent, setCartCurrent] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // NEW
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleWishlist = () => {
     if (wishlistCurrent) {

@@ -170,7 +170,9 @@ export const Filters = ({
 
       const urlParams = new URLSearchParams(location.search);
 
-      if (newFiltersArray.length && !(category.toLowerCase() === newFiltersArray[0].toLowerCase())) {
+      if (newFiltersArray.length &&
+        (!category ||
+          !(category.toLowerCase() === newFiltersArray[0].toLowerCase()))) {
         urlParams.set(
           "cat",
           category
