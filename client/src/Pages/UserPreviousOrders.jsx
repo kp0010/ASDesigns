@@ -73,8 +73,8 @@ export const UserPreviousOrders = () => {
                                 <p className="text-md font-medium"><strong>Date: </strong>{new Date(order.created_at).toLocaleDateString()}</p>
                             </div>
                             <div className="prevOrders-main flex w-[95%] pb-4 flex-col gap-4 mt-2 mx-4 lg:mx-8">
-                                {(orderItemsMap[order.order_id] || []).map((item) => (
-                                    <div key={item.product_id} className="border-b-2 border-black">
+                                {(orderItemsMap[order.order_id] || []).map((item, index, arr) => (
+                                    <div key={item.product_id} className={`${index !== arr.length - 1 ? "border-b-2 border-black" : ""}`}>
                                         <div className="flex gap-6 pb-4 lg:gap-10">
                                             <Link to={`/product/${item.product_id}`} onClick={handleClick}>
                                                 <div className="prevOrders-left pl-0 xl:pl-8">

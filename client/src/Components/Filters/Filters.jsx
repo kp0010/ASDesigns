@@ -171,8 +171,6 @@ export const Filters = ({
       const urlParams = new URLSearchParams(location.search);
 
       if (newFiltersArray.length && !(category.toLowerCase() === newFiltersArray[0].toLowerCase())) {
-        console.log("ADDING")
-        console.log(newFiltersArray)
         urlParams.set(
           "cat",
           category
@@ -182,7 +180,6 @@ export const Filters = ({
             : newFiltersArray
         );
       } else {
-        console.log("REMD")
         urlParams.delete("cat");
       }
 
