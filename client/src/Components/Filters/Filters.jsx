@@ -152,27 +152,25 @@ export const Filters = ({
   const navigate = useNavigate();
 
 
-  const handleCheckboxClick = (clicketCat) => {
+  const handleCheckboxClick = (clickedCat) => {
     setSelectedFilters((prevFilters) => {
       let newFilters = new Set(prevFilters);
 
-      if (newFilters.has(clicketCat.name.toLowerCase())) {
-        newFilters.delete(clicketCat.name.toLowerCase());
-        uncheckChildren(clicketCat, newFilters);
+      if (newFilters.has(clickedCat.name.toLowerCase())) {
+        newFilters.delete(clickedCat.name.toLowerCase());
+        uncheckChildren(clickedCat, newFilters);
       } else {
-        newFilters.add(clicketCat.name.toLowerCase());
-        checkChildren(clicketCat, newFilters);
+        newFilters.add(clickedCat.name.toLowerCase());
+        checkChildren(clickedCat, newFilters);
       }
 
-      updateParentSelection(clicketCat, newFilters);
+      updateParentSelection(clickedCat, newFilters);
 
       const newFiltersArray = Array.from(newFilters);
 
       const urlParams = new URLSearchParams(location.search);
 
       if (newFiltersArray.length && !(category.toLowerCase() === newFiltersArray[0].toLowerCase())) {
-        console.log("ADDING")
-        console.log(newFiltersArray)
         urlParams.set(
           "cat",
           category
@@ -182,7 +180,6 @@ export const Filters = ({
             : newFiltersArray
         );
       } else {
-        console.log("REMD")
         urlParams.delete("cat");
       }
 
