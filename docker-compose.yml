@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:17.2-alpine3.21
+    container_name: asdesigns_pg
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+      POSTGRES_DB: "asdesigns"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./server/misc/asdesigns.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - my_network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    volumes:
+      - be_data:/app/public/assets
+    environment:
+      - "NODE_ENV=production"
+    networks:
+      - my_network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - my_network
+
+
+volumes:
+  pg_data:
+  be_data:
+
+networks:
+  my_network:
+    driver: bridge
