@@ -9,6 +9,7 @@ export const Product = () => {
 
   const [product, setProduct] = useState({})
   const [categories, setCategories] = useState([])
+  const [tags, setTags] = useState([])
 
   const getProduct = () => {
     fetch(`/api/products/${productId}`, {
@@ -20,11 +21,11 @@ export const Product = () => {
       .then((data) => {
         setProduct(data["product"])
         setCategories(data["categories"])
+        setTags(data["tags"])
       })
   }
 
   useEffect(() => {
-    console.log("CALLING GET")
     getProduct()
 
     return () => { }
@@ -33,7 +34,12 @@ export const Product = () => {
   return (
     <div>
       <BasicBreadcrumbs categories={categories} />
-      <ProductDisplay product={product} categories={categories} productId={productId} />
+      <ProductDisplay
+        product={product}
+        categories={categories}
+        tags={tags}
+        productId={productId}
+      />
       <Related_Products />
     </div>
   )

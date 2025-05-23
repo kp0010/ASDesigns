@@ -164,17 +164,21 @@ export const getIndividualProduct = async (req, res) => {
 	try {
 		const { productId } = req.params
 
-		const updateSelectProdQuery = "UPDATE products \
-			SET popularity = popularity + 1 \
-			WHERE product_id = $1 \
-			RETURNING * \
-			"
-		const categoryQuery = "SELECT * FROM get_product_categories($1)"
-
+		const updateSelectProdQuery = `
+			UPDATE products 
+				SET popularity = popularity + 1 
+				WHERE product_id = $1 
+				RETURNING * `
 		const product = await db.query(updateSelectProdQuery, [productId])
+
+		const categoryQuery = "SELECT * FROM get_product_categories($1)"
 		const categories = await db.query(categoryQuery, [productId])
 
-		const tagQuery = `SELECT t.* FROM product_tags pt LEFT JOIN tags t on pt.tag_id = t.id WHERE pt.product_id = '${product.rows[0].id}'`
+		const tagQuery = `
+			SELECT t.*
+				FROM product_tags pt
+				LEFT JOIN tags t on pt.tag_id = t.id
+				WHERE pt.product_id = '${product.rows[0].id}'`
 		const tags = await db.query(tagQuery)
 
 		res.status(200).json({

@@ -25,11 +25,18 @@ export const BasicBreadcrumbs = ({ categories }) => {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          {categories.map((el, idx) => (
+          {categories.map((category, idx) => (
             <React.Fragment key={idx}>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link to={`/shop/?cat=${el.name}`}>{el.name}</Link>
+                  <Link
+                    to={['sports', 'festival', 'others'].includes(category['name'].toLowerCase()) ?
+                      `/shop/${category['name']}`.toLowerCase() :
+                      `/shop/?cat=${category['name']}`.toLowerCase()
+                    }
+                  >
+                    {category["name"]}
+                  </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {categories.length - 1 != idx && (<BreadcrumbSeparator />)}

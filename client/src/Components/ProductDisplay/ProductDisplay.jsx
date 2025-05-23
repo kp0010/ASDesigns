@@ -25,44 +25,44 @@ import Download from "../ui/downloadBtn";
 import './ProductDisplay.css'
 
 const Container = styled.div`
-  position: relative;
-  overflow: hidden;
-  display: block;
-  width: 500px;
-  height: 500px;
-  border-radius: 15px;
-  cursor: crosshair;
+position: relative;
+overflow: hidden;
+display: block;
+width: 500px;
+height: 500px;
+border-radius: 15px;
+cursor: crosshair;
 
-  @media (min-width: 768px) and (max-width: 1023px) {
-    width: 400px;
-    height: 400px;
-  }
+@media (min-width: 768px) and (max-width: 1023px) {
+width: 400px;
+height: 400px;
+}
 `;
 
 
 const Image = styled.img.attrs((props) => ({
   src: props.source,
 }))`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+width: 100%;
+height: 100%;
+object-fit: cover;
 `;
 
 const Target = styled.div`
-  position: absolute;
-  width: 400px; /* Size of the magnified area */
-  height: 400px;
-  background: url(${(props) => props.source}) no-repeat;
-  background-size: 1000px; /* Zoom Level (Increase for more zoom) */
-  left: ${(props) => props.offset.left}px;
-  top: ${(props) => props.offset.top}px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  display: ${(props) => (props.opacity ? "block" : "none")};
+position: absolute;
+width: 400px; /* Size of the magnified area */
+height: 400px;
+background: url(${(props) => props.source}) no-repeat;
+background-size: 1000px; /* Zoom Level (Increase for more zoom) */
+left: ${(props) => props.offset.left}px;
+top: ${(props) => props.offset.top}px;
+border: 2px solid #fff;
+border-radius: 50%;
+pointer-events: none;
+display: ${(props) => (props.opacity ? "block" : "none")};
 `;
 
-export const ProductDisplay = ({ productId, product, categories }) => {
+export const ProductDisplay = ({ productId, product, categories, tags }) => {
   // Animation Data
   const sourceRef = useRef(null);
   const containerRef = useRef(null);
@@ -188,36 +188,19 @@ export const ProductDisplay = ({ productId, product, categories }) => {
     }
   }, [productId])
 
-  const tags = ["CDR File ", "Sport ", "Cricket ", "Half Sleeves "];
-
   return (
     <>
       <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay xl:ml-16">
         <div className="product-display-left mt-4 ml-8 mb-5">
           {/* <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
-            <img
-              src={`/api/assets/${productId}.jpeg`}
-              className="product-display-main-img rounded-lg"
-              alt=""
-            />
-          </div> */}
-          <Container
-            ref={containerRef}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onMouseMove={handleMouseMove}
-          >
-            <Image
-              ref={sourceRef}
-              source={`/api/assets/${productId}.jpeg`}
-              alt="Product"
-            />
-            <Target
-              opacity={opacity}
-              offset={offset}
-              source={`/api/assets/${productId}.jpeg`}
-              style={{ backgroundPosition: `${bgPos.x}px ${bgPos.y}px` }}
-            />
+          <img src={`/api/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
+        </div> */}
+          <Container ref={containerRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
+            onMouseMove={handleMouseMove}>
+            <Image ref={sourceRef} source={`/api/assets/${productId}.jpeg`} alt="Product" />
+            <Target opacity={opacity} offset={offset} source={`/api/assets/${productId}.jpeg`} style={{
+              backgroundPosition: `${bgPos.x}px ${bgPos.y}px`
+            }} />
           </Container>
         </div>
 
@@ -244,14 +227,22 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                   <React.Fragment key={index}>
                     <BreadcrumbItem>
                       <BreadcrumbLink asChild>
-                        <Link to={`/shop/?cat=${category["name"]}`}> {category["name"]}</Link>
+                        <Link
+                          to={['sports', 'festival', 'others'].includes(category['name'].toLowerCase()) ?
+                            `/shop/${category['name'].toLowerCase()}` :
+                            `/shop/?cat=${category['name'].toLowerCase()}`
+                          }
+                        >
+                          {category["name"]}
+                        </Link>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
-                    {index < categories.length - 1 && (
-                      <BreadcrumbSeparator>
+                    {
+                      index < categories.length - 1 && (<BreadcrumbSeparator>
                         <CgFormatSlash />
                       </BreadcrumbSeparator>
-                    )}
+                      )
+                    }
                   </React.Fragment>
                 ))}
               </BreadcrumbList>
@@ -260,11 +251,19 @@ export const ProductDisplay = ({ productId, product, categories }) => {
 
           <div className="tags flex flex-wrap gap-2 mt-3">
             <h2 className="text-xl w-full">Tags:</h2>
-            {tags.map((tag, index) => (
-              <Badge key={index} className="mr-1">
-                {tag}
-              </Badge>
-            ))}
+            {tags.length ? (
+              tags.map((tag, index) => (
+                <Badge key={index} className="mr-1">
+                  {tag.name}
+                </Badge>
+              ))
+            ) : (
+              ["None"].map((tag, index) => (
+                <Badge key={index} className="mr-1">
+                  {tag}
+                </Badge>
+              ))
+            )}
           </div>
 
           <div className="buy-section mt-5 flex wishlist-wrap">
@@ -272,45 +271,27 @@ export const ProductDisplay = ({ productId, product, categories }) => {
               <AddToCart className="mr-3 w-72 md:mb-3" product={product} />
               <Download className="w-72 mr-3 md:mb-3 bg-[#e3c756]" productId={product.product_id} />
             </div>
-            <Button
-              onClick={toggleWishlist}
-              className="bg-white text-black border-black border-2 md:mb-3 pt-0"
-            >
+            <Button onClick={toggleWishlist} className="bg-white text-black border-black border-2 md:mb-3 pt-0">
               {wishlistCurrent ? (
-                <Lottie
-                  animationData={anim}
-                  lottieRef={lottieRefLarge}
-                  autoplay={false}
-                  loop={false}
-                  style={{ transform: "scale(4)" }}
-                  className="w-10 mt-2"
-                />
+                <Lottie animationData={anim} lottieRef={lottieRefLarge} autoplay={false} loop={false} style={{
+                  transform: "scale(4)"
+                }} className="w-10 mt-2" />
               ) : (
-                <Lottie
-                  animationData={anim}
-                  lottieRef={lottieRefLarge}
-                  autoplay={false}
-                  loop={false}
-                  style={{ transform: "scale(4)" }}
-                  className="w-10 mt-2"
-                />
+                <Lottie animationData={anim} lottieRef={lottieRefLarge} autoplay={false} loop={false} style={{
+                  transform: "scale(4)"
+                }} className="w-10 mt-2" />
               )}
             </Button>
           </div>
         </div>
       </div >
 
-      {/* Small Screens (<md) Layout */}
-      <div className="md:hidden productDisplay flex flex-col items-center p-4">
+      {/* Small Screens (<md) Layout */} < div className="md:hidden productDisplay flex flex-col items-center p-4" >
         <div className="w-full flex justify-center">
           <div className="productDiplay-img s:h-[350px] w-[350px]">
-            <img
-              src={`/api/assets/${productId}.jpeg`}
-              className="product-display-main-img rounded-lg"
-              alt=""
-            />
+            <img src={`/api/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
           </div>
-        </div >
+        </div>
 
         {/* Product Details */}
         <div className="w-full text-center mt-6">
@@ -337,13 +318,21 @@ export const ProductDisplay = ({ productId, product, categories }) => {
                 {categories.map((category, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbLink asChild>
-                      <Link to={`/shop/?cat=${category['name']}`}> {category["name"]}</Link>
+                      <Link
+                        to={['sports', 'festival', 'others'].includes(category['name'].toLowerCase()) ?
+                          `/shop/${category['name'].toLowerCase()}` :
+                          `/shop/?cat=${category['name'].toLowerCase()}`
+                        }
+                      >
+                        {category["name"]}
+                      </Link>
                     </BreadcrumbLink>
-                    {index < categories.length - 1 && (
-                      <BreadcrumbSeparator>
+                    {
+                      index < categories.length - 1 && (<BreadcrumbSeparator>
                         <CgFormatSlash />
                       </BreadcrumbSeparator>
-                    )}
+                      )
+                    }
                   </React.Fragment>
                 ))}
               </BreadcrumbList>
@@ -353,11 +342,19 @@ export const ProductDisplay = ({ productId, product, categories }) => {
           {/* Tags */}
           <div className="tags flex flex-wrap justify-center gap-2 mt-3">
             <h2 className="text-xl w-full text-center">Tags:</h2>
-            {tags.map((tag, index) => (
-              <Badge key={index} className="mr-1">
-                {tag}
-              </Badge>
-            ))}
+            {tags.length ? (
+              tags.map((tag, index) => (
+                <Badge key={index} className="mr-1">
+                  {tag.name}
+                </Badge>
+              ))
+            ) : (
+              ["None"].map((tag, index) => (
+                <Badge key={index} className="mr-1">
+                  {tag}
+                </Badge>
+              ))
+            )}
           </div>
 
           {/* Buttons */}
@@ -365,34 +362,22 @@ export const ProductDisplay = ({ productId, product, categories }) => {
             <AddToCart className="w-full bg-black flex items-center justify-center" product={product} />
             <Download className="w-full bg-[#e3c756] flex items-center justify-center" productId={product.product_id} />
 
-            <Button
-              onClick={toggleWishlist}
-              className="w-full bg-white text-black border-black border-2 flex items-center justify-center px-[100px]"
-            >
+            <Button onClick={toggleWishlist}
+              className="w-full bg-white text-black border-black border-2 flex items-center justify-center px-[100px]">
               {wishlistCurrent ? (
-                <Lottie
-                  animationData={anim}
-                  lottieRef={lottieRefSmall}
-                  autoplay={false}
-                  loop={false}
-                  style={{ transform: "scale(4)" }}
-                  className="w-10 "
-                />
+                <Lottie animationData={anim} lottieRef={lottieRefSmall} autoplay={false} loop={false} style={{
+                  transform: "scale(4)"
+                }} className="w-10 " />
               ) : (
-                <Lottie
-                  animationData={anim}
-                  lottieRef={lottieRefSmall}
-                  autoplay={false}
-                  loop={false}
-                  style={{ transform: "scale(4)" }}
-                  className="w-10 "
-                />
+                <Lottie animationData={anim} lottieRef={lottieRefSmall} autoplay={false} loop={false} style={{
+                  transform: "scale(4)"
+                }} className="w-10 " />
               )}
               Wishlist
             </Button>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

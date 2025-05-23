@@ -218,7 +218,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
           contact: "9999999999",
         },
         theme: {
-          color: "#0a0a0a",
+          color: "#D7BC56",
         },
       };
 
