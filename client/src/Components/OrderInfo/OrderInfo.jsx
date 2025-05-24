@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const OrderInfo = ({ }) => {
+export const OrderInfo = ({}) => {
   const { orderId } = useParams();
 
   const [orderItems, setOrderItems] = useState([]);
@@ -58,10 +58,6 @@ export const OrderInfo = ({ }) => {
             </p>
           </div>
           <div className="track-btns flex flex-col w-[50%]">
-            <button className="mt-6 bg-black text-white py-2 px-4 md:px-6 rounded-lg shadow w-full md:w-auto">
-              Download Product
-            </button>
-
             <button className="mt-6 bg-[#e3c756] text-white py-2 px-4 md:px-6 rounded-lg shadow hover:bg-[#c1a949] w-full md:w-auto">
               Track Your Order
             </button>
@@ -105,21 +101,35 @@ export const OrderInfo = ({ }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                 >
-                  <div className="flex items-center border-b-2 justify-center border-black py-3">
+                  <div className="flex border-b-2 border-black py-3">
+                    {/* Image */}
                     <img
                       src={`/api/assets/${product.product_id}.jpeg`}
                       alt="Product"
-                      className="w-14 md:w-20 h-14 md:h-20 rounded-lg"
+                      className="w-14 md:w-28 h-14 md:h-28 rounded-lg object-cover"
                     />
-                    <div className="mb-5 w-[50%] ml-3 md:ml-5 mt-12">
-                      <p className="font-medium break-words w-[95%] text-sm md:text-base">
-                        {product.product_id +
-                          (product["name"] ? " | " + product["name"] : "")}
-                      </p>
+
+                    {/* Product Info Section */}
+                    <div className="flex flex-col justify-between ml-3 md:ml-5 w-full">
+                      {/* Product name and price in a row */}
+                      <div className="flex justify-between items-start w-full">
+                        <p className="font-medium break-words w-[70%] text-sm md:text-base">
+                          {product.product_id +
+                            (product["name"] ? " | " + product["name"] : "")}
+                        </p>
+                        <p className="font-semibold text-sm md:text-lg text-right whitespace-nowrap">
+                          ₹ {parseFloat(product["amount"]).toFixed(2)}
+                        </p>
+                      </div>
+
+                      {/* Full-width download button */}
+                      <button
+                        className="mt-3 w-full bg-black text-white py-2 px-2 text-xs md:text-sm rounded-md shadow"
+                        onClick={() => handleDownload(product.product_id)}
+                      >
+                        Download Product
+                      </button>
                     </div>
-                    <p className="font-semibold text-sm md:text-lg mt-2 mb-4">
-                      ₹ {parseFloat(product["amount"]).toFixed(2)}
-                    </p>
                   </div>
                 </motion.div>
               ))}
