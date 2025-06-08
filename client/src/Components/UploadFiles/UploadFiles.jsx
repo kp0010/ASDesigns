@@ -13,9 +13,7 @@ export const UploadFiles = () => {
 
 		const files = event.target.files
 
-		for (let i = 0; i < files.length; i++) {
-			formData.append("files", files[i])
-		}
+		files.forEach(file => formData.append("files", file))
 
 		fetch("/api/products", {
 			method: "POST",

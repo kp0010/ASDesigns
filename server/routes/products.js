@@ -217,8 +217,7 @@ const copyFilesGDrive = async (files, parentFolderId) => {
 	// Upload the Files Uploaded via Multer
 	const uploadedFiles = []
 
-	for (let i = 0; i < files.length; i++) {
-		let file = files[i]
+	files.forEach(file => {
 
 		const fileMetadata = {
 			name: file["originalname"],
@@ -241,7 +240,8 @@ const copyFilesGDrive = async (files, parentFolderId) => {
 		fs.unlinkSync(file["path"], (err) => { console.error("Unable to Delete Uploads", err) });
 
 		console.log("Uploaded File :", file["originalname"])
-	}
+	})
+
 	return uploadedFiles
 }
 
