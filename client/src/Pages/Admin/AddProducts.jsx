@@ -8,7 +8,9 @@ const buildOptions = (tree, parentPath = "") => {
   const options = [];
 
   for (const node of tree) {
-    const currentPath = parentPath ? `${parentPath}  /  ${node.name}` : node.name;
+    const currentPath = parentPath
+      ? `${parentPath}  /  ${node.name}`
+      : node.name;
 
     if (node.children && node.children.length > 0) {
       options.push(...buildOptions(node.children, currentPath));
@@ -137,7 +139,25 @@ export const AddProducts = () => {
               isSearchable
             />
           </div>
+          <div className="files grid w-full gap-3">
+            <label htmlFor="fileInput" className="font-medium text-gray-700">Select Files:</label>
+            <Input
+              type="file"
+              id="fileInput"
+              multiple
+              // onChange={handleFileChange}
+              className="border-gray-300"
+            />
+            <br />
 
+            <label htmlFor="folderInput" className="font-medium text-gray-700">Select Folder:</label>
+            <Input
+              type="file"
+              id="folderInput"
+              webkitdirectory="true"
+              // onChange={handleFolderChange}
+            />
+          </div>
           <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
             Add Product
           </Button>

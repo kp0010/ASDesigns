@@ -217,7 +217,7 @@ const copyFilesGDrive = async (files, parentFolderId) => {
 	// Upload the Files Uploaded via Multer
 	const uploadedFiles = []
 
-	files.forEach(file => {
+	files.forEach(async file => {
 
 		const fileMetadata = {
 			name: file["originalname"],
