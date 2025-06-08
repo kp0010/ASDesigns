@@ -83,7 +83,7 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
   const handleClick = (event) => {
     event.preventDefault();
     getFeaturedProducts();
-    window.scrollTo({ top: 0, behavoir: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     const splitLink = event.currentTarget.href.split("/");
     const productId = splitLink[splitLink.length - 1];
     navigate(`/product/${productId}`);

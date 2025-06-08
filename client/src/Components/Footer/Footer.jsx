@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
 import { FaGooglePlusG } from "react-icons/fa";
@@ -8,6 +9,11 @@ import { IoIosCall } from "react-icons/io";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 export const Footer = () => {
+
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <footer
@@ -43,16 +49,24 @@ export const Footer = () => {
               <h6 className="text-uppercase mb-4 font-bold">Quick Links</h6>
               <div className="d-flex flex-column gap-2">
                 <p className="d-flex align-items-center gap-2">
-                  <FaArrowRightFromBracket />
-                  <a className="text-white">Home</a>
+                  <FaArrowRightFromBracket />                
+                  <Link to="/" onClick={handleClick}>Home</Link>
+                </p>
+                <p className="d-flex align-items-center gap-2">
+                  <FaArrowRightFromBracket />                
+                  <Link to="/shop" onClick={handleClick}>Shop</Link>
                 </p>
                 <p className="d-flex align-items-center gap-2">
                   <FaArrowRightFromBracket />
-                  <a className="text-white">Shop</a>
+                  <Link to="/shop/sports" onClick={handleClick}>Sports</Link>
                 </p>
                 <p className="d-flex align-items-center gap-2">
                   <FaArrowRightFromBracket />
-                  <a className="text-white">Contact Us</a>
+                  <Link to="/shop/festival" onClick={handleClick}>Festival</Link>
+                </p>
+                <p className="d-flex align-items-center gap-2">
+                  <FaArrowRightFromBracket />
+                  <Link to="/shop/others" onClick={handleClick}>Others</Link>
                 </p>
               </div>
             </div>
