@@ -9,7 +9,6 @@ import { IoIosCall } from "react-icons/io";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 export const Footer = () => {
-
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -25,12 +24,10 @@ export const Footer = () => {
             <div className="col-lg-4 col-md-12 mb-4">
               <h5 className="text-uppercase mb-4 font-bold">About company</h5>
               <p className="text-justify">
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti.
-              </p>
-              <p className="text-justify">
-                Blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias.
+                ASDesigns is a creative platform dedicated to delivering custom
+                jersey designs to customers worldwide. We make it easy to
+                browse, purchase, and receive your personalized designs with a
+                smooth and secure experience.
               </p>
               <div className="mt-4 d-flex gap-3 justify-evenly">
                 <a className="btn btn-warning btn-lg">
@@ -49,24 +46,34 @@ export const Footer = () => {
               <h6 className="text-uppercase mb-4 font-bold">Quick Links</h6>
               <div className="d-flex flex-column gap-2">
                 <p className="d-flex align-items-center gap-2">
-                  <FaArrowRightFromBracket />                
-                  <Link to="/" onClick={handleClick}>Home</Link>
-                </p>
-                <p className="d-flex align-items-center gap-2">
-                  <FaArrowRightFromBracket />                
-                  <Link to="/shop" onClick={handleClick}>Shop</Link>
+                  <FaArrowRightFromBracket />
+                  <Link to="/" onClick={handleClick}>
+                    Home
+                  </Link>
                 </p>
                 <p className="d-flex align-items-center gap-2">
                   <FaArrowRightFromBracket />
-                  <Link to="/shop/sports" onClick={handleClick}>Sports</Link>
+                  <Link to="/shop" onClick={handleClick}>
+                    Shop
+                  </Link>
                 </p>
                 <p className="d-flex align-items-center gap-2">
                   <FaArrowRightFromBracket />
-                  <Link to="/shop/festival" onClick={handleClick}>Festival</Link>
+                  <Link to="/shop/sports" onClick={handleClick}>
+                    Sports
+                  </Link>
                 </p>
                 <p className="d-flex align-items-center gap-2">
                   <FaArrowRightFromBracket />
-                  <Link to="/shop/others" onClick={handleClick}>Others</Link>
+                  <Link to="/shop/festival" onClick={handleClick}>
+                    Festival
+                  </Link>
+                </p>
+                <p className="d-flex align-items-center gap-2">
+                  <FaArrowRightFromBracket />
+                  <Link to="/shop/others" onClick={handleClick}>
+                    Others
+                  </Link>
                 </p>
               </div>
             </div>
@@ -90,7 +97,7 @@ export const Footer = () => {
                   <span className="fa-li">
                     <IoIosCall />
                   </span>
-                  <span className="ms-2">+01 234 567 89</span>
+                  <span className="ms-2">+91 99282 88280</span>
                 </li>
               </ul>
             </div>
