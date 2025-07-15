@@ -67,7 +67,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config({ path: "./.env.dev" });
 
 const SERVER_PORT = process.env.SERVER_PORT;
-const CLIENT_URL = process.env.CLIENT_URL;
 
 export const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY,
@@ -176,7 +175,13 @@ const imageUpload = multer({ storage: imageStorage });
 
 const { Pool } = pg;
 
-export const db = new Pool(PG_DB_CONFIG);
+// export const db = new Pool(PG_DB_CONFIG);
+export const db = new Pool({
+  connectionString: 'postgresql://asdesigns:cQfxiPyY5BCagAOC3KHk9orSYLgGxUgn@dpg-d1r8vnumcj7s73alg97g-a.singapore-postgres.render.com/asdesigns',
+  ssl: {
+    rejectUnauthorized: false, // Accept self-signed certs (for services like Render or Heroku)
+  }
+});
 
 db.connect(function(err) {
   if (err) throw err;
@@ -362,5 +367,4 @@ app.get("/api/payment-success", (_, res) => { res.redirect("/success"); });
 
 app.listen(SERVER_PORT, "0.0.0.0", () => {
   console.log(`App is listening on port ${SERVER_PORT}`);
-  console.log(`Client URL is ${CLIENT_URL}`);
 });
