@@ -50,7 +50,7 @@ export const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchProducts = () => {
-    fetch(`/api/products-metadata/?page=${pageNo}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products-metadata/?page=${pageNo}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -191,7 +191,7 @@ export const ProductList = () => {
                   {/* Product Image & Name */}
                   <TableCell className="flex items-center space-x-2">
                     <img
-                      src={`/api/assets/${product.product_id}.jpeg`}
+                      src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
                       className="w-20 h-20 rounded-lg cursor-pointer"
                       onClick={() => navigate(`/product/${product.product_id}`)}
                     />

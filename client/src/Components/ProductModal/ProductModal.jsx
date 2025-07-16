@@ -30,7 +30,7 @@ const ProductModal = ({ product, open, onOpenChange }) => {
   const [categories, setCategories] = useState([]);
 
   const getProduct = () => {
-    fetch(`/api/products/${product.product_id}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products/${product.product_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const ProductModal = ({ product, open, onOpenChange }) => {
         </DialogHeader>
         <div className="prod-details flex gap-6 items-center">
           <img
-            src={`/api/assets/${product.product_id}.jpeg`}
+            src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
             alt={product.name}
             className="w-[400px] h-[400px] object-cover rounded-lg"
           />

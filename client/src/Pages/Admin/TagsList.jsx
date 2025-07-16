@@ -7,7 +7,7 @@ export const TagsList = () => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    fetch("/api/tags")
+    fetch(`${import.meta.env.VITE_SERVER_URL}/tags`)
       .then((resp) => resp.json())
       .then((data) => {
         if (data.success) {
@@ -24,7 +24,7 @@ export const TagsList = () => {
 
   const handleDelete = (id) => {
     if (confirm("Are you sure you want to delete this tag?")) {
-      fetch(`/api/tags/${id}`, { method: "DELETE" })
+      fetch(`${import.meta.env.VITE_SERVER_URL}/tags/${id}`, { method: "DELETE" })
         .then((resp) => resp.json())
         .then((data) => {
           if (data.success) {

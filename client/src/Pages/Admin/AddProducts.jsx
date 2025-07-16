@@ -37,7 +37,7 @@ export const AddProducts = () => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    fetch("/api/categories", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/categories`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -56,7 +56,7 @@ export const AddProducts = () => {
   }, []);
 
   useEffect(() => {
-    fetch("/api/tags")
+    fetch(`${import.meta.env.VITE_SERVER_URL}/tags`)
       .then((resp) => resp.json())
       .then((data) => {
         if (data.success) {

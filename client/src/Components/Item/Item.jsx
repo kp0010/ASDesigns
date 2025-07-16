@@ -81,7 +81,7 @@ export const Item = ({ product }) => {
     <div className="item">
       <div className="item-image">
         <Link to={`/product/${product_id}`} onClick={handleClick}>
-          <img src={`/api/assets/${product_id}.jpeg`} alt="..." />
+          <img src={`${import.meta.env.VITE_SERVER_URL}/assets/${product_id}.jpeg`} alt="..." />
         </Link>
         <div className="item-hover-container">
           <button

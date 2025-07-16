@@ -193,12 +193,12 @@ export const ProductDisplay = ({ productId, product, categories, tags }) => {
       <div className="hidden md:flex md:flex-col lg:flex-row xl:flex-row productDisplay xl:ml-16">
         <div className="product-display-left mt-4 ml-8 mb-5">
           {/* <div className="productDiplay-img h-[500px] w-[500px] md:ml-52 lg:ml-0 xl:ml-0">
-          <img src={`/api/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
+          <img src={`${import.meta.env.VITE_SERVER_URL}/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
         </div> */}
           <Container ref={containerRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
             onMouseMove={handleMouseMove}>
-            <Image ref={sourceRef} source={`/api/assets/${productId}.jpeg`} alt="Product" />
-            <Target opacity={opacity} offset={offset} source={`/api/assets/${productId}.jpeg`} style={{
+            <Image ref={sourceRef} source={`${import.meta.env.VITE_SERVER_URL}/assets/${productId}.jpeg`} alt="Product" />
+            <Target opacity={opacity} offset={offset} source={`${import.meta.env.VITE_SERVER_URL}/assets/${productId}.jpeg`} style={{
               backgroundPosition: `${bgPos.x}px ${bgPos.y}px`
             }} />
           </Container>
@@ -289,7 +289,7 @@ export const ProductDisplay = ({ productId, product, categories, tags }) => {
       {/* Small Screens (<md) Layout */} < div className="md:hidden productDisplay flex flex-col items-center p-4" >
         <div className="w-full flex justify-center">
           <div className="productDiplay-img s:h-[350px] w-[350px]">
-            <img src={`/api/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
+            <img src={`${import.meta.env.VITE_SERVER_URL}/assets/${productId}.jpeg`} className="product-display-main-img rounded-lg" alt="" />
           </div>
         </div>
 

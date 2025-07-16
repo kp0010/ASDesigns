@@ -15,7 +15,7 @@ export const UploadFiles = () => {
 
 		files.forEach(file => formData.append("files", file))
 
-		fetch("/api/products", {
+		fetch(`${import.meta.env.VITE_SERVER_URL}/products`, {
 			method: "POST",
 			headers: { Authorization: `Bearer ${token}`, },
 			body: formData,
@@ -32,7 +32,7 @@ export const UploadFiles = () => {
 
 		const token = await getToken()
 
-		fetch(`/api/products/${productId}`, {
+		fetch(`${import.meta.env.VITE_SERVER_URL}/products/${productId}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${token}`,

@@ -61,7 +61,7 @@ export const Navbar = () => {
 
   const writeUserToDB = async () => {
     const token = await getToken();
-    fetch("/api/auth/register", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ export const Navbar = () => {
 
     const params = new URLSearchParams({ q: search, minimal: true });
 
-    fetch(`/api/products/?${params.toString()}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products/?${params.toString()}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -240,7 +240,7 @@ export const Navbar = () => {
                         ) : (
                           <>
                             <img
-                              src={`/api/assets/${product.product_id}.jpeg`}
+                              src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
                               className="w-20 h-20 object-cover rounded"
                               alt={product.name}
                             />
@@ -304,7 +304,7 @@ export const Navbar = () => {
                         onClick={() => handleItemClick(product)}
                       >
                         <img
-                          src={`/api/assets/${product.product_id}.jpeg`}
+                          src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
                           className="w-20 h-20 object-cover rounded"
                           alt={product.name}
                         />
@@ -367,7 +367,7 @@ export const Navbar = () => {
                         onClick={() => handleItemClick(product)}
                       >
                         <img
-                          src={`/api/assets/${product.product_id}.jpeg`}
+                          src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
                           className="w-20 h-20 object-cover rounded"
                           alt={product.name}
                         />

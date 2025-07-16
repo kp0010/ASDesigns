@@ -18,7 +18,7 @@ export const AddTag = () => {
     const payload = { name: tagName.trim() };
 
     try {
-      const response = await fetch("/api/tags", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

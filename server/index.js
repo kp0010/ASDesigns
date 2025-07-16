@@ -73,13 +73,13 @@ export const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
-const PG_DB_CONFIG = {
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DB,
-  port: process.env.PG_PORT,
-  password: process.env.PG_PASSWORD,
-};
+// const PG_DB_CONFIG = {
+//   user: process.env.PG_USER,
+//   host: process.env.PG_HOST,
+//   database: process.env.PG_DB,
+//   port: process.env.PG_PORT,
+//   password: process.env.PG_PASSWORD,
+// };
 
 const GDRIVE_KEY_FILE = process.env.GOOGLE_DRIVE_KEY_FILE;
 export const GDRIVE_PARENT_FOLDER_ID = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID;
@@ -175,13 +175,15 @@ const imageUpload = multer({ storage: imageStorage });
 
 const { Pool } = pg;
 
-// export const db = new Pool(PG_DB_CONFIG);
+console.log(process.env.PG_CONNECTION_STRING)
+
 export const db = new Pool({
-  connectionString: 'postgresql://asdesigns:cQfxiPyY5BCagAOC3KHk9orSYLgGxUgn@dpg-d1r8vnumcj7s73alg97g-a.singapore-postgres.render.com/asdesigns',
+  connectionString: process.env.PG_CONNECTION_STRING,
   ssl: {
-    rejectUnauthorized: false, // Accept self-signed certs (for services like Render or Heroku)
+    rejectUnauthorized: false,
   }
 });
+
 
 db.connect(function(err) {
   if (err) throw err;

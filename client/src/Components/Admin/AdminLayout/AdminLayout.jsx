@@ -13,7 +13,7 @@ export const AdminLayout = () => {
 
   const readUser = async () => {
     const token = await getToken();
-    fetch("/api/auth/", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/auth/`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",

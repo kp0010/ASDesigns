@@ -16,7 +16,7 @@ export const PreviousOrders = () => {
   const [orders, setOrders] = useState([])
   const [orderLoaded, setOrderLoaded] = useState(false)
 
-  fetch("/api/orders", {
+  fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

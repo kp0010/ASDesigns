@@ -14,7 +14,7 @@ export const Users = () => {
     const getAllUsers = async () => {
       const token = await getToken()
 
-      fetch("/api/auth/users", {
+      fetch(`${import.meta.env.VITE_SERVER_URL}/auth/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

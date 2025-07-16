@@ -22,7 +22,7 @@ export const EditProducts = () => {
     if (!searchProductId) return; // Prevent empty requests
     setLoading(true);
 
-    fetch(`/api/products/${searchProductId}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products/${searchProductId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
@@ -31,7 +31,7 @@ export const EditProducts = () => {
         setProduct(data["product"]);
         setCategories(data["categories"]);
         setTags(data["tags"]);
-        setImage(`/api/assets/${searchProductId}.jpeg`);
+        setImage(`${import.meta.env.VITE_SERVER_URL}/assets/${searchProductId}.jpeg`);
         setUpdatedProduct(data["product"]); // Initialize editable state
         setLoading(false);
       })
@@ -65,7 +65,7 @@ export const EditProducts = () => {
       formData.append("image", selectedFile);
     }
 
-    fetch(`/api/products/${searchProductId}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products/${searchProductId}`, {
       method: "PATCH",
       body: formData,
     })
@@ -75,7 +75,7 @@ export const EditProducts = () => {
           toast.success("Product Updated successfully!");
           setIsEditing(false);
           getProduct(); // Refresh data
-        } else {          
+        } else {
           toast.info("Failed to update product.");
         }
       }

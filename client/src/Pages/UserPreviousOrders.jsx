@@ -21,7 +21,7 @@ export const UserPreviousOrders = () => {
 
     useEffect(() => {
         // Fetch all orders
-        fetch("/api/orders", {
+        fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export const UserPreviousOrders = () => {
                     const itemsMap = {};
                     await Promise.all(
                         data.orders.map(async (order) => {
-                            const res = await fetch("/api/order", {
+                            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/order`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export const UserPreviousOrders = () => {
                                                 <div className="prevOrders-left pl-0 xl:pl-8">
                                                     <div className="prevOrders-img h-[100px] w-[100px]">
                                                         <img
-                                                            src={`/api/assets/${item.product_id}.jpeg`}
+                                                            src={`${import.meta.env.VITE_SERVER_URL}/assets/${item.product_id}.jpeg`}
                                                             alt={item.name}
                                                             className="rounded-lg w-full h-full object-cover mb-2"
                                                         />

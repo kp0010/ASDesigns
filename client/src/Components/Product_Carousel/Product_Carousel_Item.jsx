@@ -95,7 +95,7 @@ export const Product_Carousel_Item = ({ product, getFeaturedProducts }) => {
         <div className="carousel_item bg-white mb-5 ">
           <div className="carousel_item-image">
             <Link to={`/product/${product.product_id}`} onClick={handleClick}>
-              <img src={`/api/assets/${product.product_id}.jpeg`} alt="..." />
+              <img src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`} alt="..." />
             </Link>
             <div className="carousel_item-hover-container">
               <button

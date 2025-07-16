@@ -67,7 +67,6 @@ export const Shop = () => {
       selectedFilters = [],
       selectedTags = [],
     } = {}) => {
-
       setLoaded(false);
       const params = new URLSearchParams({ limit: PRODUCT_LIMIT });
 
@@ -100,7 +99,7 @@ export const Shop = () => {
         params.set("tags", selectedTags.map((tag) => (tag.name)).join(","));
       }
 
-      const apiQuery = `/api/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""
+      const apiQuery = `${import.meta.env.VITE_SERVER_URL}/products/${pageNo !== undefined ? "page/" + (pageNo - 1) : ""
         }?${params.toString()}`;
 
       fetch(apiQuery, {

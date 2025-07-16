@@ -6,7 +6,7 @@ export const AdminDashboard = () => {
   const [stats, setStats] = useState({})
 
   useEffect(() => {
-    fetch("/api/auth/stats", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/auth/stats`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

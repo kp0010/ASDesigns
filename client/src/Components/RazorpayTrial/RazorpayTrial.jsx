@@ -10,7 +10,7 @@ export const RazorpayTrial = () => {
     }
 
     try {
-      const response = await fetch("/api/create-order", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -39,7 +39,7 @@ export const RazorpayTrial = () => {
 
         handler: async function(response) {
           try {
-            const verifyResponse = await fetch("/api/verify-payment", {
+            const verifyResponse = await fetch(`${import.meta.env.VITE_SERVER_URL}/verify-payment`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const RazorpayTrial = () => {
             const verifyData = await verifyResponse.json();
 
             if (verifyData.success) {
-              window.location.href = "/api/payment-success";
+              window.location.href = `${import.meta.env.VITE_SERVER_URL}/payment-success`;
             } else {
               alert("Payment verification failed");
             }

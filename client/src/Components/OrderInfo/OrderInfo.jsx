@@ -10,7 +10,7 @@ export const OrderInfo = ({}) => {
   const [orderLoaded, setOrderLoaded] = useState(false);
 
   const getOrder = () => {
-    fetch("/api/order", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export const OrderInfo = ({}) => {
                   <div className="flex border-b-2 border-black py-3">
                     {/* Image */}
                     <img
-                      src={`/api/assets/${product.product_id}.jpeg`}
+                      src={`${import.meta.env.VITE_SERVER_URL}/assets/${product.product_id}.jpeg`}
                       alt="Product"
                       className="w-14 md:w-28 h-14 md:h-28 rounded-lg object-cover"
                     />

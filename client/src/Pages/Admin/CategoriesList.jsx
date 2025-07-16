@@ -16,7 +16,7 @@ export const CategoriesList = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("/api/categories", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/categories`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

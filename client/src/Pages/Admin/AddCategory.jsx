@@ -36,7 +36,7 @@ export const AddCategory = () => {
 
   // Fetch category tree on mount
   useEffect(() => {
-    fetch("/api/categories")
+    fetch(`${import.meta.env.VITE_SERVER_URL}/categories`)
       .then((resp) => resp.json())
       .then((data) => {
         if (data.success && data.categoryTree) {
@@ -56,7 +56,7 @@ export const AddCategory = () => {
       parent: parentCategory ? parentCategory.value : null,
     };
 
-    fetch("/api/categories", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/categories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

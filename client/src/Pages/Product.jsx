@@ -12,7 +12,7 @@ export const Product = () => {
   const [tags, setTags] = useState([])
 
   const getProduct = () => {
-    fetch(`/api/products/${productId}`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/products/${productId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

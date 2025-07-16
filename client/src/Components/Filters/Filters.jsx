@@ -40,7 +40,7 @@ export const Filters = ({
   }, [pageNo]);
 
   useEffect(() => {
-    fetch("/api/categories", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/categories`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -57,7 +57,7 @@ export const Filters = ({
   }, []);
 
   useEffect(() => {
-    fetch("/api/tags", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/tags`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

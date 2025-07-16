@@ -48,7 +48,7 @@ const ShopContextProvider = ({ children }) => {
 
     const token = await getToken()
 
-    fetch("/api/cart", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/cart`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,7 @@ const ShopContextProvider = ({ children }) => {
 
     const token = await getToken()
 
-    fetch("/api/cart", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const ShopContextProvider = ({ children }) => {
     updatePrice("DELETE", productId)
     const token = await getToken()
 
-    fetch("/api/cart", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/cart`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -128,7 +128,7 @@ const ShopContextProvider = ({ children }) => {
 
     const token = await getToken()
 
-    fetch("/api/wishlist", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/wishlist`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -151,7 +151,7 @@ const ShopContextProvider = ({ children }) => {
 
     const token = await getToken()
 
-    fetch("/api/wishlist", {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/wishlist`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -177,7 +177,7 @@ const ShopContextProvider = ({ children }) => {
 
     const token = await getToken()
 
-    await fetch("/api/wishlist", {
+    await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlist`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

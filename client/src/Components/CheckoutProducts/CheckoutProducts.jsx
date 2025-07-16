@@ -45,7 +45,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
     }
 
     if (buyNowProductId) {
-      fetch(`/api/products/${buyNowProductId}`, {
+      fetch(`${import.meta.env.VITE_SERVER_URL}/products/${buyNowProductId}`, {
         method: "GET",
         headers: {
           "content-type": "application/json",
@@ -136,7 +136,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
     }
 
     try {
-      const response = await fetch("/api/create-order", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -167,7 +167,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
         modal: {
           ondismiss: function() {
             try {
-              fetch("/api/cancel-order", {
+              fetch(`${import.meta.env.VITE_SERVER_URL}/cancel-order`, {
                 method: "DELETE",
                 headers: {
                   "Content-Type": "application/json",
@@ -185,7 +185,7 @@ export const CheckoutProducts = ({ buyNowProductId }) => {
 
         handler: async function(response) {
           try {
-            const verifyResponse = await fetch("/api/verify-payment", {
+            const verifyResponse = await fetch(`${import.meta.env.VITE_SERVER_URL}/verify-payment`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

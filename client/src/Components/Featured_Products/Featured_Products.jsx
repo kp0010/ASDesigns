@@ -13,7 +13,7 @@ export const Featured_Products = () => {
 	})
 
 	const getFeaturedProducts = () => {
-		fetch(`/api/products/?${params.toString()}`, {
+		fetch(`${import.meta.env.VITE_SERVER_URL}/products/?${params.toString()}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
