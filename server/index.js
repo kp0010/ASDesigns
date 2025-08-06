@@ -14,41 +14,41 @@ import { google } from "googleapis";
 import { requireAuth } from "@clerk/express";
 
 import {
-  getProducts,
-  getIndividualProduct,
-  deleteProduct,
-  postProduct,
-  getAllCategories,
-  getAllTags,
-  getProductsWithMetadata,
-  patchProduct,
+    getProducts,
+    getIndividualProduct,
+    deleteProduct,
+    postProduct,
+    getAllCategories,
+    getAllTags,
+    getProductsWithMetadata,
+    patchProduct,
 } from "./routes/products.js";
 
 import {
-  getCartItems,
-  deleteCartItem,
-  postCartItem
+    getCartItems,
+    deleteCartItem,
+    postCartItem
 } from "./routes/cart.js";
 
 import {
-  getWishlistItems,
-  deleteWishlistItem,
-  postWishlistItem,
+    getWishlistItems,
+    deleteWishlistItem,
+    postWishlistItem,
 } from "./routes/wishlist.js";
 
 import {
-  deleteUserOrder,
-  getUsersOrder,
-  getUsersOrders,
-  postUsersOrders,
-  verifyUserPayment
+    deleteUserOrder,
+    getUsersOrder,
+    getUsersOrders,
+    postUsersOrders,
+    verifyUserPayment
 } from "./routes/orders.js";
 
 import {
-  getAllUsers,
-  getUser,
-  postNewUser,
-  getDashboardStats
+    getAllUsers,
+    getUser,
+    postNewUser,
+    getDashboardStats
 } from "./routes/auth.js";
 
 
@@ -69,8 +69,8 @@ dotenv.config({ path: "./.env.dev" });
 const SERVER_PORT = process.env.SERVER_PORT;
 
 export const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_ID_KEY,
-  key_secret: process.env.RAZORPAY_SECRET_KEY,
+    key_id: process.env.RAZORPAY_ID_KEY,
+    key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
 // const PG_DB_CONFIG = {
@@ -94,12 +94,12 @@ const __dirname = path.dirname(__filename);
 // Middleware
 
 app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
 );
 
 app.use(express.json());
@@ -107,38 +107,38 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(function(_, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
 });
 
 const requireAdmin = () => {
-  // Custom requireAdmin middleware
-  return async (req, res, next) => {
-    try {
-      await requireAuth()(req, res, async () => {
-        const { userId } = req.auth;
+    // Custom requireAdmin middleware
+    return async (req, res, next) => {
+        try {
+            await requireAuth()(req, res, async () => {
+                const { userId } = req.auth;
 
-        const selectQuery = "SELECT * FROM users WHERE clerk_id = $1";
+                const selectQuery = "SELECT * FROM users WHERE clerk_id = $1";
 
-        db.query(selectQuery, [userId]).then((result) => {
-          if (result.rowCount && result.rows[0]["admin"]) {
-            next();
-          } else {
-            res.status(403).json({ message: "Admin Authorization Required" });
-          }
-        });
-      });
-    } catch (error) {
-      res
-        .status(401)
-        .json({ message: "Unauthorized access", error: error.message });
-    }
-  };
+                db.query(selectQuery, [userId]).then((result) => {
+                    if (result.rowCount && result.rows[0]["admin"]) {
+                        next();
+                    } else {
+                        res.status(403).json({ message: "Admin Authorization Required" });
+                    }
+                });
+            });
+        } catch (error) {
+            res
+                .status(401)
+                .json({ message: "Unauthorized access", error: error.message });
+        }
+    };
 };
 
 // Middleware End
@@ -148,21 +148,21 @@ const requireAdmin = () => {
 // GDrive Setup
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: GDRIVE_KEY_FILE,
-  scopes: ["https://www.googleapis.com/auth/drive"],
+    keyFile: GDRIVE_KEY_FILE,
+    scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
 export const drive = google.drive({ version: "v3", auth });
 
 const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // cb(null, process.env.MULTER_DESTINATION)
-    cb(null, "./public/assets/")
-  },
+    destination: (req, file, cb) => {
+        // cb(null, process.env.MULTER_DESTINATION)
+        cb(null, "./public/assets/")
+    },
 
-  filename: (req, file, cb) => {
-    cb(null, req.params.productId + ".jpeg")
-  }
+    filename: (req, file, cb) => {
+        cb(null, req.params.productId + ".jpeg")
+    }
 })
 
 const imageUpload = multer({ storage: imageStorage });
@@ -175,19 +175,17 @@ const imageUpload = multer({ storage: imageStorage });
 
 const { Pool } = pg;
 
-console.log(process.env.PG_CONNECTION_STRING)
-
 export const db = new Pool({
-  connectionString: process.env.PG_CONNECTION_STRING,
-  ssl: {
-    rejectUnauthorized: false,
-  }
+    connectionString: process.env.PG_CONNECTION_STRING,
+    ssl: {
+        rejectUnauthorized: false,
+    }
 });
 
 
 db.connect(function(err) {
-  if (err) throw err;
-  console.log("Database Connected!");
+    if (err) throw err;
+    console.log("Database Connected!");
 });
 
 // Database Setup End
@@ -198,7 +196,7 @@ db.connect(function(err) {
 Routes
 
 Auth Routes:
-POST	:   /api/auth/register
+POST    :   /api/auth/register
             Register New Users to the DB (Protected)
 
 GET     :   /api/auth/users
@@ -206,50 +204,50 @@ GET     :   /api/auth/users
 
 
 Product Routes:
-GET	:   /api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
+GET :   /api/products/page?/:pageNo?/?orderBy=x &limit=x &minPrice=x &maxPrice
             View Products (Optionally Via Page Number and Sorting Options) (Public)
 
-GET	:   /api/products/:productId
+GET :   /api/products/:productId
             View Product with Specified Product Id (Public)
 
-POST	:   /api/products/
+POST    :   /api/products/
             Add New Product to the DB and the Assets to GDRIVE (Protected Admin)
 
-DELETE	:   /api/products/:productId
+DELETE  :   /api/products/:productId
             Delete Product with Specified Product Id (Protected Admin)
 
-GET	:   /api/categories
+GET :   /api/categories
             Get all Categories nested Levelwise
 
-GET	:   /api/tags
+GET :   /api/tags
             Get all Tags
 
 PATCH :    /api/products/:productId
            Update Product with Specified Product Id (Protected Admin)
 
 Cart Routes
-GET	:   /api/cart/
+GET :   /api/cart/
                 Get All Cart Items for a User (Protected)
 
-DELETE	:   /api/cart/
+DELETE  :   /api/cart/
             Delete Items from a Users Cart (Protected)
 
-POST	:   /api/cart/
+POST    :   /api/cart/
             Add Items to a Users Cart (Protected)
 
 Orders Routes
-POST	:   /api/checkout/
+POST    :   /api/checkout/
             Get Items from Body of request (Protected)
             The Items list is either Cart Items if Cart is checked directly or is a singular Product when Buy Now is clicked
 
 Wishlist Routes
-GET	:   /api/wishlist/
+GET :   /api/wishlist/
             Get All Wishlist Items for a User (Protected)
 
-DELETE	:   /api/wishlist/
+DELETE  :   /api/wishlist/
             Delete Items from a Users Wishlist (Protected)
 
-POST	:   /api/wishlist/
+POST    :   /api/wishlist/
             Add Items to a Users Wishlist (Protected)
 
 Order Rotues
@@ -368,5 +366,5 @@ app.get("/api/payment-success", (_, res) => { res.redirect("/success"); });
 // -----------------------------------------------------------
 
 app.listen(SERVER_PORT, "0.0.0.0", () => {
-  console.log(`App is listening on port ${SERVER_PORT}`);
+    console.log(`App is listening on port ${SERVER_PORT}`);
 });
